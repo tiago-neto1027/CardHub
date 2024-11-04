@@ -25,6 +25,8 @@ AppAsset::register($this);
 <body class="d-flex flex-column h-100">
 <?php $this->beginBody() ?>
 
+<?php /* 
+--- yii2 stock header ---
 <header>
     <?php
     NavBar::begin([
@@ -60,23 +62,33 @@ AppAsset::register($this);
     NavBar::end();
     ?>
 </header>
+--- /yii2 stock header ---
+*/
+?>
 
 <main role="main" class="flex-shrink-0">
-    <div class="container">
-        <?= Breadcrumbs::widget([
+    <div>
+        <?php Breadcrumbs::widget([
             'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
         ]) ?>
         <?= Alert::widget() ?>
+        <?= $this->render('header')?>
         <?= $content ?>
+        <?= $this->render('footer')?>
     </div>
 </main>
 
+<?php /* 
+--- yii2 stock footer ---
 <footer class="footer mt-auto py-3 text-muted">
     <div class="container">
         <p class="float-start">&copy; <?= Html::encode(Yii::$app->name) ?> <?= date('Y') ?></p>
         <p class="float-end"><?= Yii::powered() ?></p>
     </div>
 </footer>
+--- /yii2 stock footer --- 
+*/
+?>
 
 <?php $this->endBody() ?>
 </body>
