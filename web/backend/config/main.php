@@ -1,4 +1,7 @@
 <?php
+
+use yii\web\View;
+
 $params = array_merge(
     require __DIR__ . '/../../common/config/params.php',
     require __DIR__ . '/../../common/config/params-local.php',
@@ -43,6 +46,14 @@ return [
             'rules' => [
             ],
         ],
+        'view' => [
+            'class' => View::class,
+         'theme' => [
+             'pathMap' => [
+                '@app/views' => '@backend/views'
+             ],
+         ],
+    ],
     ],
     'params' => $params,
 ];
