@@ -12,8 +12,8 @@ class m241104_223042_init_rbac extends Migration
      */
     public function up()
     {
-        echo "Run the following code before migrating rbac";
-        echo "yii migrate --migrationPath=@yii/rbac/migrations";
+        //Run the following code before migrating rbac;
+        //yii migrate --migrationPath=@yii/rbac/migrations;
         $auth = Yii::$app->authManager;
 
         $manager = $auth->createRole('manager');
