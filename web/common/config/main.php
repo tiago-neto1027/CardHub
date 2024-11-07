@@ -11,8 +11,9 @@ return [
         ],
         'authManager' => [
             'class' => 'yii\rbac\DbManager',
-            // uncomment if you want to cache RBAC items hierarchy
+            // Uncomment if you want to cache RBAC items hierarchy
             // 'cache' => 'cache',
         ],
+        // ... other components
     ],
 ];
