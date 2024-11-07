@@ -24,17 +24,16 @@ class SiteController extends Controller
                 'class' => AccessControl::class,
                 'rules' => [
                     [
-                        'actions' => ['error'],
-                        'roles' => ["@"],
+                        'actions' => ['error', 'logout'],
+                        'roles' => ["@",'?'],
                         'allow' => true,
                     ],
                     [
                         'actions' => ['login'],
-                        'roles' => ["?"],
+                        'roles' => ['?'],
                         'allow' => true,
                     ],
                     [
-                        'actions' => ['logout', 'index'],
                         'allow' => true,
                         'roles' => ["admin",'manager'],
                     ],
@@ -79,14 +78,24 @@ class SiteController extends Controller
     public function actionLogin()
     {
         if (!Yii::$app->user->isGuest) {
-            return $this->goHome();
+            if (Yii::$app->user->can('admin') || Yii::$app->user->can('manager')) {
+                return $this->goHome();
+            }
         }
 
         $this->layout = 'blank';
 
         $model = new LoginForm();
-        if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
+        if ($model->load(Yii::$app->request->post()) && $model->login())
+        {
+            if(Yii::$app->user->can('admin') || Yii::$app->user->can('manager')){
+                return $this->goBack();
+            }
+            else
+            {
+                Yii::$app->user->logout();
+                $this->redirect(['error']);
+            }
         }
 
         $model->password = '';
