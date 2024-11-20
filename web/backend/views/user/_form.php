@@ -26,7 +26,7 @@ use yii\widgets\ActiveForm;
             10 => 'Active',
             9 => 'Inactive',
             0 => 'Deleted',
-        ], ['prompt' => 'Select Status']) ?>
+        ], ['prompt' => 'Select Status', 'value' => $model->status ?: 10]) ?>
     <?php endif; ?>
 
 
