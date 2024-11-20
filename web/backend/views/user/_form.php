@@ -31,7 +31,10 @@ use yii\widgets\ActiveForm;
 
 
     <div class="form-group">
-        <?= Html::submitButton('Register User', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton(
+            Yii::$app->controller->action->id === 'update' ? 'Update User' : 'Register User',
+            ['class' => 'btn btn-success']
+        ) ?>
     </div>
 
     <?php ActiveForm::end(); ?>
