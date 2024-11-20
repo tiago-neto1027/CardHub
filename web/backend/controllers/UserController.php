@@ -97,6 +97,7 @@ class UserController extends Controller
         $model->username = $user->username;
         $model->email = $user->email;
         $model->role = $user->getRole();
+        $model->status = $user->status;
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->update($id)) {
             return $this->redirect(['view', 'id' => $id]);
