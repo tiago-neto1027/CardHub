@@ -43,7 +43,7 @@ class m241104_223042_init_rbac extends Migration
 
         // Add "manageRoles" permission
         $manageRoles = $auth->createPermission('manageRoles');
-        $manageRoles->description = 'Manage roles and permissions of users';
+        $manageRoles->description = 'Manage roles and permissions of user';
         $auth->add($manageRoles);
 
         //Cards
