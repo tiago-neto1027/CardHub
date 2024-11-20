@@ -195,6 +195,9 @@ class User extends ActiveRecord implements IdentityInterface
         $this->password_reset_token = Yii::$app->security->generateRandomString() . '_' . time();
     }
 
+
+
+
     /**
      * Generates new token for email verification
      */
@@ -209,5 +212,19 @@ class User extends ActiveRecord implements IdentityInterface
     public function removePasswordResetToken()
     {
         $this->password_reset_token = null;
+    }
+
+    public function checkForRole($role){
+        $roles = Yii::$app->authManager->getRolesByUser(($this->id));
+        if (isset($roles[$role])){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public function getRole(){
+        $roles = Yii::$app->authManager->getRolesByUser(($this->id));
+        return reset($roles) ? reset($roles)->name :null;
     }
 }

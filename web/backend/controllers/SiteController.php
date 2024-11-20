@@ -89,7 +89,7 @@ class SiteController extends Controller
             else
             {
                 Yii::$app->user->logout();
-                $this->redirect(['login']);
+                $model->addError('username', 'You do not have access to the backend.');
             }
         }
 

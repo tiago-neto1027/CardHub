@@ -25,8 +25,11 @@ use yii\helpers\Html;
             ->label(false)
             ->passwordInput(['placeholder' => $model->getAttributeLabel('password')]) ?>
 
-        <div class="row">
-            <div class="col-8">
+        <div class="row mb-3">
+            <div class="col-12 mb-2 text-center">
+                <?= Html::submitButton('Sign In', ['class' => 'btn btn-primary btn-block']) ?>
+            </div>
+            <div class="col-12 text-center">
                 <?= $form->field($model, 'rememberMe')->checkbox([
                     'template' => '<div class="icheck-primary">{input}{label}</div>',
                     'labelOptions' => [
@@ -35,13 +38,11 @@ use yii\helpers\Html;
                     'uncheck' => null
                 ]) ?>
             </div>
-            <div class="col-4">
-                <?= Html::submitButton('Sign In', ['class' => 'btn btn-primary btn-block']) ?>
-            </div>
         </div>
 
         <?php \yii\bootstrap4\ActiveForm::end(); ?>
 
+        <!--
         <div class="social-auth-links text-center mb-3">
             <p>- OR -</p>
             <a href="#" class="btn btn-block btn-primary">
@@ -51,6 +52,7 @@ use yii\helpers\Html;
                 <i class="fab fa-google-plus mr-2"></i> Sign in using Google+
             </a>
         </div>
+        -->
         <!-- /.social-auth-links -->
 
         <p class="mb-1">
