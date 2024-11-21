@@ -27,6 +27,10 @@
   --danger: #dc3545;
   --light: #FFFFFF;
   --dark: #3D464D;
+  --bg-grey: #282828;
+  --cardhub-blue:  #0097b2;
+  --cardhub-blue-medium:  #5ba9cf;
+  --cardhub-blue-light:  #e3e8ff;
   --breakpoint-xs: 0;
   --breakpoint-sm: 576px;
   --breakpoint-md: 768px;
@@ -61,7 +65,7 @@ body {
   line-height: 1.5;
   color: #6C757D;
   text-align: left;
-  background-color: #F5F5F5;
+  background-color: #282828;
 }
 
 [tabindex="-1"]:focus:not(:focus-visible) {
@@ -1883,6 +1887,7 @@ pre code {
   color: #495057;
   background-color: #fff;
   background-clip: padding-box;
+  /* ---------search bar color--------- */
   border: 1px solid #ced4da;
   border-radius: 0;
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
@@ -2365,20 +2370,20 @@ fieldset:disabled a.btn {
 
 .btn-primary {
   color: #212529;
-  background-color: #FFD333;
-  border-color: #FFD333;
+  background-color: var(--cardhub-blue-medium);
+  border-color: var(--cardhub-blue-medium);
 }
 
 .btn-primary:hover {
   color: #212529;
-  background-color: #ffcb0d;
-  border-color: #ffc800;
+  background-color: var(--cardhub-blue-light);
+  border-color: var(--cardhub-blue-light);
 }
 
 .btn-primary:focus, .btn-primary.focus {
   color: #212529;
-  background-color: #ffcb0d;
-  border-color: #ffc800;
+  background-color: var(--cardhub-blue-medium);
+  border-color: var(--cardhub-blue-medium);
   box-shadow: 0 0 0 0.2rem rgba(222, 185, 50, 0.5);
 }
 
@@ -2391,8 +2396,8 @@ fieldset:disabled a.btn {
 .btn-primary:not(:disabled):not(.disabled):active, .btn-primary:not(:disabled):not(.disabled).active,
 .show > .btn-primary.dropdown-toggle {
   color: #212529;
-  background-color: #ffc800;
-  border-color: #f2be00;
+  background-color: var(--cardhub-blue);
+  border-color: var(--cardhub-blue);
 }
 
 .btn-primary:not(:disabled):not(.disabled):active:focus, .btn-primary:not(:disabled):not(.disabled).active:focus,
@@ -2917,12 +2922,12 @@ fieldset:disabled a.btn {
 
 .btn-link {
   font-weight: 400;
-  color: #FFD333;
+  color: var(--cardhub-blue-medium);
   text-decoration: none;
 }
 
 .btn-link:hover {
-  color: #e6b400;
+  color: var(--cardhub-blue-medium);
   text-decoration: underline;
 }
 
@@ -9508,7 +9513,7 @@ a.text-dark:hover, a.text-dark:focus {
 
 .navbar-dark .navbar-nav .nav-link:hover,
 .navbar-dark .navbar-nav .nav-link.active {
-  color: #FFD333;
+  color: var(--cardhub-blue-medium);
 }
 
 @media (max-width: 991.98px) {
@@ -9599,12 +9604,12 @@ a.text-dark:hover, a.text-dark:focus {
 }
 
 .cat-item {
-  background: #FFFFFF;
+  background: var(--cardhub-blue-light);
   transition: .5s;
 }
 
 .cat-item:hover {
-  background: #FFD333;
+  background: var(--cardhub-blue-medium);
 }
 
 .cat-item img {
