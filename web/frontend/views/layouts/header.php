@@ -31,7 +31,7 @@
         <div class="row bg-secondary py-1 px-xl-5">
             <div class="col-lg-6 d-none d-lg-block">
                 <div class="d-inline-flex align-items-center h-100">
-                    <a href="" class="text-decoration-none mr-3">
+                    <a href="<?=\yii\helpers\Url::home()?>" class="text-decoration-none mr-3">
                         <span class="h1 text-uppercase text-primary bg-dark px-2">Card</span>
                         <span class="h1 text-uppercase text-dark bg-primary px-2 ml-n1">Hub</span>
                     </a>
@@ -39,12 +39,39 @@
             </div>
             <div class="col-lg-6 text-center text-lg-right">
                 <div class="d-inline-flex align-items-center">
+
+                    <?php
+
+                    use yii\helpers\Html;
+
+                    if (Yii::$app->user->isGuest) {
+                        echo Html::tag('div',
+                            Html::a('Login', ['/site/login'], ['class' => 'btn btn-sm btn-light']),
+                            ['class' => 'btn d-flex']
+                        );
+                        echo Html::tag('div',
+                            Html::a('Sign Up', ['/site/signup'], ['class' => 'btn btn-sm btn-light']),
+                            ['class' => 'btn d-flex']
+                        );
+                    }
+                    else{
+                        echo Html::tag('div',
+                            Html::a('My Account', ['/site/myaccount'], ['class' => 'btn btn-sm btn-light']),
+                            ['class' => 'btn d-flex']
+                        );
+                        echo Html::tag('div',
+                            Html::a('Logout', ['/site/logout'], ['data-method' => 'post', 'class' => 'btn btn-sm btn-light']),
+                            ['class' => 'btn d-flex']
+                        );
+                    }
+                    ?>
+                    <!--
                     <div class="btn ">
                         <button type="button" class="btn btn-sm btn-light">Log In</button>
                     </div>
                     <div class="btn">
                         <button type="button" class="btn btn-sm btn-light">Sign Up</button>
-                    </div>
+                    </div>-->
                 </div>
                 <div class="d-inline-flex align-items-center d-block d-lg-none">
                     <a href="" class="btn px-0 ml-2">
