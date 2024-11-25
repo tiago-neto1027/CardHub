@@ -49,7 +49,7 @@
                     ['label' => 'User Management', 'url' =>['user/index'], 'iconStyle' => 'far'],
                     ['label' => 'Game Management', 'url' =>['game/index'], 'iconStyle' => 'far'],
                     ['label' => 'Product Management', 'iconStyle' => 'far'],
-                    ['label' => 'Cards Management', 'iconStyle' => 'far'],
+                    ['label' => 'Cards Management', 'url' =>['card/index'], 'iconStyle' => 'far'],
                     ['label' => 'Reviews', 'iconStyle' => 'far'],
                     ['label' => 'Statistics', 'iconStyle' => 'far'],
 
