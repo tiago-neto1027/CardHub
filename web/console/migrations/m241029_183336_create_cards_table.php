@@ -22,6 +22,7 @@ class m241029_183336_create_cards_table extends Migration
             'rarity' => $this->string(50)->notNull(),
             'image_url' => $this->string(255)->notNull(),
             'description' => $this->string(255),
+            'status' => "ENUM('active','inactive') NOT NULL",
             'created_at' => $this->timestamp()->notNull()->defaultExpression('CURRENT_TIMESTAMP'),
         ], 'ENGINE=InnoDB');
 
