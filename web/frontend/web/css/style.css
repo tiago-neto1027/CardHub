@@ -162,7 +162,7 @@ a {
 }
 
 a:hover {
-  color: #e6b400;
+  color: var(--cardhub-blue);
   text-decoration: underline;
 }
 
@@ -3219,7 +3219,7 @@ input[type="button"].btn-block {
 .dropdown-item.active, .dropdown-item:active {
   color: #fff;
   text-decoration: none;
-  background-color: #FFD333;
+  background-color: var(--cardhub-blue-light);
 }
 
 .dropdown-item.disabled, .dropdown-item:disabled {
@@ -6099,7 +6099,7 @@ a.close.disabled {
 }
 
 .bg-primary {
-  background-color: #FFD333 !important;
+  background-color: var(--cardhub-blue-medium) !important;
 }
 
 a.bg-primary:hover, a.bg-primary:focus,
@@ -9269,7 +9269,7 @@ button.bg-dark:focus {
 }
 
 .text-primary {
-  color: #FFD333 !important;
+  color: var(--cardhub-blue-medium) !important;
 }
 
 a.text-primary:hover, a.text-primary:focus {
@@ -9457,6 +9457,14 @@ a.text-dark:hover, a.text-dark:focus {
 }
 
 /********** Custom CSS ************/
+
+/* fas -> heart and shopping cart on header */
+/* fa-search -> magnifying glass on search bar */
+.fas,
+.fa-search {
+  color: var(--cardhub-blue-medium) !important;             
+}
+
 .h1, h2, h3 {
   font-weight: 700 !important;
 }
@@ -9684,7 +9692,7 @@ a.text-dark:hover, a.text-dark:focus {
 }
 
 .product-item .btn:hover {
-  color: #FFD333 !important;
+  color: var(--cardhub-blue-medium) !important;
 }
 
 .table.table-borderless thead tr,
