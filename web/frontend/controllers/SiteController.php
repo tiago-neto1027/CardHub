@@ -37,7 +37,7 @@ class SiteController extends Controller
                         'roles' => ['?'],
                     ],
                     [
-                        'actions' => ['logout'],
+                        'actions' => ['logout','teste'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -165,6 +165,19 @@ class SiteController extends Controller
     }
 
     /**
+     * Displays user account.
+     *
+     * @return mixed
+     */
+    public function actionMyAccount($id)
+    {
+        $user = \common\models\User::findOne($id);
+        return $this->render('about', [
+            'user' => $user,
+        ]);
+    }
+
+    /**
      * Requests password reset.
      *
      * @return mixed
@@ -256,4 +269,5 @@ class SiteController extends Controller
             'model' => $model
         ]);
     }
+
 }
