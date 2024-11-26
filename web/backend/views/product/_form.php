@@ -19,29 +19,17 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'type')->dropDownList(
-        [
-            'booster' => 'Booster',
-            'sleeve' => 'Sleeve',
-            'playmat' => 'Playmat',
-            'storage' => 'Storage',
-            'guide' => 'Guide',
-            'apparel' => 'Apparel',
-        ],
-        ['prompt' => 'Select Type']
-    ) ?>
-
     <?= $form->field($model, 'price')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'stock')->textInput() ?>
 
-    <?= $form->field($model, 'image_url')->textInput() ?>
-
     <?= $form->field($model, 'status')->dropDownList([ 'active' => 'Active', 'inactive' => 'Inactive', ], ['prompt' => '']) ?>
 
-    <?= $form->field($model, 'description')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'image_url')->textInput(['maxlength' => true]) ?>
 
-    <!--<?= $form->field($model, 'created_at')->textInput() ?>-->
+    <?= $form->field($model, 'type')->dropDownList([ 'booster' => 'Booster', 'sleeve' => 'Sleeve', 'playmat' => 'Playmat', 'storage' => 'Storage', 'guide' => 'Guide', 'apparel' => 'Apparel', ], ['prompt' => '']) ?>
+
+    <?= $form->field($model, 'description')->textInput(['maxlength' => true]) ?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

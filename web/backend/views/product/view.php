@@ -13,8 +13,6 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="product-view">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-
     <p>
         <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
         <?= Html::a('Delete', ['delete', 'id' => $model->id], [
@@ -30,11 +28,27 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'id',
-            'game_id',
+            [
+                'attribute' => 'game_id',
+                'value' => function ($model) {
+                    return $model->game->name;
+                },
+                'label' => 'Game',
+            ],
             'name',
             'price',
             'stock',
             'status',
+            'image_url:url',
+            [
+                'attribute' => 'image_url',
+                'label' => 'Image',
+                'format' => 'raw',
+                'value' => function ($model) {
+                    return Html::img($model->image_url, ['alt' => $model->name, 'style' => 'max-width:200px;']);
+                },
+            ],
+            'type',
             'description',
             'created_at',
         ],

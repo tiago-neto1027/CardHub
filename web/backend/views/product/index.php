@@ -15,6 +15,8 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="product-index">
 
+    <h1><?= Html::encode($this->title) ?></h1>
+
     <p>
         <?= Html::a('Create Product', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
@@ -28,6 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             //'id',
+            //'game_id',
             [
                 'attribute' => 'game_id',
                 'value' => function ($model) {
@@ -38,10 +41,20 @@ $this->params['breadcrumbs'][] = $this->title;
             'name',
             'price',
             'stock',
-            //'status',
+            'status',
+            //'image_url:url',
+            'type',
             //'description',
-            //'created_at',
             [
+                'attribute' => 'created_at',
+                'format' => ['date', 'php:d/m/Y'],
+                'value' => function ($model) {
+                    return $model->created_at;
+                },
+                'label' => 'Created At',
+            ],
+            [
+                'contentOptions' => ['style' => 'white-space: nowrap;'],
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, Product $model, $key, $index, $column) {
                     return Url::toRoute([$action, 'id' => $model->id]);

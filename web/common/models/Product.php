@@ -13,11 +13,12 @@ use Yii;
  * @property float $price
  * @property int $stock
  * @property string $status
+ * @property string $image_url
+ * @property string $type
  * @property string|null $description
  * @property string $created_at
  *
  * @property Game $game
- * @property ProductTransaction[] $productTransactions
  */
 class Product extends \yii\db\ActiveRecord
 {
@@ -35,13 +36,13 @@ class Product extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['game_id', 'name', 'price', 'stock'], 'required'],
+            [['game_id', 'name', 'price', 'stock', 'image_url', 'type'], 'required'],
             [['game_id', 'stock'], 'integer'],
             [['price'], 'number'],
-            [['status'], 'string'],
+            [['status', 'type'], 'string'],
             [['created_at'], 'safe'],
             [['name'], 'string', 'max' => 100],
-            [['description'], 'string', 'max' => 255],
+            [['image_url', 'description'], 'string', 'max' => 255],
             [['game_id'], 'exist', 'skipOnError' => true, 'targetClass' => Game::class, 'targetAttribute' => ['game_id' => 'id']],
         ];
     }
@@ -58,6 +59,8 @@ class Product extends \yii\db\ActiveRecord
             'price' => 'Price',
             'stock' => 'Stock',
             'status' => 'Status',
+            'image_url' => 'Image Url',
+            'type' => 'Type',
             'description' => 'Description',
             'created_at' => 'Created At',
         ];
@@ -71,15 +74,5 @@ class Product extends \yii\db\ActiveRecord
     public function getGame()
     {
         return $this->hasOne(Game::class, ['id' => 'game_id']);
-    }
-
-    /**
-     * Gets query for [[ProductTransactions]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getProductTransactions()
-    {
-        return $this->hasMany(ProductTransaction::class, ['product_id' => 'id']);
     }
 }
