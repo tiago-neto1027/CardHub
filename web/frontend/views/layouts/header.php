@@ -56,7 +56,7 @@
                     }
                     else{
                         echo Html::tag('div',
-                            Html::a('My Account', ['/site/myAccount','id' => Yii::$app->user->id], ['class' => 'btn btn-sm btn-light']),
+                            Html::a('My Account', ['/site/details','id' => Yii::$app->user->id], ['class' => 'btn btn-sm btn-light']),
                             ['class' => 'btn d-flex']
                         );
                         echo Html::tag('div',

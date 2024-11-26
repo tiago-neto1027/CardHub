@@ -169,10 +169,10 @@ class SiteController extends Controller
      *
      * @return mixed
      */
-    public function actionmyAccount($id)
+    public function actionDetails($id)
     {
         $user = \common\models\User::findOne($id);
-        return $this->render('myAccount', [
+        return $this->render('details', [
             'user' => $user,
         ]);
     }
