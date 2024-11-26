@@ -35,6 +35,8 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'stock')->textInput() ?>
 
+    <?= $form->field($model, 'image_url')->textInput() ?>
+
     <?= $form->field($model, 'status')->dropDownList([ 'active' => 'Active', 'inactive' => 'Inactive', ], ['prompt' => '']) ?>
 
     <?= $form->field($model, 'description')->textInput(['maxlength' => true]) ?>
