@@ -24,6 +24,7 @@ class m241029_183336_create_cards_table extends Migration
             'status' => "ENUM('active','inactive') NOT NULL",
             'description' => $this->string(255),
             'created_at' => $this->timestamp()->notNull()->defaultExpression('CURRENT_TIMESTAMP'),
+            'user_id' => $this->integer()->null(),
         ], 'ENGINE=InnoDB');
 
         // creates index for column `game_id`
@@ -31,6 +32,13 @@ class m241029_183336_create_cards_table extends Migration
             '{{%idx-cards-game_id}}',
             '{{%cards}}',
             'game_id'
+        );
+
+        //creates index for column `user_id`
+        $this->createIndex(
+            '{{%idx-cards-user_id}}',
+            '{{%cards}}',
+            'user_id'
         );
 
         // add foreign key for table `{{%games}}`
@@ -41,6 +49,15 @@ class m241029_183336_create_cards_table extends Migration
             '{{%games}}',
             'id',
             'CASCADE'
+        );
+
+        $this->addForeignKey(
+            '{{%fk-cards-user_id}}',
+            '{{%cards}}',
+            'user_id',
+            '{{%user}}',
+            'id',
+            'SET NULL'
         );
     }
 
@@ -55,9 +72,19 @@ class m241029_183336_create_cards_table extends Migration
             '{{%cards}}'
         );
 
+        $this->dropForeignKey(
+            '{{%fk-cards-user_id}}',
+            '{{%cards}}'
+        );
+
         // drops index for column `game_id`
         $this->dropIndex(
             '{{%idx-cards-game_id}}',
+            '{{%cards}}'
+        );
+
+        $this->dropIndex(
+            '{{%idx-cards-user_id}}',
             '{{%cards}}'
         );
 
