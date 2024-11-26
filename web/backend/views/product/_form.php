@@ -12,7 +12,7 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'game_id')->dropDownList(
+    <?= $form->field($model, 'game_id')->label('Game')->dropDownList(
         \yii\helpers\ArrayHelper::map(\common\models\Game::find()->all(), 'id', 'name'),
         ['prompt' => 'Select a Game']
     ) ?>
