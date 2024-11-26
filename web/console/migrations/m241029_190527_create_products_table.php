@@ -22,6 +22,8 @@ class m241029_190527_create_products_table extends Migration
             'price' => $this->decimal(10,2)->notNull(),
             'stock' => $this->integer(4)->notNull(),
             'status' => "ENUM('active','inactive') NOT NULL DEFAULT 'active'",
+            'image_url' => $this->string(255)->notNull(),
+            'type' => "ENUM('booster', 'sleeve', 'playmat', 'storage', 'guide', 'apparel') NOT NULL",
             'description' => $this->string(255),
             'created_at' => $this->timestamp()->notNull()->defaultExpression('CURRENT_TIMESTAMP'),
         ], 'ENGINE=InnoDB');

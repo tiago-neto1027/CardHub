@@ -50,7 +50,7 @@
                     ['label' => 'User Management', 'url' => ['user/index'], 'icon' => 'user'],
                     ['label' => 'Game Management', 'url' => ['game/index'], 'icon' => 'gamepad'],
                     ['label' => 'Cards Management', 'url' => ['card/index'], 'icon' => 'dragon'],
-                    ['label' => 'Product Management', 'icon' => 'shopping-cart'],
+                    ['label' => 'Product Management', 'url' => ['product/index'], 'icon' => 'shopping-cart'],
 
 
                     ['label' => 'OTHERS', 'header' => true],
