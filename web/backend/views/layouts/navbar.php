@@ -186,6 +186,11 @@ use yii\helpers\Html;
                 <i class="fas fa-th-large"></i>
             </a>
         </li>
+        <li class="nav-item">
+            <a href="javascript:history.go(-1);" class="btn btn-primary mx-2 pl-3 pr-4">
+                <i class="fa-solid fa-arrow-right"></i> Back
+            </a>
+        </li>
     </ul>
 </nav>
 <!-- /.navbar -->
