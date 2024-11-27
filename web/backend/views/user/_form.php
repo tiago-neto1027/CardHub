@@ -13,14 +13,21 @@ use yii\widgets\ActiveForm;
     <?php $form = ActiveForm::begin(); ?>
 
     <?= $form->field($model, 'username')->textInput(['autofocus' => true]) ?>
+
     <?= $form->field($model, 'email') ?>
-    <?= $form->field($model, 'password')->passwordInput() ?>
+
+    <!-- Removes the password from the 'update' action -->
+    <?php if (Yii::$app->controller->action->id !== 'update' || !empty($model->password)): ?>
+        <?= $form->field($model, 'password')->passwordInput() ?>
+    <?php endif; ?>
+
     <?= $form->field($model, 'role')->dropDownList([
             'manager' => 'manager',
             'admin' => 'admin',
             'seller' => 'seller',
             'buyer' => 'buyer',
     ], ['prompt' => 'Select Role']) ?>
+
     <?php if (Yii::$app->controller->action->id === 'update'): ?>
         <?= $form->field($model, 'status')->dropDownList([
             10 => 'Active',
