@@ -126,7 +126,7 @@ class CardController extends Controller
     /* PENDING CARD ACTIONS */
     public function actionPendingApproval()
     {
-        //The same as the index but filters for 'Pending' cards only
+        //The same as the index but filters for 'Pending' cards only and sorts by ascendint created time
 
         $searchModel = new CardSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
@@ -140,6 +140,11 @@ class CardController extends Controller
         ]);
     }
 
+    public function actionPendingCardCount()
+    {
+        return Card::find()->where(['status' => 'inactive'])->count();
+    }
+
     public function actionAccept($id)
     {
         $model = $this->findModel($id);
@@ -149,6 +154,19 @@ class CardController extends Controller
             $model->status = 'active';
             $model->save();
         }
+        return $this->redirect(['pending-approval']);
+    }
+
+    public function actionUserInfo($id)
+    {
+        $model = $this->findModel($id);
+
+        if($model &&  !empty($model->user_id))
+        {
+            return $this->redirect(['user/view', 'id' => $model->user_id]);
+        }
+
+        Yii::$app->session->setFlash('failed', 'This card does not have an associated user.');
         return $this->redirect(['pending-approval']);
     }
 

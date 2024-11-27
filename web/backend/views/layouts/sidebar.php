@@ -31,6 +31,8 @@
         <!-- Sidebar Menu -->
         <nav class="mt-2">
             <?php
+            $pendingCount = Yii::$app->runAction('card/pending-card-count');
+
             echo \hail812\adminlte\widgets\Menu::widget([
                 'items' => [
                     /*[
@@ -47,7 +49,11 @@
 
                     //ACTIVITY MENUS
                     ['label' => 'ACTIVITIES', 'header' => true],
-                    ['label' => 'Pending Cards', 'url' => ['card/pending-approval'], 'icon' => 'bell'],
+                    ['label' => 'Pending Cards',
+                        'url' => ['card/pending-approval'],
+                        'icon' => 'bell',
+                        'badge' => '<span class="right badge badge-danger">' . $pendingCount . '</span>',
+                    ],
 
                     //CRUD MENUS
                     ['label' => 'CRUD MENUS', 'header' => true],
