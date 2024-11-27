@@ -42,18 +42,6 @@ return [
             'rules' => [
             ],
         ],
-        'mailer' => [
-            'class' => 'yii\swiftmailer\Mailer',
-            'useFileTransport' => false,
-            'transport' => [
-                'class' => 'Swift_SmtpTransport',
-                'host' => 'smtp.office365.com',  // For Gmail SMTP
-                'username' => 'goncalogaspar2001@outlook.pt',
-                'password' => 'AllMightyStar1!',
-                'port' => '587',  // Use port 587 for TLS
-                'encryption' => 'tls',  // Enable TLS encryption
-            ],
-        ],
 
 
     ],
