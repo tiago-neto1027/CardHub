@@ -36,7 +36,14 @@ use yii\bootstrap4\Breadcrumbs;
 
     <!-- Main content -->
     <div class="content">
-        <?= $content ?><!-- /.container-fluid -->
+        <?php if (Yii::$app->session->hasFlash('failed')): ?>
+            <div class="alert alert-danger">
+                <?php echo Yii::$app->session->getFlash('failed'); ?>
+            </div>
+        <?php endif; ?>
+
+        <?= $content ?>
+        <!-- /.container-fluid -->
     </div>
     <!-- /.content -->
 </div>

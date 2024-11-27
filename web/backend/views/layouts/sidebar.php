@@ -31,6 +31,8 @@
         <!-- Sidebar Menu -->
         <nav class="mt-2">
             <?php
+            $pendingCount = Yii::$app->runAction('card/pending-card-count');
+
             echo \hail812\adminlte\widgets\Menu::widget([
                 'items' => [
                     /*[
@@ -45,13 +47,23 @@
                     ],*/
                     ['label' => 'Dashboard', 'url' => ['site/index'], 'icon' => 'tachometer-alt'],
 
+                    //ACTIVITY MENUS
+                    ['label' => 'ACTIVITIES', 'header' => true],
+                    ['label' => 'Pending Cards',
+                        'url' => ['card/pending-approval'],
+                        'icon' => 'bell',
+                        'badge' => '<span class="right badge badge-danger">' . $pendingCount . '</span>',
+                    ],
 
+                    //CRUD MENUS
                     ['label' => 'CRUD MENUS', 'header' => true],
                     ['label' => 'User Management', 'url' => ['user/index'], 'icon' => 'user'],
                     ['label' => 'Game Management', 'url' => ['game/index'], 'icon' => 'gamepad'],
-                    ['label' => 'Cards Management', 'url' => ['card/index'], 'icon' => 'dragon'],
+                    ['label' => 'Card Management', 'url' => ['card/index'], 'icon' => 'dragon'],
                     ['label' => 'Product Management', 'url' => ['product/index'], 'icon' => 'shopping-cart'],
 
+                    //REVENUE MENUS
+                    ['label' => 'REVENUES', 'header' => true],
 
                     ['label' => 'OTHERS', 'header' => true],
                     [
@@ -60,7 +72,6 @@
                         'items' => [
                             ['label' => 'Reviews', 'iconStyle' => 'far'],
                             ['label' => 'Statistics', 'iconStyle' => 'far'],
-                            ['label' => 'Accept Cards', 'iconStyle' => 'far'],
                             ['label' => 'Card Sales', 'iconStyle' => 'far'],
                             ['label' => 'Product Sales', 'iconStyle' => 'far'],
                         ]

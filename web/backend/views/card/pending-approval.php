@@ -10,14 +10,10 @@ use yii\grid\GridView;
 /** @var common\models\CardSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = 'Cards';
+$this->title = 'Cards Pending Approval';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="card-index">
-
-    <p>
-        <?= Html::a('Create Card', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
+<div class="card-pending-approval">
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
@@ -47,7 +43,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],*/
             //'image_url:url',
             //'description',
-            'status',
+            //'status',
             [
                 'attribute' => 'created_at',
                 'format' => ['date', 'php:d/m/Y'],
@@ -59,9 +55,36 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'contentOptions' => ['style' => 'white-space: nowrap;'],
                 'class' => ActionColumn::className(),
+                'header' => 'Actions',
+                'template' => '{view} {accept} {reject} {info}',
+                'buttons' => [
+                    'view' => function ($url, $model, $key) {
+                        return Html::a('View', ['view', 'id' => $model->id], [
+                            'class' => 'btn btn-info btn-sm',
+                            'data-method' => 'post',
+                        ]);
+                    },
+                    'accept' => function ($url, $model, $key) {
+                        return Html::a('Accept', ['accept', 'id' => $model->id], [
+                            'class' => 'btn btn-success btn-sm',
+                            'data-method' => 'post',
+                        ]);
+                    },
+                    'reject' => function ($url, $model, $key) {
+                        return Html::a('Reject', ['delete', 'id' => $model->id], [
+                            'class' => 'btn btn-danger btn-sm',
+                            'data-method' => 'post',
+                        ]);
+                    },
+                    'info' => function ($url, $model, $key) {
+                        return Html::a('User Info', ['user-info', 'id' => $model->id], [
+                            'class' => 'btn btn-primary btn-sm',
+                        ]);
+                    },
+                ],
                 'urlCreator' => function ($action, Card $model, $key, $index, $column) {
                     return Url::toRoute([$action, 'id' => $model->id]);
-                 }
+                }
             ],
         ],
     ]); ?>

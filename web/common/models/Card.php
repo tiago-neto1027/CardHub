@@ -12,13 +12,15 @@ use Yii;
  * @property string $name
  * @property string $rarity
  * @property string $image_url
- * @property string|null $description
  * @property string $status
+ * @property string|null $description
  * @property string $created_at
+ * @property int|null $user_id
  *
  * @property Favorite[] $favorites
  * @property Game $game
  * @property Listing[] $listings
+ * @property User $user
  */
 class Card extends \yii\db\ActiveRecord
 {
@@ -37,13 +39,14 @@ class Card extends \yii\db\ActiveRecord
     {
         return [
             [['game_id', 'name', 'rarity', 'image_url', 'status'], 'required'],
-            [['game_id'], 'integer'],
+            [['game_id', 'user_id'], 'integer'],
             [['status'], 'string'],
             [['created_at'], 'safe'],
             [['name'], 'string', 'max' => 100],
             [['rarity'], 'string', 'max' => 50],
             [['image_url', 'description'], 'string', 'max' => 255],
             [['game_id'], 'exist', 'skipOnError' => true, 'targetClass' => Game::class, 'targetAttribute' => ['game_id' => 'id']],
+            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
 
@@ -58,9 +61,10 @@ class Card extends \yii\db\ActiveRecord
             'name' => 'Name',
             'rarity' => 'Rarity',
             'image_url' => 'Image Url',
-            'description' => 'Description',
             'status' => 'Status',
+            'description' => 'Description',
             'created_at' => 'Created At',
+            'user_id' => 'User ID',
         ];
     }
 
@@ -92,5 +96,15 @@ class Card extends \yii\db\ActiveRecord
     public function getListings()
     {
         return $this->hasMany(Listing::class, ['card_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[User]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUser()
+    {
+        return $this->hasOne(User::class, ['id' => 'user_id']);
     }
 }

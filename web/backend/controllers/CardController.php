@@ -4,6 +4,7 @@ namespace backend\controllers;
 
 use common\models\Card;
 use common\models\CardSearch;
+use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -113,7 +114,60 @@ class CardController extends Controller
     {
         $this->findModel($id)->delete();
 
+        //Redirects to the right place, the referer is the last page URL
+        $referrer = Yii::$app->request->referrer;
+        if (strpos($referrer, 'pending-approval') !== false) {
+            return $this->redirect(['pending-approval']);
+        }
+
         return $this->redirect(['index']);
+    }
+
+    /* PENDING CARD ACTIONS */
+    public function actionPendingApproval()
+    {
+        //The same as the index but filters for 'Pending' cards only and sorts by ascendint created time
+
+        $searchModel = new CardSearch();
+        $dataProvider = $searchModel->search($this->request->queryParams);
+
+        $dataProvider->query->andWhere(['status' => 'inactive']);
+        $dataProvider->query->orderBy(['created_at' => SORT_ASC]);
+
+        return $this->render('pending-approval', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    public function actionPendingCardCount()
+    {
+        return Card::find()->where(['status' => 'inactive'])->count();
+    }
+
+    public function actionAccept($id)
+    {
+        $model = $this->findModel($id);
+
+        if($model)
+        {
+            $model->status = 'active';
+            $model->save();
+        }
+        return $this->redirect(['pending-approval']);
+    }
+
+    public function actionUserInfo($id)
+    {
+        $model = $this->findModel($id);
+
+        if($model &&  !empty($model->user_id))
+        {
+            return $this->redirect(['user/view', 'id' => $model->user_id]);
+        }
+
+        Yii::$app->session->setFlash('failed', 'This card does not have an associated user.');
+        return $this->redirect(['pending-approval']);
     }
 
     /**
