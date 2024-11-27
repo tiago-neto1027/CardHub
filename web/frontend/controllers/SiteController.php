@@ -269,5 +269,18 @@ class SiteController extends Controller
             'model' => $model
         ]);
     }
+    public function actionTestEmail(){
+        $to = "goncalogaspar2001@outlook.pt";
+        $subject = "Test Email";
+        $message = "This is a test email.";
+        $headers = "From: your-email@example.com";
+
+        if (mail($to, $subject, $message, $headers)) {
+            echo "Email sent successfully!";
+        } else {
+            echo "Failed to send email.";
+        }
+
+    }
 
 }
