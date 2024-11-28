@@ -17,10 +17,10 @@ use yii\bootstrap5\ActiveForm;
         <p style="margin-bottom: 150px"></p>
 
         <?= Html::button('Change username', ['class' => 'btn btn-sm btn-dark', 'name' => 'RequestPasswordReset']) ?>
-        <?= Html::button('Change email', ['class' => 'btn btn-sm btn-dark', 'name' => 'RequestPasswordReset']) ?>
+        <?= Html::a('Change email', ['/detail/reset-email-form','id' => Yii::$app->user->id], ['class' => 'btn btn-sm btn-dark']) ?>
 
         <p style="margin-top: 20px">
-            <?= Html::a('Change password', ['/site/request-password-reset'], ['class' => 'btn btn-sm btn-dark']) ?>
+            <?= Html::a('Change password', ['/site/request-password-reset '], ['class' => 'btn btn-sm btn-dark']) ?>
         </p>
     </div>
 <?php

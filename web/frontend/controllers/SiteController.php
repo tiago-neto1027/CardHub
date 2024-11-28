@@ -164,18 +164,7 @@ class SiteController extends Controller
         ]);
     }
 
-    /**
-     * Displays user account.
-     *
-     * @return mixed
-     */
-    public function actionDetails($id)
-    {
-        $user = \common\models\User::findOne($id);
-        return $this->render('details', [
-            'user' => $user,
-        ]);
-    }
+
 
     /**
      * Requests password reset.
