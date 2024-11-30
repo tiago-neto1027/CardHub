@@ -64,7 +64,18 @@
         <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">Featured Products</span></h2>
         <div class="row px-xl-5">
             <?php 
-                foreach($products as $product){
+                if (empty($products)) {
+                    echo "<p>No products available.</p>";
+                } else {
+
+                    $shuffledProducts = $products;      //SHUFFLE used to produce random products display
+                    shuffle($shuffledProducts);
+
+                    $count=0;
+                    $maxcard=8;
+
+                foreach($shuffledProducts as $product){
+                    if ($count >= $maxcard) break;      //COUNTER is used to limit the max number of cards. Default set to 8.
                     
             ?>
                     <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
@@ -81,7 +92,7 @@
                             <div class="text-center py-4">
                                 <a class="h6 text-decoration-none text-truncate" href=""><?= $product->name ?></a>
                                 <div class="d-flex align-items-center justify-content-center mt-2">
-                                    <h5>€ <?= $product->price ?></h5><h6 class="text-muted ml-2"><del> old price</del></h6>
+                                    <h5>€ <?= $product->price ?></h5><!-- REMOVED old price<h6 class="text-muted ml-2"><del> old price</del></h6>-->
                                 </div>
                                 <div class="d-flex align-items-center justify-content-center mb-1">
                                     <small class="fa fa-star text-primary mr-1"></small>
@@ -95,7 +106,7 @@
                         </div>
                     </div>
             <?php
-                }
+                $count++;}}
             ?>
 
             <!-- HARDCODED PRODUCTS FROM TEMPLATE -->
