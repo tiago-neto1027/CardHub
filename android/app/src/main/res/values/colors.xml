@@ -2,4 +2,10 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="bg_grey">#282828</color>
+    <color name="bg_grey_light">#3D464D</color>
+    <color name="cardhub_blue">#0097b2</color>
+    <color name="cardhub_blue_medium">#5ba9cf</color>
+    <color name="cardhub_blue_light">#e3e8ff</color>
+
 </resources>
