@@ -8,20 +8,46 @@ use yii\bootstrap5\Html;
 use yii\bootstrap5\ActiveForm;
 
 ?>
-<h1 style="text-align: center;">My Account</h1>
-    <div style="margin-left: 50px;">
-        <p style="font-size: 20px; font-weight: bold;">User Name:
-            <span style="font-size: 16px; font-weight: normal;"><?= $user->username ?></span></p>
-        <p style="font-size: 20px; font-weight: bold;">Email:
-            <span style="font-size: 16px; font-weight: normal;"><?= $user->email ?></span></p>
-        <p style="margin-bottom: 150px"></p>
-
-        <?= Html::button('Change username', ['class' => 'btn btn-sm btn-dark', 'name' => 'RequestPasswordReset']) ?>
-        <?= Html::a('Change email', ['/detail/reset-email-form','id' => Yii::$app->user->id], ['class' => 'btn btn-sm btn-dark']) ?>
-
-        <p style="margin-top: 20px">
-            <?= Html::a('Change password', ['/site/request-password-reset '], ['class' => 'btn btn-sm btn-dark']) ?>
-        </p>
+<h1 class="text-center mb-5">My Account</h1>
+<div class="container">
+    <div class="ml-5 rounded bg-body-secondary">
+        <div class="row justify-content-between ml-5">
+            <div class="col mt-5">
+                <p class="font-weight-bold fs-4">User Name:
+                    <span class="font-weight-normal fs-5"><?= $user->username ?></span>
+                </p>
+            </div>
+            <div class="col mt-5">
+                <?= Html::a('Change Username', ['/detail/change-username-form', 'id' => Yii::$app->user->id], [
+                    'class' => 'btn btn-primary btn-sm rounded',
+                    'role' => 'button'
+                ]) ?>
+            </div>
+        </div>
+        <div class="row justify-content-between ml-5 mt-5 mb-5">
+            <div class="col">
+                <p class="font-weight-bold fs-4">Email:
+                    <span class="font-weight-normal fs-5"><?= $user->email ?></span></p>
+            </div>
+            <div class="col">
+                <?= Html::a('Change Email', ['/detail/change-email-form', 'id' => Yii::$app->user->id], [
+                    'class' => 'btn btn-primary btn-sm rounded',
+                    'role' => 'button'
+                ]) ?>
+            </div>
+        </div>
+        <div class="row justify-content-between ml-5 mt-5 mb-5">
+            <div class="col">
+                <div class="mt-2 mb-4">
+                    <?= Html::a('Change Password', ['/detail/change-password-form', 'id' => Yii::$app->user->id], [
+                        'class' => 'btn btn-primary btn-sm rounded',
+                        'role' => 'button'
+                    ]) ?>
+                </div>
+            </div>
+        </div>
     </div>
+</div>
+
 <?php
 
