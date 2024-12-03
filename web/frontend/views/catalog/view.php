@@ -22,12 +22,19 @@ use yii\widgets\DetailView;
                    <div>
                     <?php
                         if($model->stock > 0){
-                            ?><h5 class="text-secondary mb-4"><i class="text-primary bi bi-bag-check-fill me-2"></i>Em Stock: <?= $model->stock ?></h5> <?php
+                            ?>
+                            <div class=" align-items-left">
+                                
+                                <h5 class="text-secondary mb-4"><i class="text-primary bi bi-bag-check-fill me-2"></i>Em Stock: <?= $model->stock ?></h5> 
+                                <button type="button" class="bg-primary text-secondary btn btn-lg">Add to cart!</button>
+                            </div><?php
+                            
                         } else{
                             ?> 
-                            <div class="d-flex align-items-left">
+                            <div class=" align-items-left">
                                 
-                                <h5 class="text-secondary mb-4"><i class="text-primary bi bi-bag-x-fill me-2"></i>Sem Stock!</h5> 
+                                <h5 class="text-secondary mb-4"><i class="text-primary bi bi-bag-x-fill me-2"></i>Sem Stock!</h5>
+                                <button type="button" class="bg-primary text-secondary btn btn-lg disabled">Add to cart!</button>
                             </div><?php
                         }
                         	?>
