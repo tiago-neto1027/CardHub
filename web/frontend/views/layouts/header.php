@@ -163,8 +163,8 @@
                             <?php
                             $id = Yii::$app->user->id;
                             $roles = Yii::$app->authManager->getRolesByUser($id);
+                            $listingCount = \common\models\Listing::find()->where(['seller_id' => $id])->count();
                             if(isset($roles['seller']))
-                                $listingCount = \common\models\Listing::find()->where(['seller_id' => $id])->count();
                                 echo '
                                     <a href="'.Url::to(['/listing/index']).'" class="btn px-0">
                                         <i class="fas fa-book-open text-primary"></i>
