@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use yii\jui\AutoComplete;
 
 /** @var yii\web\View $this */
 /** @var common\models\Listing $model */
@@ -12,19 +13,37 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'seller_id')->textInput() ?>
+    <label class="control-label" for="listing-price">Card Name</label>
+    <?= \yii\jui\AutoComplete::widget([
+        'options' => ['class' => 'form-control', 'placeholder' => 'Type card name...'],
+        'clientOptions' => [
+            'source' => \yii\helpers\Url::to(['listing/card-list']),
+            'minLength' => 2,
+            'select' => new \yii\web\JsExpression('function(event, ui) {
+                $("#listing-card_id").val(ui.item.id);
+            }'),
+        ],
+    ]);
+    echo $form->field($model, 'card_id')->hiddenInput()->label(false) ?>
 
-    <?= $form->field($model, 'card_id')->textInput() ?>
-
-    <?= $form->field($model, 'price')->textInput() ?>
-
-    <?= $form->field($model, 'condition')->dropDownList([ 'Brand new' => 'Brand new', 'Very good' => 'Very good', 'Good' => 'Good', 'Played' => 'Played', 'Poor' => 'Poor', 'Damaged' => 'Damaged', ], ['prompt' => '']) ?>
-
-    <?= $form->field($model, 'status')->dropDownList([ 'active' => 'Active', 'inactive' => 'Inactive', ], ['prompt' => '']) ?>
-
-    <?= $form->field($model, 'created_at')->textInput() ?>
-
-    <?= $form->field($model, 'updated_at')->textInput() ?>
+    <div class="row">
+        <div class="col-6">
+            <?= $form->field($model, 'price')->textInput(['placeholder' => 'Type the price...']) ?>
+        </div>
+        <div class="col-6">
+            <?= $form->field($model, 'condition')->dropDownList(
+                [
+                    'Brand new' => 'Brand new',
+                    'Very good' => 'Very good',
+                    'Good' => 'Good',
+                    'Played' => 'Played',
+                    'Poor' => 'Poor',
+                    'Damaged' => 'Damaged',
+                ],
+                ['prompt' => 'Select a Quality']
+            ) ?>
+        </div>
+    </div>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

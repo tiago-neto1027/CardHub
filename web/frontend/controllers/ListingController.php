@@ -7,6 +7,7 @@ use common\models\ListingSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\jui\AutoComplete;
 
 /**
  * ListingController implements the CRUD actions for Listing model.
@@ -47,19 +48,6 @@ class ListingController extends Controller
     }
 
     /**
-     * Displays a single Listing model.
-     * @param int $id ID
-     * @return string
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionView($id)
-    {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
-    }
-
-    /**
      * Creates a new Listing model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
@@ -67,10 +55,12 @@ class ListingController extends Controller
     public function actionCreate()
     {
         $model = new Listing();
+        $model->seller_id = \Yii::$app->user->identity->id;
+        $model->status = 'inactive';
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+                return $this->redirect(['index']);
             }
         } else {
             $model->loadDefaultValues();
@@ -81,24 +71,17 @@ class ListingController extends Controller
         ]);
     }
 
-    /**
-     * Updates an existing Listing model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param int $id ID
-     * @return string|\yii\web\Response
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionUpdate($id)
+    public function actionCardList($term)
     {
-        $model = $this->findModel($id);
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        }
+        $cards = \common\models\Card::find()
+            ->select(['id', 'name AS label'])
+            ->where(['like', 'name', $term])
+            ->asArray()
+            ->all();
 
-        return $this->render('update', [
-            'model' => $model,
-        ]);
+        return $cards;
     }
 
     /**
