@@ -5,12 +5,12 @@ use yii\helpers\Html;
 ?>
 
 
-<div class="card" style="max-width: 540px;">
-    <div class="row g-0">
+<div class="card h-100" style="max-width: 540px;">
+    <div class="row g-0 h-100">
         <div class="col-md-4">
             <?= Html::img($model->card->image_url, [
                 'alt' => $model->card->name,
-                'class' => 'img-fluid rounded-start',
+                'class' => 'img-fluid rounded-start h-100 w-100',
             ]);?>
         </div>
         <div class="col-md-8">
@@ -22,7 +22,7 @@ use yii\helpers\Html;
             </div>
         </div>
     </div>
-    <div class="position-absolute top-100 end-0 p-2">
+    <div class="position-absolute end-0 p-2" style="top: 90%; transform: translateY(-50%);">
         <?= Html::a(
             '<i class="fas fa-trash-alt" style="font-size: 1.5rem;"></i>',
             ['listing/delete', 'id' => $model->id],
