@@ -11,11 +11,10 @@ class RbacController extends Controller
         $auth = Yii::$app->authManager;
         $auth->removeAll();
 
-
-        $manager = $auth->createRole('manager');
-        $auth->add($manager);
         $admin = $auth->createRole('admin');
         $auth->add($admin);
+        $manager = $auth->createRole('manager');
+        $auth->add($manager);
         $buyer = $auth->createRole('buyer');
         $auth->add($buyer);
         $seller = $auth->createRole('seller');
@@ -280,32 +279,32 @@ class RbacController extends Controller
 
         //Admin permissions
         //getting all the seller permissions
-        $auth->addChild($admin, $seller);
+        $auth->addChild($manager, $seller);
 
         //Cards
-        $auth->addChild($admin, $createCard);
-        $auth->addChild($admin, $deleteCard);
+        $auth->addChild($manager, $createCard);
+        $auth->addChild($manager, $deleteCard);
 
         //Games
-        $auth->addChild($admin, $createGame);
-        $auth->addChild($admin, $deleteGame);
-        $auth->addChild($admin, $updateGame);
+        $auth->addChild($manager, $createGame);
+        $auth->addChild($manager, $deleteGame);
+        $auth->addChild($manager, $updateGame);
 
         //Products
-        $auth->addChild($admin, $createProduct);
-        $auth->addChild($admin, $deleteProduct);
-        $auth->addChild($admin, $updateProduct);
+        $auth->addChild($manager, $createProduct);
+        $auth->addChild($manager, $deleteProduct);
+        $auth->addChild($manager, $updateProduct);
 
         //Invoice
-        $auth->addChild($admin, $deleteInvoice);
+        $auth->addChild($manager, $deleteInvoice);
 
 
         //Manager permissions
         //getting all the seller permissions
-        $auth->addChild($manager, $admin);
+        $auth->addChild($admin, $manager);
 
         //Users
-        $auth->addChild($manager, $manageRoles);
+        $auth->addChild($admin, $manageRoles);
 
         //
     }
