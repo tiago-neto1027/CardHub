@@ -10,18 +10,16 @@ use yii\widgets\ListView;
 /** @var common\models\ListingSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = 'Listings';
+$this->title = 'My listings';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="listing-index row">
-
     <div class="col-8">
-        <h1><?= Html::encode($this->title) ?></h1>
+        <h2><?= Html::encode($this->title) ?></h2>
     </div>
-
     <div class="col-4 text-end align-content-end">
         <p>
-            <?= Html::a('Create Listing', ['create'], ['class' => 'btn btn-success']) ?>
+            <?= Html::a('Sell other product', ['create'], ['class' => 'btn btn-success']) ?>
         </p>
     </div>
 </div>

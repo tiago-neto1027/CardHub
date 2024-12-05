@@ -2,17 +2,17 @@
 
 namespace frontend\controllers;
 
-use common\models\Listing;
-use common\models\ListingSearch;
+use common\models\Card;
+use common\models\CardSearch;
+use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use yii\jui\AutoComplete;
 
 /**
- * ListingController implements the CRUD actions for Listing model.
+ * CardController implements the CRUD actions for Card model.
  */
-class ListingController extends Controller
+class CardController extends Controller
 {
     /**
      * @inheritDoc
@@ -33,34 +33,48 @@ class ListingController extends Controller
     }
 
     /**
-     * Lists all Listing models.
+     * Lists all Card models.
      *
      * @return string
      */
     public function actionIndex()
     {
-        $searchModel = new ListingSearch();
+        $searchModel = new CardSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
         return $this->render('index', [
+            'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
     }
 
     /**
-     * Creates a new Listing model.
+     * Displays a single Card model.
+     * @param int $id ID
+     * @return string
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    public function actionView($id)
+    {
+        return $this->render('view', [
+            'model' => $this->findModel($id),
+        ]);
+    }
+
+    /**
+     * Creates a new Card model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
     public function actionCreate()
     {
-        $model = new Listing();
-        $model->seller_id = \Yii::$app->user->identity->id;
+        $model = new Card();
         $model->status = 'inactive';
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['index']);
+                Yii::$app->session->setFlash('success', 'Card submitted. Please wait for your card to be accepted.');
+                return $this->redirect(['listing/index']);
             }
         } else {
             $model->loadDefaultValues();
@@ -71,22 +85,28 @@ class ListingController extends Controller
         ]);
     }
 
-    public function actionCardList($term)
+    /**
+     * Updates an existing Card model.
+     * If update is successful, the browser will be redirected to the 'view' page.
+     * @param int $id ID
+     * @return string|\yii\web\Response
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    public function actionUpdate($id)
     {
-        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $model = $this->findModel($id);
 
-        $cards = \common\models\Card::find()
-            ->select(['id', 'name AS label'])
-            ->where(['like', 'name', $term])
-            ->andWhere(['status' => 'active'])
-            ->asArray()
-            ->all();
+        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
+        }
 
-        return $cards;
+        return $this->render('update', [
+            'model' => $model,
+        ]);
     }
 
     /**
-     * Deletes an existing Listing model.
+     * Deletes an existing Card model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param int $id ID
      * @return \yii\web\Response
@@ -100,15 +120,15 @@ class ListingController extends Controller
     }
 
     /**
-     * Finds the Listing model based on its primary key value.
+     * Finds the Card model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param int $id ID
-     * @return Listing the loaded model
+     * @return Card the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Listing::findOne(['id' => $id])) !== null) {
+        if (($model = Card::findOne(['id' => $id])) !== null) {
             return $model;
         }
 

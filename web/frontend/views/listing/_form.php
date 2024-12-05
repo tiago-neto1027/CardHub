@@ -46,7 +46,8 @@ use yii\jui\AutoComplete;
     </div>
 
     <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Create Card', ['/card/create'], ['class' => 'btn btn-primary mr-3']) ?>
+        <?= Html::submitButton('Save', ['class' => 'btn btn-success mr-3']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

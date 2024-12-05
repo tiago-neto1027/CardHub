@@ -54,7 +54,7 @@ class Listing extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'seller_id' => 'Seller ID',
-            'card_id' => 'Card ID',
+            'card_id' => 'Card Name',
             'price' => 'Price',
             'condition' => 'Condition',
             'status' => 'Status',
