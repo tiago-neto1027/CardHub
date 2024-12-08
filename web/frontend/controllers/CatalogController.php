@@ -14,7 +14,25 @@ class CatalogController extends \yii\web\Controller
 {
     public function actionIndex()
     {
-        $data = Product::find()->all();
+        $data = null;
+        $request = \Yii::$app->request;
+        $filter = $request->get('filter');
+        if ($filter != null) {
+            $words = explode(' ', $filter);
+
+            // ORIGINAL FILTER $data = Product::find()->where(['like', 'name', $filter])->all();
+            // v MULTI-WORD FILTER:
+            $query = Product::find();
+            foreach ($words as $word) {
+                $query->andWhere(['like', 'name', $word],);
+            }
+
+            $data = $query->all();
+            
+        } else {
+            $data = Product::find()->all();
+
+        } 
         
         return $this->render('index', ['products' =>$data]);
     }

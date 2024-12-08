@@ -4,13 +4,35 @@
 <!DOCTYPE html>
 <html lang="en">
     <body>
-        <div class="container-fluid mb-3">
+        <div class="container-fluid">
         <div class="row">
-        <div class="col-lg-3">
-            test
+        <div class="col-lg-3" >
+            <div class="container-fluid pt-5 pb-3">
+                <h2 class="section-title position-relative text-uppercase mb-4"><span class="bg-secondary pr-3">Filters</span></h2>
+                <a class="btn rounded mb-2" href="\CardHub/web/frontend/web/catalog">Clear</a>
+                <div class="filter-buttons mb-2" id="filter-buttons">
+                    <button class="btn rounded" onclick="applyFilter('one piece')">One Piece</button>
+                    <button class="btn rounded" onclick="applyFilter('magic')">Magic</button>
+                    <button class="btn rounded" onclick="applyFilter('pokemon')">Pokemon</button>
+                </div>
+                <div class="filter-buttons mb-2" id="filter-buttons">
+                    <button class="btn rounded" onclick="applyFilter('booster')">Booster</button>
+                    <button class="btn rounded" onclick="applyFilter('playmat')">Playmat</button>
+                    <button class="btn rounded" onclick="applyFilter('sleeve')">Sleeve</button>
+                    <button class="btn rounded" onclick="applyFilter('shirt')">T-Shirt</button>
+                </div>
+                <script>
+                    function applyFilter(filterWord) {
+                        const url = new URL(window.location.href);      //TODO remove and apply in main.js
+                        url.searchParams.set('filter', filterWord);     // Set or update the filter query parameter
+                        window.location.href = url.toString();          // Redirect to the updated URL
+                    } 
+                </script>
+            </div>
         </div>
+        
         <div class="col-lg-9">
-    <!-- Products Start -->
+            <!-- Products Start -->
             <div class="container-fluid pt-5 pb-3">
                 <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">Product Catalog</span></h2>
                 <div class="row px-xl-5">
@@ -38,7 +60,7 @@
                                         </div>
                                     </div>
                                     <div class="text-center py-4">
-                                        <a class="h6 text-decoration-none text-truncate d-block" href="view?id=<?= $product->id ?>"><?= $product->name ?></a>
+                                        <a class="h6 text-decoration-none text-truncate d-block" href="catalog/view?id=<?= $product->id ?>"><?= $product->name ?></a>
                                         <div class="d-flex align-items-center justify-content-center mt-2">
                                             <h5>€ <?= $product->price ?></h5><!-- REMOVED old price<h6 class="text-muted ml-2"><del> old price</del></h6>-->
                                         </div>
@@ -62,11 +84,14 @@
         </div>
         </div>
         </div>
-        <div class= "flex items-senter gap-x-2.5">
-            <nav>
-                
-            </nav>
-
+        <div class= "d-flex justify-content-center">
+            <div class="pagination">
+                <button class="btn active rounded" onclick="">&laquo;</button>
+                <button class="btn rounded onclick="">1</button>
+                <button class="btn rounded" onclick="">2</button>
+                <button class="btn rounded" onclick="">3</button>
+                <button class="btn active rounded" onclick="">&raquo;</button>
+            </div>
         </div>
         
     </body>
