@@ -6,6 +6,7 @@ use backend\models\SignupForm;
 use common\models\User;
 use common\models\UserSearch;
 use Yii;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -30,17 +31,17 @@ class UserController extends Controller
                         'delete' => ['POST'],
                     ],
                 ],
-                // Access control behavior for restricting actions
-                'access' => [ // Each behavior needs a unique key
+                'access' => [
                     'class' => \yii\filters\AccessControl::class,
-                    'only' => ['create','update'], // Restrict only the 'create' action
+                    'only' => ['create','update'],
                     'rules' => [
                         [
                             'allow' => true,
                             'actions' => ['create','update'],
-                            'roles' => ['admin'], // Only 'admin' role can access
+                            'roles' => ['admin'],
                         ],
                     ],
+
                 ],
             ]
         );
