@@ -42,8 +42,8 @@
                 <div class="d-inline-flex align-items-center">
 
                     <?php
-
                     use yii\helpers\Html;
+                    use yii\helpers\Url;
 
                     if (Yii::$app->user->isGuest) {
                         echo Html::tag('div',
@@ -157,7 +157,20 @@
                             </div>      -->
                         </div>
                         <div class="navbar-nav ml-auto py-0 d-none d-lg-block">
-                            <a href="" class="btn px-0">
+                            <?php
+                            $id = Yii::$app->user->id;
+                            $roles = Yii::$app->authManager->getRolesByUser($id);
+                            $listingCount = \common\models\Listing::find()->where(['seller_id' => $id])->count();
+                            if(isset($roles['seller']))
+                                echo '
+                                    <a href="'.Url::to(['/listing/index']).'" class="btn px-0">
+                                        <i class="fas fa-book-open text-primary"></i>
+                                        <span class="badge text-secondary border border-secondary rounded-circle" style="padding-bottom: 2px;">
+                                            '. $listingCount .'
+                                        </span>
+                                    </a>';
+                            ?>
+                            <a href="" class="btn px-0 ml-3">
                                 <i class="fas fa-heart text-primary"></i>
                                 <span class="badge text-secondary border border-secondary rounded-circle" style="padding-bottom: 2px;">0</span>
                             </a>

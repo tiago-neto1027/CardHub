@@ -73,7 +73,9 @@ AppAsset::register($this);
         ]) ?>
         <?= Alert::widget() ?>
         <?= $this->render('header')?>
+        <div class="container">
         <?= $content ?>
+        </div>
         <?= $this->render('footer')?>
     </div>
 </main>

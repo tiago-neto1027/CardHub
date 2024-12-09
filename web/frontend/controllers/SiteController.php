@@ -21,6 +21,7 @@ use frontend\models\ContactForm;
  */
 class SiteController extends Controller
 {
+
     /**
      * {@inheritdoc}
      */
@@ -141,6 +142,7 @@ class SiteController extends Controller
 
         return $this->render('contact', [
             'model' => $model,
+            'listings' => $this->listings,
         ]);
     }
 
@@ -171,8 +173,6 @@ class SiteController extends Controller
             'model' => $model,
         ]);
     }
-
-
 
     /**
      * Requests password reset.
@@ -266,19 +266,4 @@ class SiteController extends Controller
             'model' => $model
         ]);
     }
-    public function actionTestEmail(){
-
-        $to = 'goncalogaspar2001@outlook.pt';
-        $subject = 'Test Email';
-        $message = 'This is a test email sent using PHP mail() function.';
-        $headers = 'From: your-email@example.com';
-
-        if (mail($to, $subject, $message, $headers)) {
-            echo "Email sent successfully!";
-        } else {
-            echo "Failed to send email.";
-        }
-
-    }
-
 }
