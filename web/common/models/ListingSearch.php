@@ -4,12 +4,12 @@ namespace common\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\models\User;
+use common\models\Listing;
 
 /**
- * UserSearch represents the model behind the search form of `common\models\User`.
+ * ListingSearch represents the model behind the search form of `common\models\Listing`.
  */
-class UserSearch extends User
+class ListingSearch extends Listing
 {
     /**
      * {@inheritdoc}
@@ -17,8 +17,9 @@ class UserSearch extends User
     public function rules()
     {
         return [
-            [['id', 'status', 'created_at', 'updated_at'], 'integer'],
-            [['username', 'auth_key', 'password_hash', 'password_reset_token', 'email', 'verification_token'], 'safe'],
+            [['id', 'seller_id', 'card_id'], 'integer'],
+            [['price'], 'number'],
+            [['condition', 'status', 'created_at', 'updated_at'], 'safe'],
         ];
     }
 
@@ -38,16 +39,12 @@ class UserSearch extends User
      *
      * @return ActiveDataProvider
      */
-    public function search($params, $onlyDeleted = false)
+    public function search($params)
     {
-        $query = User::find();
+        $query = Listing::find();
 
         // add conditions that should always apply here
-        if ($onlyDeleted) {
-            $query->andWhere(['status' => 'deleted']);
-        } else {
-            $query->andWhere(['!=', 'status', 'deleted']);
-        }
+
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
@@ -56,24 +53,22 @@ class UserSearch extends User
 
         if (!$this->validate()) {
             // uncomment the following line if you do not want to return any records when validation fails
-            $query->where('0=1');
+            // $query->where('0=1');
             return $dataProvider;
         }
 
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'status' => $this->status,
+            'seller_id' => $this->seller_id,
+            'card_id' => $this->card_id,
+            'price' => $this->price,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ]);
 
-        $query->andFilterWhere(['like', 'username', $this->username])
-            ->andFilterWhere(['like', 'auth_key', $this->auth_key])
-            ->andFilterWhere(['like', 'password_hash', $this->password_hash])
-            ->andFilterWhere(['like', 'password_reset_token', $this->password_reset_token])
-            ->andFilterWhere(['like', 'email', $this->email])
-            ->andFilterWhere(['like', 'verification_token', $this->verification_token]);
+        $query->andFilterWhere(['like', 'condition', $this->condition])
+            ->andFilterWhere(['like', 'status', $this->status]);
 
         return $dataProvider;
     }
