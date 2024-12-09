@@ -40,7 +40,7 @@ class Listing extends \yii\db\ActiveRecord
             [['seller_id', 'card_id'], 'integer'],
             [['price'], 'number'],
             [['condition', 'status'], 'string'],
-            [['created_at', 'updated_at'], 'safe'],
+            [['created_at', 'updated_at'], 'unsafe'],
             [['card_id'], 'exist', 'skipOnError' => true, 'targetClass' => Card::class, 'targetAttribute' => ['card_id' => 'id']],
             [['seller_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['seller_id' => 'id']],
         ];

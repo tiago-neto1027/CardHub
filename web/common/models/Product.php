@@ -40,7 +40,7 @@ class Product extends \yii\db\ActiveRecord
             [['game_id', 'stock'], 'integer'],
             [['price'], 'number'],
             [['status', 'type'], 'string'],
-            [['created_at'], 'safe'],
+            [['created_at'], 'unsafe'],
             [['name'], 'string', 'max' => 100],
             [['image_url', 'description'], 'string', 'max' => 255],
             [['game_id'], 'exist', 'skipOnError' => true, 'targetClass' => Game::class, 'targetAttribute' => ['game_id' => 'id']],
