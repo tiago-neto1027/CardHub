@@ -84,16 +84,20 @@
         </div>
         </div>
         </div>
-        <div class= "d-flex justify-content-center">
+        <div class= "d-flex justify-content-center pagination-container mt-4">
             <div class="pagination">
-                <button class="btn active rounded" onclick="">&laquo;</button>
-                <button class="btn rounded onclick="">1</button>
-                <button class="btn rounded" onclick="">2</button>
-                <button class="btn rounded" onclick="">3</button>
-                <button class="btn active rounded" onclick="">&raquo;</button>
+                <a class="btn active rounded" href="?<?= http_build_query(array_merge($_GET, ['page' => $page - 1])) ?>">&laquo;</a>
+
+                <?php           // Pagination Buttons
+                $totalPages = ceil($totalCount / $pageSize); 
+                for($i = 1; $i <=$totalPages; $i++){ ?>
+                    <a class="btn rouded" href="?<?= http_build_query(array_merge($_GET, ['page' => $i])) ?>">
+                    <?= $i ?></a> <?php
+                }?>
+                
+                <a class="btn active rounded" href="?<?= http_build_query(array_merge($_GET, ['page' => $page + 1])) ?>">&raquo;</a> 
             </div>
-        </div>
-        
+        </div>    
     </body>
 </html>
 

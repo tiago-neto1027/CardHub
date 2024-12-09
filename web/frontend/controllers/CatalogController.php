@@ -16,12 +16,16 @@ class CatalogController extends \yii\web\Controller
     {
         $data = null;
         $request = \Yii::$app->request;
+
+        $page = $request->get('page', 1);   // Default to page 1
+        $pageSize = 12;                     // Number of products per page
+
         $filter = $request->get('filter');
         if ($filter != null) {
             $words = explode(' ', $filter);
 
             // ORIGINAL FILTER $data = Product::find()->where(['like', 'name', $filter])->all();
-            // v MULTI-WORD FILTER:
+            // < MULTI-WORD FILTER:
             $query = Product::find();
             foreach ($words as $word) {
                 $query->andWhere(['like', 'name', $word],);
@@ -30,11 +34,20 @@ class CatalogController extends \yii\web\Controller
             $data = $query->all();
             
         } else {
+            $query = Product::find();
             $data = Product::find()->all();
-
         } 
+
+        $totalCount = $query->count();      // Total number of products matching the filter
+        $data = $query  ->offset(($page - 1) * $pageSize)
+                        ->limit($pageSize)
+                        ->all();
         
-        return $this->render('index', ['products' =>$data]);
+        return $this->render('index', ['products' =>$data,
+            'totalCount' => $totalCount,
+            'page' => $page,
+            'pageSize' => $pageSize
+        ]);
     }
 
     /**
