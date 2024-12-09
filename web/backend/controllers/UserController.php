@@ -49,6 +49,17 @@ class UserController extends Controller
         ]);
     }
 
+    public function actionDeleted()
+    {
+        $searchModel = new UserSearch();
+        $dataProvider = $searchModel->search($this->request->queryParams, true);
+
+        return $this->render('deleted', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
     /**
      * Displays a single User model.
      * @param int $id

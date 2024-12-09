@@ -38,12 +38,16 @@ class UserSearch extends User
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search($params, $onlyDeleted = false)
     {
         $query = User::find();
 
         // add conditions that should always apply here
-
+        if ($onlyDeleted) {
+            $query->andWhere(['status' => 'deleted']);
+        } else {
+            $query->andWhere(['!=', 'status', 'deleted']);
+        }
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
@@ -52,7 +56,7 @@ class UserSearch extends User
 
         if (!$this->validate()) {
             // uncomment the following line if you do not want to return any records when validation fails
-            // $query->where('0=1');
+            $query->where('0=1');
             return $dataProvider;
         }
 

@@ -13,13 +13,12 @@ use yii\grid\GridView;
 $this->title = 'Users';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="user-index">
+<div class="user-deleted">
 
     <!--<h1><?= Html::encode($this->title) ?></h1>-->
 
     <p>
-        <?= Html::a('Create User', ['create'], ['class' => 'btn btn-success']) ?>
-        <?= Html::a('Deleted Users', ['deleted'], ['class' => 'btn btn-danger']) ?>
+        <?= Html::a('Index', ['index'], ['class' => 'btn btn-info']) ?>
     </p>
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
@@ -45,20 +44,21 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             //'status',
             [
-                   'attribute' => 'created_at',
-                   'format' => ['date', 'php:d/m/Y'],
-                   'value' => function ($model) {
-                        return $model->created_at;
-                    },
-                    'label' => 'Created At',
+                'attribute' => 'created_at',
+                'format' => ['date', 'php:d/m/Y'],
+                'value' => function ($model) {
+                    return $model->created_at;
+                },
+                'label' => 'Created At',
             ],
             //'updated_at',
             //'verification_token',
             [
                 'class' => ActionColumn::className(),
+                'template' => '{view} {update}',
                 'urlCreator' => function ($action, User $model, $key, $index, $column) {
                     return Url::toRoute([$action, 'id' => $model->id]);
-                 }
+                }
             ],
         ],
     ]); ?>
