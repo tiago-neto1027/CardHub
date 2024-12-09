@@ -7,6 +7,8 @@
 use yii\bootstrap5\Html;
 use yii\bootstrap5\ActiveForm;
 
+$this->title = 'MyAccount';
+
 ?>
 <h1 class="text-center mb-5">My Account</h1>
 <div class="container">

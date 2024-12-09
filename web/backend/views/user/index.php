@@ -16,9 +16,13 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="user-index">
 
     <!--<h1><?= Html::encode($this->title) ?></h1>-->
+    <?php if (\Yii::$app->user->can('admin')): ?>
+        <p>
+            <?= Html::a('Create User', ['create'], ['class' => 'btn btn-success']) ?>
+        </p>
+    <?php endif; ?>
 
     <p>
-        <?= Html::a('Create User', ['create'], ['class' => 'btn btn-success']) ?>
         <?= Html::a('Deleted Users', ['deleted'], ['class' => 'btn btn-danger']) ?>
     </p>
 
@@ -56,6 +60,9 @@ $this->params['breadcrumbs'][] = $this->title;
             //'verification_token',
             [
                 'class' => ActionColumn::className(),
+                'template' => \Yii::$app->user->can('admin') ?
+                    '{view} {update} {delete}'
+                    : '{view} {delete}',
                 'urlCreator' => function ($action, User $model, $key, $index, $column) {
                     return Url::toRoute([$action, 'id' => $model->id]);
                  }

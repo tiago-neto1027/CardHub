@@ -23,15 +23,29 @@ class UserController extends Controller
         return array_merge(
             parent::behaviors(),
             [
+                // Restrict actions to specific HTTP methods
                 'verbs' => [
-                    'class' => VerbFilter::className(),
+                    'class' => \yii\filters\VerbFilter::class,
                     'actions' => [
                         'delete' => ['POST'],
+                    ],
+                ],
+                // Access control behavior for restricting actions
+                'access' => [ // Each behavior needs a unique key
+                    'class' => \yii\filters\AccessControl::class,
+                    'only' => ['create','update'], // Restrict only the 'create' action
+                    'rules' => [
+                        [
+                            'allow' => true,
+                            'actions' => ['create','update'],
+                            'roles' => ['admin'], // Only 'admin' role can access
+                        ],
                     ],
                 ],
             ]
         );
     }
+
 
     /**
      * Lists all User models.

@@ -87,12 +87,20 @@ class SiteController extends Controller
     public function actionLogin()
     {
         if (!Yii::$app->user->isGuest) {
-            return $this->goHome();
+            if (Yii::$app->user->can('buyer') || Yii::$app->user->can('seller')) {
+                return $this->goHome();
+            }
         }
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
+            if (Yii::$app->user->can('admin') || Yii::$app->user->can('manager')) {
+                Yii::$app->user->logout();
+                $model->addError('username', 'Log in with a frontend account.');
+            }
+            else{
+                return $this->goBack();
+            }
         }
 
         $model->password = '';
