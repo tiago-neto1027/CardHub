@@ -3,6 +3,7 @@
 namespace common\models;
 
 use Yii;
+use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "products".
@@ -40,10 +41,16 @@ class Product extends \yii\db\ActiveRecord
             [['game_id', 'stock'], 'integer'],
             [['price'], 'number'],
             [['status', 'type'], 'string'],
-            [['created_at'], 'safe'],
             [['name'], 'string', 'max' => 100],
             [['image_url', 'description'], 'string', 'max' => 255],
             [['game_id'], 'exist', 'skipOnError' => true, 'targetClass' => Game::class, 'targetAttribute' => ['game_id' => 'id']],
+        ];
+    }
+
+    public function behaviors()
+    {
+        return [
+            TimestampBehavior::class,
         ];
     }
 

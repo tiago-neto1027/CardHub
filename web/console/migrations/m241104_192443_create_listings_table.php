@@ -23,8 +23,8 @@ class m241104_192443_create_listings_table extends Migration
             'price' => $this->float()->notNull(),
             'condition' => "ENUM('Brand new', 'Very good', 'Good', 'Played', 'Poor', 'Damaged') NOT NULL",
             'status' => "ENUM('active','inactive') NOT NULL DEFAULT 'active'",
-            'created_at' => $this->timestamp()->notNull()->defaultExpression('CURRENT_TIMESTAMP'),
-            'updated_at' => $this->timestamp()->notNull()->defaultExpression('CURRENT_TIMESTAMP'),
+            'created_at' => $this->integer()->notNull(),
+            'updated_at' => $this->integer()->notNull(),
         ], 'ENGINE=InnoDB');
 
         // creates index for column `seller_id`

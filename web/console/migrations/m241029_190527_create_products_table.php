@@ -25,7 +25,8 @@ class m241029_190527_create_products_table extends Migration
             'image_url' => $this->string(255)->notNull(),
             'type' => "ENUM('booster', 'sleeve', 'playmat', 'storage', 'guide', 'apparel') NOT NULL",
             'description' => $this->string(255),
-            'created_at' => $this->timestamp()->notNull()->defaultExpression('CURRENT_TIMESTAMP'),
+            'created_at' => $this->integer()->notNull(),
+            'updated_at' => $this->integer()->notNull(),
         ], 'ENGINE=InnoDB');
 
         // creates index for column `game_id`
