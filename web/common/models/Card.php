@@ -41,7 +41,7 @@ class Card extends \yii\db\ActiveRecord
             [['game_id', 'name', 'rarity', 'image_url', 'status'], 'required'],
             [['game_id', 'user_id'], 'integer'],
             [['status'], 'string'],
-            [['created_at'], 'unsafe'],
+            [['created_at'], 'safe'],
             [['name'], 'string', 'max' => 100],
             [['rarity'], 'string', 'max' => 50],
             [['image_url', 'description'], 'string', 'max' => 255],
