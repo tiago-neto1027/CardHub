@@ -3,6 +3,7 @@
 namespace common\models;
 
 use Yii;
+use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "listings".
@@ -40,9 +41,15 @@ class Listing extends \yii\db\ActiveRecord
             [['seller_id', 'card_id'], 'integer'],
             [['price'], 'number'],
             [['condition', 'status'], 'string'],
-            [['created_at', 'updated_at'], 'safe'],
             [['card_id'], 'exist', 'skipOnError' => true, 'targetClass' => Card::class, 'targetAttribute' => ['card_id' => 'id']],
             [['seller_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['seller_id' => 'id']],
+        ];
+    }
+
+    public function behaviors()
+    {
+        return [
+            TimestampBehavior::class,
         ];
     }
 

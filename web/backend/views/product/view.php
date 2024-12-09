@@ -50,7 +50,22 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             'type',
             'description',
-            'created_at',
+            [
+                'attribute' => 'created_at',
+                'format' => ['date', 'php:d/m/Y'],
+                'value' => function ($model) {
+                    return $model->created_at;
+                },
+                'label' => 'Created At',
+            ],
+            [
+                'attribute' => 'updated_at',
+                'format' => ['date', 'php:d/m/Y'],
+                'value' => function ($model) {
+                    return $model->updated_at;
+                },
+                'label' => 'Updated At',
+            ],
         ],
     ]) ?>
 

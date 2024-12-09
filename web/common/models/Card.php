@@ -3,6 +3,7 @@
 namespace common\models;
 
 use Yii;
+use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "cards".
@@ -41,12 +42,18 @@ class Card extends \yii\db\ActiveRecord
             [['game_id', 'name', 'rarity', 'image_url', 'status'], 'required'],
             [['game_id', 'user_id'], 'integer'],
             [['status'], 'string'],
-            [['created_at'], 'safe'],
             [['name'], 'string', 'max' => 100],
             [['rarity'], 'string', 'max' => 50],
             [['image_url', 'description'], 'string', 'max' => 255],
             [['game_id'], 'exist', 'skipOnError' => true, 'targetClass' => Game::class, 'targetAttribute' => ['game_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],
+        ];
+    }
+
+    public function behaviors()
+    {
+        return [
+            TimestampBehavior::class,
         ];
     }
 
