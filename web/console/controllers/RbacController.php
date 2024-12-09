@@ -217,7 +217,6 @@ class RbacController extends Controller
 
         //Buyer permission
         //Users
-        $auth->addChild($buyer, $createUser);
         $auth->addChild($buyer, $updateUser);
         $auth->addChild($buyer, $deleteUser);
 
@@ -305,6 +304,7 @@ class RbacController extends Controller
 
         //Users
         $auth->addChild($admin, $manageRoles);
+        $auth->addChild($admin, $createUser);
 
         //
     }

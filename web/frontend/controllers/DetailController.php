@@ -34,6 +34,9 @@ class DetailController extends Controller
      */
     public function actionDetails($id)
     {
+        if (Yii::$app->user->id != $id) {
+            return $this->goHome();
+        }
         $user = getUser($id);
         return $this->render('details', [
             'user' => $user,
@@ -42,6 +45,9 @@ class DetailController extends Controller
 
     public function actionChangeEmailForm($id)
     {
+        if (Yii::$app->user->id != $id) {
+            return $this->goHome();
+        }
         $user = getUser($id);
         return $this->render('changeEmailForm', [
             'user' => $user,
@@ -50,6 +56,9 @@ class DetailController extends Controller
 
     public function actionChangeUsernameForm($id)
     {
+        if (Yii::$app->user->id != $id) {
+            return $this->goHome();
+        }
         $user = getUser($id);
         return $this->render('changeUsernameForm', [
             'user' => $user,
@@ -58,6 +67,9 @@ class DetailController extends Controller
 
     public function actionChangePasswordForm($id)
     {
+        if (Yii::$app->user->id != $id) {
+            return $this->goHome();
+        }
         $user = getUser($id);
         return $this->render('changePasswordForm', [
             'user' => $user,
