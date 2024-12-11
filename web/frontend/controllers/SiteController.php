@@ -10,7 +10,8 @@ use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
-use common\models\LoginForm;
+use \common\models\LoginForm;
+use \common\models\Product;
 use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
@@ -80,7 +81,11 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        $data = Product::find()->all();
+
+        return $this->render('index',[
+            'products' => $data
+        ]);
     }
 
     /**

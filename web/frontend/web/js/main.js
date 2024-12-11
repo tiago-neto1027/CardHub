@@ -99,6 +99,34 @@
         }
         button.parent().parent().find('input').val(newVal);
     });
+
+    
+    
+    
+
     
 })(jQuery);
 
+$(document).ready(function () {
+    function applyFilter(filterWord) {
+        const url = new URL(window.location.href);
+        url.searchParams.set('filter', filterWord); // Set or update the filter query parameter
+        window.location.href = url.toString(); // Redirect to the updated URL
+    }
+
+    function removeFilter() {
+        const url = new URL(window.location.href);
+        url.searchParams.delete('filter'); // Remove the filter query parameter
+        window.location.href = url.toString(); // Redirect to the updated URL
+    }
+
+    // Bind click events
+    $(".filter-button").on("click", function () {
+        const filterWord = $(this).data("filter");
+        applyFilter(filterWord);
+    });
+
+    $("#clear-filter").on("click", function () {
+        removeFilter();
+    });
+});
