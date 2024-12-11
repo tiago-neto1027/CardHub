@@ -11,6 +11,7 @@ use yii\captcha\Captcha;
 $this->title = 'Contact';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+<!--                                           NOT BEING USED                                           -->
 <div class="site-contact">
     <h1><?= Html::encode($this->title) ?></h1>
 

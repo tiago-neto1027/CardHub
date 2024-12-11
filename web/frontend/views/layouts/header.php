@@ -114,14 +114,20 @@ use yii\helpers\Url;
             <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                 <div class="navbar-nav mr-auto py-0">
                     <a href="<?= \yii\helpers\Url::home() ?>" class="nav-item nav-link active">Home</a>
-                    <!--        ---- removed dropdown - kept for possible utility ----
                     <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Pages <i class="fa fa-angle-down mt-1"></i></a>
+                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Cards <i class="fa fa-angle-down"></i></a>
                         <div class="dropdown-menu bg-primary rounded-0 border-0 m-0">
                             <a href="cart.html" class="dropdown-item">Shopping Cart</a>
                             <a href="checkout.html" class="dropdown-item">Checkout</a>
                         </div>
-                    </div>      -->
+                    </div>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Products <i class="fa fa-angle-down"></i></a>
+                        <div class="dropdown-menu bg-primary rounded-0 border-0 m-0">
+                            <a href="cart.html" class="dropdown-item">Shopping Cart</a>
+                            <a href="checkout.html" class="dropdown-item">Checkout</a>
+                        </div>
+                    </div>
                 </div>
                 <div class="navbar-nav ml-auto py-0 d-none d-lg-block ">
                     <?php
