@@ -142,7 +142,6 @@ class SiteController extends Controller
 
         return $this->render('contact', [
             'model' => $model,
-            'listings' => $this->listings,
         ]);
     }
 

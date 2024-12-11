@@ -9,7 +9,7 @@
     <!-- Sidebar -->
     <div class="sidebar">
         <!--User-->
-        <div class="user-panel my-2 pb-2 mx-0 d-flex">
+        <div class="user-panel my-2 pb-2 pl-2 ml-0 d-flex">
             <div class="info">
                 <a href="#" class="d-block"><?= Yii::$app->user->identity->username ?? 'Guest' ?></a>
             </div>

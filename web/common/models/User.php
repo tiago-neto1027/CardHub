@@ -227,4 +227,9 @@ class User extends ActiveRecord implements IdentityInterface
         $roles = Yii::$app->authManager->getRolesByUser(($this->id));
         return reset($roles) ? reset($roles)->name :null;
     }
+
+    public function getListings($id)
+    {
+        return \common\models\Listing::find()->where(['seller_id' => $id])->count();
+    }
 }
