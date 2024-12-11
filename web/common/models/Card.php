@@ -71,6 +71,7 @@ class Card extends \yii\db\ActiveRecord
             'status' => 'Status',
             'description' => 'Description',
             'created_at' => 'Created At',
+            'updated_at' => 'Updated At',
             'user_id' => 'User ID',
         ];
     }
