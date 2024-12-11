@@ -21,7 +21,23 @@ use common\models\User;
 
 class DetailController extends Controller
 {
-
+    public function behaviors()
+    {
+        return array_merge(
+            parent::behaviors(),
+            [
+                'access' => [
+                    'class' => \yii\filters\AccessControl::class,
+                    'rules' => [
+                            [
+                                'allow' => true,
+                                'roles' => ["seller",'buyer'],
+                            ],
+                        ],
+                    ],
+                ]
+        );
+    }
     public function actionIndex()
     {
         return $this->render('index');

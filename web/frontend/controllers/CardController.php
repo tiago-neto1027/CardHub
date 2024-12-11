@@ -22,12 +22,24 @@ class CardController extends Controller
         return array_merge(
             parent::behaviors(),
             [
+                'access' => [
+                    'class' => \yii\filters\AccessControl::class,
+                    'only' => ['create','index','delete','view'],
+                    'rules' => [
+                        [
+                            'allow' => true,
+                            'actions' => ['create'],
+                            'roles' => ['seller'],
+                        ],
+                    ],
+                ],
                 'verbs' => [
                     'class' => VerbFilter::className(),
                     'actions' => [
                         'delete' => ['POST'],
                     ],
                 ],
+
             ]
         );
     }

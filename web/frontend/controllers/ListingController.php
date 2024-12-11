@@ -22,15 +22,28 @@ class ListingController extends Controller
         return array_merge(
             parent::behaviors(),
             [
-                'verbs' => [
-                    'class' => VerbFilter::className(),
-                    'actions' => [
-                        'delete' => ['POST'],
+            'access' => [
+                'class' => \yii\filters\AccessControl::class,
+                'only' => ['create', 'index', 'delete', 'view'],
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'actions' => ['create', 'index','delete','view'],
+                        'roles' => ['seller'],
                     ],
                 ],
-            ]
-        );
+            ],
+            // Verb filter
+            'verbs' => [
+                'class' => VerbFilter::class,
+                'actions' => [
+                    'delete' => ['POST'],  // Only allow POST for the delete action
+                ],
+            ],
+        ]
+       );
     }
+
 
     /**
      * Lists all Listing models.
