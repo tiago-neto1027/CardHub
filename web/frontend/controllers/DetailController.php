@@ -53,7 +53,7 @@ class DetailController extends Controller
         if (Yii::$app->user->id != $id) {
             return $this->goHome();
         }
-        $user = getUser($id);
+        $user = User::findOne($id);
         return $this->render('details', [
             'user' => $user,
         ]);
@@ -64,7 +64,7 @@ class DetailController extends Controller
         if (Yii::$app->user->id != $id) {
             return $this->goHome();
         }
-        $user = getUser($id);
+        $user = User::findOne($id);
         return $this->render('changeEmailForm', [
             'user' => $user,
         ]);
@@ -75,7 +75,7 @@ class DetailController extends Controller
         if (Yii::$app->user->id != $id) {
             return $this->goHome();
         }
-        $user = getUser($id);
+        $user = User::findOne($id);
         return $this->render('changeUsernameForm', [
             'user' => $user,
         ]);
@@ -86,7 +86,7 @@ class DetailController extends Controller
         if (Yii::$app->user->id != $id) {
             return $this->goHome();
         }
-        $user = getUser($id);
+        $user = User::findOne($id);
         return $this->render('changePasswordForm', [
             'user' => $user,
         ]);
@@ -94,28 +94,40 @@ class DetailController extends Controller
 
     public function actionChangeEmail($id)
     {
-        $user = getUser($id);
+        $user = User::findOne($id);
+
+        if (!$user) {
+            Yii::$app->session->setFlash('error', 'User not found.');
+            return $this->redirect(['site/index']); // Redirect to a safe place, like the homepage
+        }
 
         // Handle the form submission
         if (Yii::$app->request->isPost) {
             // Get the new email from the POST data
-            $newEmail = Yii::$app->request->post('newEmail'); // Access the 'newEmail' field
+            $newEmail = Yii::$app->request->post('newEmail'); // Ensure this matches the input field name in the form
 
-            // Perform the email validation
+            // Validate the new email
             if (filter_var($newEmail, FILTER_VALIDATE_EMAIL)) {
-                Yii::$app->session->setFlash('success', 'The new email is valid!');
-
-                // Optionally, update the user email if you wish to save it
-                $user->email = $newEmail;
-                if ($user->save()) {
-                    Yii::$app->session->setFlash('success', 'Your email has been updated successfully.');
+                // Check if the new email is already taken
+                if (User::find()->where(['email' => $newEmail])->exists()) {
+                    Yii::$app->session->setFlash('error', 'This email is already in use.');
                 } else {
-                    Yii::$app->session->setFlash('error', 'There was an error updating your email.');
+                    // If email is valid and not in use, update it
+                    $user->email = $newEmail;
+
+                    // Save the updated email
+                    if ($user->save()) {
+                        Yii::$app->session->setFlash('success', 'Your email has been updated successfully.');
+                    } else {
+                        Yii::$app->session->setFlash('error', 'There was an error updating your email.');
+                    }
                 }
             } else {
                 Yii::$app->session->setFlash('error', 'The new email is not valid.');
             }
         }
+
+        // Render the view with the user data
         return $this->render('/detail/details', ['user' => $user]);
     }
 
@@ -126,27 +138,40 @@ class DetailController extends Controller
         if (Yii::$app->request->isPost) {
             $newUsername = Yii::$app->request->post('newUsername');
 
-            // Perform the email validation
-            if ($newUsername != null) {
-                Yii::$app->session->setFlash('success', 'The new username is valid!');
-
-                // Optionally, update the user email if you wish to save it
-                $user->username = $newUsername;
-                if ($user->save()) {
-                    Yii::$app->session->setFlash('success', 'Your username has been updated successfully.');
+            // Perform the username validation
+            if ($newUsername != null && strlen($newUsername) >= 3) {
+                // Optionally check if the username is unique
+                $existingUser = User::findOne(['username' => $newUsername]);
+                if ($existingUser) {
+                    Yii::$app->session->setFlash('error', 'The username is already taken.');
                 } else {
-                    Yii::$app->session->setFlash('error', 'There was an error updating your username.');
+                    Yii::$app->session->setFlash('success', 'The new username is valid!');
+
+                    // Update the username if it is valid
+                    $user->username = $newUsername;
+                    if ($user->save()) {
+                        Yii::$app->session->setFlash('success', 'Your username has been updated successfully.');
+                    } else {
+                        Yii::$app->session->setFlash('error', 'There was an error updating your username.');
+                    }
                 }
             } else {
-                Yii::$app->session->setFlash('error', 'The new username is not valid.');
+                Yii::$app->session->setFlash('error', 'The new username must be at least 3 characters long.');
             }
         }
+
         return $this->render('/detail/details', ['user' => $user]);
     }
 
+
     public function actionChangePassword($id)
     {
-        $user = getUser($id);
+        $user = User::findOne($id);
+
+        if (!$user) {
+            Yii::$app->session->setFlash('error', 'User not found.');
+            return $this->redirect(['site/index']); // Redirect to a safe place, like the homepage
+        }
 
         if (Yii::$app->request->isPost) {
             $newPassword = Yii::$app->request->post('newPassword');
