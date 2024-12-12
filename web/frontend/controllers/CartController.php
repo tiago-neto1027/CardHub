@@ -33,7 +33,7 @@ class CartController extends Controller
         Cart::addItem($id, $quantity);
 
         Yii::$app->session->setFlash('success', 'Item added to cart');
-        return $this->redirect(['cart/view-cart']);
+        return $this->redirect(['cart/index']);
     }
 
     public function actionClearCart()
@@ -41,7 +41,7 @@ class CartController extends Controller
         Cart::clearCart();
 
         Yii::$app->session->setFlash('success', 'Cart cleared');
-        return $this->redirect(['cart/view-cart']);
+        return $this->redirect(['cart/index']);
     }
 
     public function actionRemoveFromCart($id)
@@ -56,7 +56,7 @@ class CartController extends Controller
         Cart::removeItem($id, $quantity);
 
         Yii::$app->session->setFlash('success', 'Item removed from cart');
-        return $this->redirect(['cart/view-cart']);
+        return $this->redirect(['cart/index']);
     }
 
 
