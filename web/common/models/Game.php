@@ -67,4 +67,9 @@ class Game extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Product::class, ['game_id' => 'id']);
     }
+
+    public static function getAllGames()
+    {
+        return self::find()->all();
+    }
 }
