@@ -119,14 +119,14 @@ use yii\helpers\Url;
                     <a href="<?= \yii\helpers\Url::home() ?>" class="nav-item nav-link active">Home</a>
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Cards <i class="fa fa-angle-down"></i></a>
-                        <div class="dropdown-menu bg-primary rounded-0 border-0 m-0">
+                        <div class="dropdown-menu bg-dark rounded-0 border-0 m-0">
                             <a href="cart.html" class="dropdown-item">Shopping Cart</a>
                             <a href="checkout.html" class="dropdown-item">Checkout</a>
                         </div>
                     </div>
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Products <i class="fa fa-angle-down"></i></a>
-                        <div class="dropdown-menu bg-primary rounded-0 border-0 m-0">
+                        <div class="dropdown-menu bg-dark rounded-0 border-0 m-0">
                             <a href="cart.html" class="dropdown-item">Shopping Cart</a>
                             <a href="checkout.html" class="dropdown-item">Checkout</a>
                         </div>
