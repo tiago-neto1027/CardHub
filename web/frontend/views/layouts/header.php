@@ -27,6 +27,9 @@ use yii\helpers\Url;
 
     <!-- Customized Bootstrap Stylesheet -->
     <link href="web/frontend/web/css/style.css" rel="stylesheet">
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 </head>
 
 <!-- Topbar Start -->
@@ -122,20 +125,32 @@ use yii\helpers\Url;
             <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                 <div class="navbar-nav mr-auto py-0">
                     <a href="<?= \yii\helpers\Url::home() ?>" class="nav-item nav-link active">Home</a>
+                    <?php if ($games = \common\models\Game::getAllGames()): ?>
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Cards <i class="fa fa-angle-down"></i></a>
-                        <div class="dropdown-menu bg-primary rounded-0 border-0 m-0">
-                            <a href="cart.html" class="dropdown-item">Shopping Cart</a>
-                            <a href="checkout.html" class="dropdown-item">Checkout</a>
+                        <div class="dropdown-menu bg-dark rounded-0 border-0 m-0">
+                            <?php
+                            foreach ($games as $game) {
+                                echo Html::a($game->name, Url::to(['/catalog/index',
+                                    'id' => $game->id, 'type' => 'card']),
+                                    ['class' => 'dropdown-item']);
+                            }
+                            ?>
                         </div>
                     </div>
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Products <i class="fa fa-angle-down"></i></a>
-                        <div class="dropdown-menu bg-primary rounded-0 border-0 m-0">
-                            <a href="cart.html" class="dropdown-item">Shopping Cart</a>
-                            <a href="checkout.html" class="dropdown-item">Checkout</a>
+                        <div class="dropdown-menu bg-dark rounded-0 border-0 m-0">
+                            <?php
+                            foreach ($games as $game) {
+                                echo Html::a($game->name, Url::to(['/catalog/index',
+                                    'id' => $game->id, 'type' => 'product']),
+                                    ['class' => 'dropdown-item']);
+                            }
+                            ?>
                         </div>
                     </div>
+                    <?php endif; ?>
                 </div>
                 <div class="navbar-nav ml-auto py-0 d-none d-lg-block ">
                     <?php
