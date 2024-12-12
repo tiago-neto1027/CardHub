@@ -13,7 +13,7 @@ $this->title = 'My Yii Application';
     <!-- Carousel Start -->
     <div class="container-fluid mb-3">
         <div class="row px-xl-5">
-            <div id="header-carousel" class="carousel slide carousel-fade mb-30 mb-lg-0" data-ride="carousel">
+            <div id="header-carousel" class="carousel slide carousel-fade mb-30 mb-lg-0 col-lg-8 offset-lg-2" data-ride="carousel">
                 <ol class="carousel-indicators">
                     <li data-target="#header-carousel" data-slide-to="0" class="active"></li>
                     <li data-target="#header-carousel" data-slide-to="1"></li>
