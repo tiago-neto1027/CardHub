@@ -232,4 +232,8 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return \common\models\Listing::find()->where(['seller_id' => $id])->count();
     }
+
+    public function getCart()
+    {
+        return count(\frontend\models\Cart::getItems());}
 }
