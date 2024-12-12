@@ -117,12 +117,12 @@ use yii\helpers\Url;
             <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                 <div class="navbar-nav mr-auto py-0">
                     <a href="<?= \yii\helpers\Url::home() ?>" class="nav-item nav-link active">Home</a>
+                    <?php if ($games = \common\models\Game::getAllGames()): ?>
                     <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Cards <i
-                                    class="fa fa-angle-down"></i></a>
+                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Cards <i class="fa fa-angle-down"></i></a>
                         <div class="dropdown-menu bg-primary rounded-0 border-0 m-0">
                             <?php
-                            foreach (\common\models\Game::getAllGames() as $game) {
+                            foreach ($games as $game) {
                                 echo Html::a($game->name, Url::to(['/catalog/index',
                                     'id' => $game->id, 'type' => 'card']),
                                     ['class' => 'dropdown-item']);
@@ -131,11 +131,10 @@ use yii\helpers\Url;
                         </div>
                     </div>
                     <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Products <i
-                                    class="fa fa-angle-down"></i></a>
+                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Products <i class="fa fa-angle-down"></i></a>
                         <div class="dropdown-menu bg-primary rounded-0 border-0 m-0">
                             <?php
-                            foreach (\common\models\Game::getAllGames() as $game) {
+                            foreach ($games as $game) {
                                 echo Html::a($game->name, Url::to(['/catalog/index',
                                     'id' => $game->id, 'type' => 'product']),
                                     ['class' => 'dropdown-item']);
@@ -143,6 +142,7 @@ use yii\helpers\Url;
                             ?>
                         </div>
                     </div>
+                    <?php endif; ?>
                 </div>
                 <div class="navbar-nav ml-auto py-0 d-none d-lg-block ">
                     <?php
