@@ -14,11 +14,9 @@ use yii\filters\VerbFilter;
 
 class CatalogController extends \yii\web\Controller
 {
-    public function actionIndex()
+    public function actionIndex($id, $type)
     {   
-        $request = \Yii::$app->request; 
-        $gameId = $request->get('id', null);            
-        $type = $request->get('type', null);            
+        $request = \Yii::$app->request;          
         $productTypeFilter = $request->get('productType', null); 
         $page = $request->get('page', 1);               
         $pageSize = 12;                                 // Number of items per page
@@ -28,9 +26,9 @@ class CatalogController extends \yii\web\Controller
         
 
         // Applying Game filter
-        if ($gameId !== null) {
-            $productQuery->andWhere(['game_id' => $gameId]); 
-            $cardQuery->andWhere(['game_id' => $gameId]);   
+        if ($id !== null) {
+            $productQuery->andWhere(['game_id' => $id]); 
+            $cardQuery->andWhere(['game_id' => $id]);   
         }
 
         if ($productTypeFilter !== null) {
@@ -46,6 +44,7 @@ class CatalogController extends \yii\web\Controller
         } elseif ($type === 'card') {
             $searchModel = new ListingSearch();
             $dataProvider = $searchModel->search($this->request->queryParams);
+            
             $query = $cardQuery;
         } else {
             $allProducts = $productQuery->all();
@@ -65,6 +64,7 @@ class CatalogController extends \yii\web\Controller
                 'products' => $items,  
                 'totalCount' => $totalCount,
                 'page' => $page,
+                'type' => $type,
                 'pageSize' => $pageSize,
                 'productType' => $productTypeFilter, 
             ]);
@@ -83,6 +83,7 @@ class CatalogController extends \yii\web\Controller
             'pageSize' => $pageSize,
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'type' => $type,
             'productType' => ($type === 'product') ? $productTypeFilter : null, // Only include productType for products
         ]);
     }
@@ -94,6 +95,7 @@ class CatalogController extends \yii\web\Controller
             // Determines the model by type
         if ($type === 'product') {
             $model = Product::findOne($id);
+            
         } elseif ($type === 'card') {
             $model = Card::findOne($id);
         } else {
