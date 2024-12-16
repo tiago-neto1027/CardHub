@@ -81,10 +81,19 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        $data = Product::find()->all();
+        $randomProducts = Product::find()
+            ->orderBy(new \yii\db\Expression('RAND()'))
+            ->limit(8)
+            ->all();
+
+        $recentProducts = Product::find()
+            ->orderBy(['created_at' => SORT_DESC])
+            ->limit(4)
+            ->all();
 
         return $this->render('index',[
-            'products' => $data
+            'products' => $randomProducts,
+            'recentProducts' => $recentProducts,
         ]);
     }
 
