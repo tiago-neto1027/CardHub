@@ -60,15 +60,7 @@ $this->title = 'My Yii Application';
                     echo "<p>No products available.</p>";
                 } else {
 
-                    $shuffledProducts = $products;      //SHUFFLE used to produce random products display
-                    shuffle($shuffledProducts);
-
-                    $count=0;
-                    $maxcard=8;
-
-                foreach($shuffledProducts as $product){
-                    if ($count >= $maxcard) break;      //COUNTER is used to limit the max number of cards. Default set to 8.
-
+                foreach($products as $product){
             ?>
                     <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
                         <div class="product-item bg-light mb-4">
@@ -98,7 +90,7 @@ $this->title = 'My Yii Application';
                         </div>
                     </div>
             <?php
-                $count++;}}
+                }};
             ?>
 
             <!-- HARDCODED PRODUCTS FROM TEMPLATE -->
@@ -358,20 +350,11 @@ $this->title = 'My Yii Application';
         <div class="row px-xl-5">
 
             <?php
-                if (empty($products)) {
+                if (empty($recentProducts)) {
                     echo "<p>No products available.</p>";
                 } else {
 
-                    usort($products, function($a, $b) {                 //USORT used to sort the card by date, for the newest.
-                        return strtotime($b->created_at) - strtotime($a->created_at);
-                    });
-
-                    $count=0;
-                    $maxcard=4;
-
-                foreach($products as $product){
-                    if ($count >= $maxcard) break;      //COUNTER is used to limit the max number of cards. RECENT Default set to 4.
-
+                foreach($recentProducts as $product){
             ?>
             <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
                 <div class="product-item bg-light mb-4">
@@ -401,7 +384,7 @@ $this->title = 'My Yii Application';
                 </div>
             </div>
             <?php
-                $count++; }};
+                }};
             ?>
 
 
