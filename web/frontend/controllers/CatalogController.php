@@ -19,7 +19,7 @@ class CatalogController extends \yii\web\Controller
         $request = \Yii::$app->request;          
         $productTypeFilter = $request->get('productType', null); 
         $page = $request->get('page', 1);               
-        $pageSize = 12;                                 // Number of items per page
+        $pageSize = 6;                                 // Number of items per page
 
         $productQuery = Product::find();
         $cardQuery = Card::find();

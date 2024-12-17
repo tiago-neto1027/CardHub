@@ -57,37 +57,36 @@ use function PHPSTORM_META\type;
                 </div>
             </div>
         </div>
-        
         <div class="col-lg-9">
             <!-- Products Start -->
             <div class="container-fluid pt-5 pb-3">
-                <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">Product Catalog</span></h2>
-                <div class="row px-xl-5">
-                    <?php 
-                        if($type === 'card')
-                        {
-                            echo ListView::widget([
-                                'dataProvider' => $dataProvider,
-                                'itemOptions' => ['class' => 'item col-md-6'],
-                                'itemView' => '../listing/_listing',
-                                'layout' => "<div class='row g-3'>{items}</div>\n{pager}"
-                            ]);
-                        }
-                        elseif($type === 'product')
-                        {
-                            echo ListView::widget([
-                                'dataProvider' => $dataProvider,
-                                'itemOptions' => ['class' => 'item col-md-6'],
-                                'itemView' => '../product/_product',
-                                'layout' => "<div class='row g-3'>{items}</div>\n{pager}"
-                            ]);
-                        }
+                <h2 class="section-title position-relative text-uppercase mx-xl-2 mb-4"><span class="bg-secondary pr-3">Product Catalog</span></h2>
+                <div class="row">
+                        <?php 
+                            if($type === 'card')
+                            {
+                                echo ListView::widget([
+                                    'dataProvider' => $dataProvider,
+                                    'itemOptions' => ['class' => 'item col-md-6 col-sm-6 pb-1'],
+                                    'itemView' => '../listing/_listing',
+                                    'layout' => "<div class='row g-3'>{items}</div>\n{pager}"
+                                ]);
+                            }
+                            elseif($type === 'product')
+                            {
+                                echo ListView::widget([
+                                    'dataProvider' => $dataProvider,
+                                    'itemOptions' => ['class' => 'item col-lg-3 col-md-4 col-sm-6 pb-1'],
+                                    'itemView' => '../product/_product',
+                                    'layout' => "<div class='row g-3'>{items}</div>\n{pager}"
+                                ]);
+                            }
                         ?>
-
-                </div>
+                </div>      
             </div>
             <!-- Products End -->
         </div>
+          
         <div class= "d-flex justify-content-center pagination-container mt-4">
             <div class="pagination">
                 <!-- Backward Button -->
