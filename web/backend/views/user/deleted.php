@@ -15,8 +15,6 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="user-deleted">
 
-    <!--<h1><?= Html::encode($this->title) ?></h1>-->
-
     <p>
         <?= Html::a('Index', ['index'], ['class' => 'btn btn-info']) ?>
     </p>
