@@ -19,19 +19,14 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::a('Index', ['index'], ['class' => 'btn btn-info']) ?>
     </p>
 
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+        'options' => ['class' => 'col-12'],
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            //'id',
             'username',
-            //'auth_key',
-            //'password_hash',
-            //'password_reset_token',
             'email:email',
             [
                 'attribute' => 'role',
@@ -39,8 +34,18 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $model->getRole();
                 },
                 'label' => 'User Type',
+                'filter' => Html::activeDropDownList(
+                    $searchModel,
+                    'user_type',
+                    [
+                        'manager' => 'manager',
+                        'admin' => 'admin',
+                        'seller' => 'seller',
+                        'buyer' => 'buyer',
+                    ],
+                    ['class' => 'form-control', 'prompt' => 'Select Role']
+                ),
             ],
-            //'status',
             [
                 'attribute' => 'created_at',
                 'format' => ['date', 'php:d/m/Y'],
@@ -49,17 +54,23 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
                 'label' => 'Created At',
             ],
-            //'updated_at',
-            //'verification_token',
+            [
+                'attribute' => 'updated_at',
+                'format' => ['date', 'php:d/m/Y'],
+                'value' => function ($model) {
+                    return $model->updated_at;
+                },
+                'label' => 'Updated At',
+            ],
             [
                 'class' => ActionColumn::className(),
-                'template' => '{view} {update}',
+                'template' => \Yii::$app->user->can('admin') ?
+                    '{view} {update} {delete}'
+                    : '{view} {delete}',
                 'urlCreator' => function ($action, User $model, $key, $index, $column) {
                     return Url::toRoute([$action, 'id' => $model->id]);
                 }
             ],
         ],
     ]); ?>
-
-
 </div>
