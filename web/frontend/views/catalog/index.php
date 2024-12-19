@@ -1,5 +1,9 @@
 <?php
 /** @var yii\web\View $this */
+
+use yii\helpers\Url;
+use yii\helpers\Html;
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -52,11 +56,21 @@
                                 <div class="product-item bg-light mb-4">
                                     <div class="product-img position-relative overflow-hidden">
                                         <img class="img-fluid w-100" src="<?= $product->image_url ?>" alt="">
-                                        <div class="product-action">
-                                            <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-shopping-cart"></i></a>
-                                            <a class="btn btn-outline-dark btn-square" href=""><i class="far fa-heart"></i></a>
-                                            <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-sync-alt"></i></a>
-                                            <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-search"></i></a>
+                                        <div class="product-action mt-5">
+                                            <?php
+                                            echo '
+                                                <a href="' . Url::to(['/cart/add-to-cart','itemId'=>$product->id,'type'=>"product"]) . '" class="btn btn-outline-dark btn-square">
+                                                    <i class="fa fa-shopping-cart"></i>                                           
+                                                </a>';
+                                            echo '
+                                                <a href="' . Url::to(['/favorites/index']) . '" class="btn btn-outline-dark btn-square">
+                                                    <i class="far fa-heart"></i>                                           
+                                                </a>';
+                                            echo '
+                                                <a href="' . Url::to(['/catalog/view','id'=>$product->id]) . '" class="btn btn-outline-dark btn-square">
+                                                    <i class="fa fa-search"></i>                                           
+                                                </a>';
+                                            ?>
                                         </div>
                                     </div>
                                     <div class="text-center py-4">
@@ -64,14 +78,14 @@
                                         <div class="d-flex align-items-center justify-content-center mt-2">
                                             <h5>€ <?= $product->price ?></h5><!-- REMOVED old price<h6 class="text-muted ml-2"><del> old price</del></h6>-->
                                         </div>
-                                        <div class="d-flex align-items-center justify-content-center mb-1">
+                                        <!--<div class="d-flex align-items-center justify-content-center mb-1">
                                             <small class="fa fa-star text-primary mr-1"></small>
                                             <small class="fa fa-star text-primary mr-1"></small>
                                             <small class="fa fa-star text-primary mr-1"></small>
                                             <small class="fa fa-star text-primary mr-1"></small>
                                             <small class="fa fa-star text-primary mr-1"></small>
                                             <small>(99)</small>
-                                        </div>
+                                        </div>-->
                                     </div>
                                 </div>
                             </div>

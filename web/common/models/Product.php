@@ -82,4 +82,10 @@ class Product extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Game::class, ['id' => 'game_id']);
     }
+
+    public static function getStock($productId)
+    {
+        $product = self::findOne($productId);
+        return $product ? $product->stock : 0;
+    }
 }

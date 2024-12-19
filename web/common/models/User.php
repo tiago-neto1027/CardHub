@@ -233,7 +233,16 @@ class User extends ActiveRecord implements IdentityInterface
         return \common\models\Listing::find()->where(['seller_id' => $id])->count();
     }
 
-    public function getCart()
+    public function getCartItemCount()
     {
-        return count(\frontend\models\Cart::getItems());}
+        $userId = Yii::$app->user->id;
+        $cartItems = Yii::$app->cache->get('cart_' . $userId) ?: [];
+        $count = 0;
+
+        foreach ($cartItems as $item) {
+            $count ++;
+        }
+
+        return $count;
+    }
 }

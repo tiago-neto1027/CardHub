@@ -1,9 +1,11 @@
 <?php
 
+use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
-
+$this->title =  $model->name;
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -26,10 +28,15 @@ use yii\widgets\DetailView;
                             ?>
                             <div class=" align-items-left">
 
-                                <h5 class="text-secondary mb-4"><i class="text-primary bi bi-bag-check-fill me-2"></i>Em Stock: <?= $model->stock ?></h5> 
-                                <button type="button" class="rounded bg-primary text-secondary btn btn-lg">Add to cart!</button>
+                                <h5 class="text-secondary mb-4"><i class="text-primary bi bi-bag-check-fill me-2"></i>Em Stock: <?= $model->stock ?></h5>
+                                <?php
+                                    echo '
+                                        <a href="' . Url::to(['/cart/add-to-cart','itemId'=>$model->id,'type'=>"product"]) . '" class="rounded bg-primary text-secondary btn btn-lg">
+                                           Add to cart!                                       
+                                        </a>';
+                                    ?>
                             </div><?php
-                            
+
                         } else{
                             ?> 
                             <div class=" align-items-left">

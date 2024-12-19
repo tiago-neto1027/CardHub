@@ -89,17 +89,23 @@ use yii\helpers\Url;
                           style="padding-bottom: 2px;">0</span>
                 </a>
                 <?php
-                    echo '
-                        <a href="' .Url::to(['/cart/index']) . '" class="btn px-0 ml-2">
-                            <i class="fas fa-shopping-cart text-dark"></i>
-                            <span class="badge text-secondary border border-secondary rounded-circle"
-                              style="padding-bottom: 2px;">
-                                    ' . Yii::$app->user->identity->getCart() . '
-                              </span>
-                        </a>';
+                $itemCount = 0;
 
+                if (Yii::$app->user->isGuest) {
+                    $cartItems = Yii::$app->session->get('cart', []);
+                    $itemCount = array_sum(array_column($cartItems, 'quantity'));
+
+                } else {
+                    $itemCount = Yii::$app->user->identity->getCartItemCount();
+                }
                 ?>
 
+                <a href="<?= Url::to(['/cart/index']) ?>" class="btn px-0 ml-2">
+                    <i class="fas fa-shopping-cart text-dark"></i>
+                    <span class="badge text-secondary border border-secondary rounded-circle"
+                          style="padding-bottom: 2px;">
+                <?= $itemCount ?></span>
+                </a>
 
             </div>
         </div>
@@ -171,16 +177,24 @@ use yii\helpers\Url;
                               style="padding-bottom: 2px;">0</span>
                     </a>
                     <?php
-                    echo '
-                        <a href="' .Url::to(['/cart/index']) . '" class="btn px-0 ml-2">
-                            <i class="fas fa-shopping-cart text-dark"></i>
-                            <span class="badge text-secondary border border-secondary rounded-circle"
-                              style="padding-bottom: 2px;">
-                                    ' . Yii::$app->user->identity->getCart() . '
-                              </span>
-                        </a>';
+                    $itemCount = 0;
 
+                    if (Yii::$app->user->isGuest) {
+                        $cartItems = Yii::$app->session->get('cart', []);
+                        $itemCount = array_sum(array_column($cartItems, 'quantity'));
+
+                    } else {
+                        $itemCount = Yii::$app->user->identity->getCartItemCount();
+                    }
                     ?>
+
+                    <a href="<?= Url::to(['/cart/index']) ?>" class="btn px-0 ml-2">
+                        <i class="fas fa-shopping-cart text-dark"></i>
+                        <span class="badge text-secondary border border-secondary rounded-circle"
+                              style="padding-bottom: 2px;">
+                        <?= $itemCount ?> </span>
+                    </a>
+
                 </div>
             </div>
         </nav>
