@@ -7,6 +7,9 @@ use \common\models\Product;
 use \common\models\Card;
 use common\models\ListingSearch;
 use \common\models\ProductSearch;
+use \common\models\Listing;
+use yii\data\ActiveDataProvider;
+use yii\data\Pagination;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -16,75 +19,39 @@ class CatalogController extends \yii\web\Controller
 {
     public function actionIndex($id, $type)
     {   
-        $request = \Yii::$app->request;          
-        $productTypeFilter = $request->get('productType', null); 
-        $page = $request->get('page', 1);               
-        $pageSize = 6;                                 // Number of items per page
-
+        //Fetch the Products/Listings
         $productQuery = Product::find();
-        $cardQuery = Card::find();
-        
-
-        // Applying Game filter
+        $cardQuery = Listing::find();
         if ($id !== null) {
             $productQuery->andWhere(['game_id' => $id]); 
-            $cardQuery->andWhere(['game_id' => $id]);   
+            $cardQuery->joinWith('card')->andWhere(['cards.game_id' => $id]);
         }
 
-        if ($productTypeFilter !== null) {
-            $productQuery->andWhere(['type' => $productTypeFilter]);
-        }
-
-
-        // Fetching data based on type
+        //Load the correct data according to the type
         if ($type === 'product') {
             $searchModel = new ProductSearch();
-            $dataProvider = $searchModel->search($this->request->queryParams);
             $query = $productQuery;
-        } elseif ($type === 'card') {
+        }
+        elseif($type === 'card'){
             $searchModel = new ListingSearch();
-            $dataProvider = $searchModel->search($this->request->queryParams);
-            
             $query = $cardQuery;
-        } else {
-            $allProducts = $productQuery->all();
-            $allCards = $cardQuery->all();
-            $allItems = array_merge($allProducts, $allCards);  
-
-            // Sorting
-            usort($allItems, function ($a, $b) {
-                return strtotime($b->created_at) - strtotime($a->created_at); 
-            });
-
-            // Pagination
-            $totalCount = count($allItems);
-            $items = array_slice($allItems, ($page - 1) * $pageSize, $pageSize);
-
-            return $this->render('index', [
-                'products' => $items,  
-                'totalCount' => $totalCount,
-                'page' => $page,
-                'type' => $type,
-                'pageSize' => $pageSize,
-                'productType' => $productTypeFilter, 
-            ]);
+        }
+        else{
+            return $this->redirect(['site/error']);
         }
 
-        //pagination for single type
-        $totalCount = $query->count();
-        $items = $query->offset(($page - 1) * $pageSize)
-                    ->limit($pageSize)
-                    ->all();
+        //Load the DataProvider and Return with the right items
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => [
+                'pageSize' => 4,
+            ],
+        ]);
 
         return $this->render('index', [
-            'products' => $items,                                               //(Product or Card)
-            'totalCount' => $totalCount,
-            'page' => $page,
-            'pageSize' => $pageSize,
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'type' => $type,
-            'productType' => ($type === 'product') ? $productTypeFilter : null, // Only include productType for products
         ]);
     }
     /**

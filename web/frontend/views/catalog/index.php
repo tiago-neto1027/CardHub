@@ -69,7 +69,7 @@ use function PHPSTORM_META\type;
                                     'dataProvider' => $dataProvider,
                                     'itemOptions' => ['class' => 'item col-md-6 col-sm-6 pb-1'],
                                     'itemView' => '../listing/_listing',
-                                    'layout' => "<div class='row g-3'>{items}</div>\n{pager}"
+                                    'layout' => "<div class='row g-3'>{items}</div>\n{pager}",
                                 ]);
                             }
                             elseif($type === 'product')
@@ -78,7 +78,7 @@ use function PHPSTORM_META\type;
                                     'dataProvider' => $dataProvider,
                                     'itemOptions' => ['class' => 'item col-lg-3 col-md-4 col-sm-6 pb-1'],
                                     'itemView' => '../product/_product',
-                                    'layout' => "<div class='row g-3'>{items}</div>\n{pager}"
+                                    'layout' => "<div class='row g-3'>{items}</div>\n{pager}",
                                 ]);
                             }
                         ?>
@@ -90,14 +90,14 @@ use function PHPSTORM_META\type;
         <div class= "d-flex justify-content-center pagination-container mt-4">
             <div class="pagination">
                 <!-- Backward Button -->
-                <?php if ($page > 1): ?>
+                <?php /*if ($page > 1): ?>
                     <a class="btn active rounded" href="?<?= http_build_query(array_merge($_GET, ['page' => $page - 1])) ?>">&laquo;</a>
                 <?php else: ?>
                     <span class="btn disabled rounded">&laquo;</span>
-                <?php endif; ?>
+                <?php endif; */?>
 
                 <!-- Pagination -->
-                <?php 
+                <?php /*
                 $totalPages = ceil($totalCount / $pageSize); 
                 for ($i = 1; $i <= $totalPages; $i++): ?>
                     <a class="btn rounded <?= $i === $page ? 'active' : '' ?>" 
@@ -111,7 +111,18 @@ use function PHPSTORM_META\type;
                     <a class="btn active rounded" href="?<?= http_build_query(array_merge($_GET, ['page' => $page + 1])) ?>">&raquo;</a>
                 <?php else: ?>
                     <span class="btn disabled rounded">&raquo;</span>
-                <?php endif; ?>
+                <?php endif; */?>
+
+            <?php 
+            use yii\widgets\LinkPager;
+
+            /*echo LinkPager::widget([
+                'pagination' => $pages,
+                
+            ]);*/
+            ?>
+
+
             </div>
         </div>    
     </body>
