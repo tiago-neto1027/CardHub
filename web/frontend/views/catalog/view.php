@@ -18,15 +18,29 @@ use yii\widgets\DetailView;
                 </div>
                 <div class="col-lg-7">
                    <h4 class="text-secondary mb-4 mt-2"><?= $model->name ?></h4>
-                   <h3 class="text-primary mb-4"><?= $model->price ?>€</h3>
+                   <h3 class="text-primary mb-4">
+                   <?php 
+                            if (empty($model->price)) { 
+                                echo '<h5 class="text-secondary">No price available.</h5>';
+                            }  else{?>
+                            € <?= $model->price ?><!-- REMOVED old price<h6 class="text-muted ml-2"><del> old price</del></h6>-->
+                             <?php }?></h3>
                    
                    <div>
                     <?php
-                        if($model->stock > 0){
+                        if (empty($model->stock)) { 
+                            ?>
+                            <div class=" align-items-left">
+                                
+                                <h5 class="text-secondary mb-4"><i class="text-primary bi bi-bag-x-fill me-2"></i>Not avalable</h5>
+                                <button type="button" class="rounded bg-primary text-secondary btn btn-lg disabled">Add to cart!</button>
+                            </div><?php
+                        }
+                        elseif($model->stock > 0){
                             ?>
                             <div class=" align-items-left">
 
-                                <h5 class="text-secondary mb-4"><i class="text-primary bi bi-bag-check-fill me-2"></i>Em Stock: <?= $model->stock ?></h5> 
+                                <h5 class="text-secondary mb-4"><i class="text-primary bi bi-bag-check-fill me-2"></i>In Stock: <?= $model->stock ?></h5> 
                                 <button type="button" class="rounded bg-primary text-secondary btn btn-lg">Add to cart!</button>
                             </div><?php
                             
@@ -34,7 +48,7 @@ use yii\widgets\DetailView;
                             ?> 
                             <div class=" align-items-left">
                                 
-                                <h5 class="text-secondary mb-4"><i class="text-primary bi bi-bag-x-fill me-2"></i>Sem Stock!</h5>
+                                <h5 class="text-secondary mb-4"><i class="text-primary bi bi-bag-x-fill me-2"></i>Out of Stock!</h5>
                                 <button type="button" class="rounded bg-primary text-secondary btn btn-lg disabled">Add to cart!</button>
                             </div><?php
                         }

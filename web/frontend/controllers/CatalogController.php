@@ -4,7 +4,12 @@ namespace app\controllers;
 namespace frontend\controllers;
 
 use \common\models\Product;
+use \common\models\Card;
+use common\models\ListingSearch;
 use \common\models\ProductSearch;
+use \common\models\Listing;
+use yii\data\ActiveDataProvider;
+use yii\data\Pagination;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -12,51 +17,66 @@ use yii\filters\VerbFilter;
 
 class CatalogController extends \yii\web\Controller
 {
-    public function actionIndex()
-    {
-        $data = null;
-        $request = \Yii::$app->request;
+    public function actionIndex($id, $type)
+    {   
+        //Fetch the Products/Listings
+        $productQuery = Product::find();
+        $cardQuery = Listing::find();
+        if ($id !== null) {
+            $productQuery->andWhere(['game_id' => $id]); 
+            $cardQuery->joinWith('card')->andWhere(['cards.game_id' => $id]);
+        }
 
-        $page = $request->get('page', 1);   // Default to page 1
-        $pageSize = 12;                     // Number of products per page
+        //Load the correct data according to the type
+        if ($type === 'product') {
+            $searchModel = new ProductSearch();
+            $query = $productQuery;
+        }
+        elseif($type === 'card'){
+            $searchModel = new ListingSearch();
+            $query = $cardQuery;
+        }
+        else{
+            return $this->redirect(['site/error']);
+        }
 
-        $filter = $request->get('filter');
-        if ($filter != null) {
-            $words = explode(' ', $filter);
+        //Load the DataProvider and Return with the right items
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => [
+                'pageSize' => 4,
+            ],
+        ]);
 
-            // ORIGINAL FILTER $data = Product::find()->where(['like', 'name', $filter])->all();
-            // < MULTI-WORD FILTER:
-            $query = Product::find();
-            foreach ($words as $word) {
-                $query->andWhere(['like', 'name', $word],);
-            }
-
-            $data = $query->all();
-            
-        } else {
-            $query = Product::find();
-            $data = Product::find()->all();
-        } 
-
-        $totalCount = $query->count();      // Total number of products matching the filter
-        $data = $query  ->offset(($page - 1) * $pageSize)
-                        ->limit($pageSize)
-                        ->all();
-        
-        return $this->render('index', ['products' =>$data,
-            'totalCount' => $totalCount,
-            'page' => $page,
-            'pageSize' => $pageSize
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'type' => $type,
         ]);
     }
-
     /**
      * Displays a single Product model.
      */
-    public function actionView($id)
+    public function actionView($id, $type)
     {
+            // Determines the model by type
+        if ($type === 'product') {
+            $model = Product::findOne($id);
+            
+        } elseif ($type === 'card') {
+            $model = Card::findOne($id);
+        } else {
+            throw new \yii\web\BadRequestHttpException('Invalid type provided.');
+        }
+
+        // If the model doesn't exist, throw a 404 exception
+        if ($model === null) {
+            throw new \yii\web\NotFoundHttpException('The requested item does not exist.');
+        }
+
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
+            'type' => $type, // Optionally pass the type to the view
         ]);
     }
 
@@ -69,7 +89,6 @@ class CatalogController extends \yii\web\Controller
         if (($model = Product::findOne(['id' => $id])) !== null) {
             return $model;
         }
-
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 

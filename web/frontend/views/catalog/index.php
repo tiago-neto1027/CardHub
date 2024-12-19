@@ -1,5 +1,12 @@
 <?php
 /** @var yii\web\View $this */
+use yii\helpers\Html;
+use yii\helpers\Url;
+use \common\models\Product;
+use yii\widgets\ListView;
+
+use function PHPSTORM_META\type;
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -9,93 +16,113 @@
         <div class="col-lg-3" >
             <div class="container-fluid pt-5 pb-3">
                 <h2 class="section-title position-relative text-uppercase mb-4"><span class="bg-secondary pr-3">Filters</span></h2>
-                <a class="btn rounded mb-2" href="\CardHub/web/frontend/web/catalog">Clear</a>
-                <div class="filter-buttons mb-2" id="filter-buttons">
-                    <button class="btn rounded" onclick="applyFilter('one piece')">One Piece</button>
-                    <button class="btn rounded" onclick="applyFilter('magic')">Magic</button>
-                    <button class="btn rounded" onclick="applyFilter('pokemon')">Pokemon</button>
+                <a class="btn rounded mb-4" href="<?= \yii\helpers\Url::to(['/catalog']) ?>">Clear</a>
+
+                <div class="dropdown">
+                    <a class="btn dropdown-toggle mb-4" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Type</a>
+                    <div class="dropdown-menu bg-dark">
+                        <?php    
+                            echo Html::a('Cards', Url::current([
+                                'type' => 'card']),
+                                ['class' => 'dropdown-item']);
+                            echo Html::a('Products', Url::current([
+                                'type' => 'product']),
+                                ['class' => 'dropdown-item']);
+                         ?>  
+                    </div>
                 </div>
-                <div class="filter-buttons mb-2" id="filter-buttons">
-                    <button class="btn rounded" onclick="applyFilter('booster')">Booster</button>
-                    <button class="btn rounded" onclick="applyFilter('playmat')">Playmat</button>
-                    <button class="btn rounded" onclick="applyFilter('sleeve')">Sleeve</button>
-                    <button class="btn rounded" onclick="applyFilter('shirt')">T-Shirt</button>
+                <div class="filter-buttons border border-dark rounded mb-4" id="filter-buttons">
+                    <?php 
+                        if ($games = \common\models\Game::getAllGames()):     
+                            foreach ($games as $game) {
+                            echo Html::a($game->name, Url::current([
+                                'id' => $game->id]),
+                                ['class' => 'dropdown-item']);
+                            }
+                        endif; ?>        
                 </div>
-                <script>
-                    function applyFilter(filterWord) {
-                        const url = new URL(window.location.href);      //TODO remove and apply in main.js
-                        url.searchParams.set('filter', filterWord);     // Set or update the filter query parameter
-                        window.location.href = url.toString();          // Redirect to the updated URL
-                    } 
-                </script>
+                <div class="filter-buttons border border-dark rounded mb-4" id="">
+                    <?php
+                        $productTypeOptions = Product :: getProductTypes();         //TODO fix?
+                        if (empty($productTypeOptions)) {
+                            echo "<p>No product types available.</p>";
+                        } else {
+                            foreach ($productTypeOptions as $productType) {
+                                echo Html::a($productType->type, Url::current([
+                                'productType' => $productType->type]),
+                                ['class' => 'dropdown-item']);
+                            }
+                        }
+                    ?>
+                </div>
             </div>
         </div>
-        
         <div class="col-lg-9">
             <!-- Products Start -->
             <div class="container-fluid pt-5 pb-3">
-                <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">Product Catalog</span></h2>
-                <div class="row px-xl-5">
-                    <?php 
-                        if (empty($products)) {
-                            echo "<p>No products available.</p>";
-                        } else {
-
-                            $count=0;
-                            $maxcard=12;
-
-                        foreach($products as $product){
-                            if ($count >= $maxcard) break;      //COUNTER is used to limit the max number of cards. Default set to 8.
-                            
-                    ?>
-                            <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-                                <div class="product-item bg-light mb-4">
-                                    <div class="product-img position-relative overflow-hidden">
-                                        <img class="img-fluid w-100" src="<?= $product->image_url ?>" alt="">
-                                        <div class="product-action">
-                                            <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-shopping-cart"></i></a>
-                                            <a class="btn btn-outline-dark btn-square" href=""><i class="far fa-heart"></i></a>
-                                            <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-sync-alt"></i></a>
-                                            <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-search"></i></a>
-                                        </div>
-                                    </div>
-                                    <div class="text-center py-4">
-                                        <a class="h6 text-decoration-none text-truncate d-block" href="catalog/view?id=<?= $product->id ?>"><?= $product->name ?></a>
-                                        <div class="d-flex align-items-center justify-content-center mt-2">
-                                            <h5>€ <?= $product->price ?></h5><!-- REMOVED old price<h6 class="text-muted ml-2"><del> old price</del></h6>-->
-                                        </div>
-                                        <div class="d-flex align-items-center justify-content-center mb-1">
-                                            <small class="fa fa-star text-primary mr-1"></small>
-                                            <small class="fa fa-star text-primary mr-1"></small>
-                                            <small class="fa fa-star text-primary mr-1"></small>
-                                            <small class="fa fa-star text-primary mr-1"></small>
-                                            <small class="fa fa-star text-primary mr-1"></small>
-                                            <small>(99)</small>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                    <?php
-                        $count++;}}
-                    ?>
-                </div>
+                <h2 class="section-title position-relative text-uppercase mx-xl-2 mb-4"><span class="bg-secondary pr-3">Product Catalog</span></h2>
+                <div class="row">
+                        <?php 
+                            if($type === 'card')
+                            {
+                                echo ListView::widget([
+                                    'dataProvider' => $dataProvider,
+                                    'itemOptions' => ['class' => 'item col-md-6 col-sm-6 pb-1'],
+                                    'itemView' => '../listing/_listing',
+                                    'layout' => "<div class='row g-3'>{items}</div>\n{pager}",
+                                ]);
+                            }
+                            elseif($type === 'product')
+                            {
+                                echo ListView::widget([
+                                    'dataProvider' => $dataProvider,
+                                    'itemOptions' => ['class' => 'item col-lg-3 col-md-4 col-sm-6 pb-1'],
+                                    'itemView' => '../product/_product',
+                                    'layout' => "<div class='row g-3'>{items}</div>\n{pager}",
+                                ]);
+                            }
+                        ?>
+                </div>      
             </div>
             <!-- Products End -->
         </div>
-        </div>
-        </div>
+          
         <div class= "d-flex justify-content-center pagination-container mt-4">
             <div class="pagination">
-                <a class="btn active rounded" href="?<?= http_build_query(array_merge($_GET, ['page' => $page - 1])) ?>">&laquo;</a>
+                <!-- Backward Button -->
+                <?php /*if ($page > 1): ?>
+                    <a class="btn active rounded" href="?<?= http_build_query(array_merge($_GET, ['page' => $page - 1])) ?>">&laquo;</a>
+                <?php else: ?>
+                    <span class="btn disabled rounded">&laquo;</span>
+                <?php endif; */?>
 
-                <?php           // Pagination Buttons
+                <!-- Pagination -->
+                <?php /*
                 $totalPages = ceil($totalCount / $pageSize); 
-                for($i = 1; $i <=$totalPages; $i++){ ?>
-                    <a class="btn rouded" href="?<?= http_build_query(array_merge($_GET, ['page' => $i])) ?>">
-                    <?= $i ?></a> <?php
-                }?>
+                for ($i = 1; $i <= $totalPages; $i++): ?>
+                    <a class="btn rounded <?= $i === $page ? 'active' : '' ?>" 
+                    href="?<?= http_build_query(array_merge($_GET, ['page' => $i])) ?>">
+                    <?= $i ?>
+                    </a>
+                <?php endfor; ?>
+
+                <!-- Forward Button -->
+                <?php if ($page < $totalPages): ?>
+                    <a class="btn active rounded" href="?<?= http_build_query(array_merge($_GET, ['page' => $page + 1])) ?>">&raquo;</a>
+                <?php else: ?>
+                    <span class="btn disabled rounded">&raquo;</span>
+                <?php endif; */?>
+
+            <?php 
+            use yii\widgets\LinkPager;
+
+            /*echo LinkPager::widget([
+                'pagination' => $pages,
                 
-                <a class="btn active rounded" href="?<?= http_build_query(array_merge($_GET, ['page' => $page + 1])) ?>">&raquo;</a> 
+            ]);*/
+            ?>
+
+
             </div>
         </div>    
     </body>
