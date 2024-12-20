@@ -19,19 +19,11 @@ use \common\models\Product;
                 <div class="d-flex align-items-center justify-content-center mt-2">
                     <?php 
                     if (empty($model->price)) { 
-                            echo "<h5>No no price available.</h5>";
+                            echo "<h5>No price available.</h5>";
                     }  else{?>
-                        <h5>€ <?= $model->price ?></h5><!-- REMOVED old price<h6 class="text-muted ml-2"><del> old price</del></h6>-->
+                        <h5><?= $model->price ?>€</h5>
                     <?php }?>
                     
                 </div><!--
-                <div class="d-flex align-items-center justify-content-center mb-1">
-                    <small class="fa fa-star text-primary mr-1"></small>
-                    <small class="fa fa-star text-primary mr-1"></small>
-                    <small class="fa fa-star text-primary mr-1"></small>
-                    <small class="fa fa-star text-primary mr-1"></small>
-                    <small class="fa fa-star text-primary mr-1"></small>
-                    <small>(99)</small>
-                </div>-->
             </div>
         </div>

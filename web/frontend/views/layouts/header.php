@@ -131,10 +131,11 @@ use yii\helpers\Url;
             <!-- CONTENT -->
             <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                 <div class="navbar-nav mr-auto py-0">
-                    <a href="<?= \yii\helpers\Url::home() ?>" class="nav-item nav-link active">Home</a>
+                    <a href="<?= Url::home() ?>" class="nav-item nav-link active">Home</a>
+                    <a href="<?= Url::to(['/card/index'])?>" class="nav-item nav-link">Browse Cards</a>
                     <?php if ($games = \common\models\Game::getAllGames()): ?>
                     <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Cards <i class="fa fa-angle-down"></i></a>
+                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Listings <i class="fa fa-angle-down"></i></a>
                         <div class="dropdown-menu bg-dark rounded-0 border-0 m-0">
                             <?php
                             foreach ($games as $game) {
