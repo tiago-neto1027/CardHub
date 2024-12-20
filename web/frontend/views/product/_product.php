@@ -24,6 +24,6 @@ use \common\models\Product;
                         <h5><?= $model->price ?>€</h5>
                     <?php }?>
                     
-                </div><!--
+                </div>
             </div>
         </div>
