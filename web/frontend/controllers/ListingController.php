@@ -46,6 +46,7 @@ class ListingController extends Controller
     }
 
 
+
     /**
      * Lists all Listing models.
      *
@@ -130,5 +131,24 @@ class ListingController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    public function actionView($id)
+    {
+        $model = Listing::findOne($id);
+        $type = $model instanceof Listing ? 'listing' : 'product';
+
+        if ($type !== 'listing') {
+            throw new \yii\web\BadRequestHttpException('Invalid type provided.');
+        }
+
+        if ($model === null) {
+            throw new \yii\web\NotFoundHttpException('The requested item does not exist.');
+        }
+
+        return $this->render('view', [
+            'model' => $model,
+            'type' => $type,
+        ]);
     }
 }

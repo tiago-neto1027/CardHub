@@ -20,7 +20,7 @@ use yii\helpers\Url;
                             <i class="far fa-heart"></i>                                           
                         </a>';
                     echo '
-                        <a href="' . Url::to(['/catalog/view','id'=>$model->id, 'type' => $model instanceof Product ? 'product' : 'card']) . '" class="btn btn-outline-dark btn-square">
+                        <a href="' . Url::to(['/product/view','id'=>$model->id]) . '" class="btn btn-outline-dark btn-square">
                             <i class="fa fa-search"></i>                                           
                         </a>';
                     ?>
