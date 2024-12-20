@@ -57,7 +57,6 @@ use yii\widgets\DetailView;
                    <div class="container-fluid bg-dark mt-4 mb-4 rounded-1" style="padding: 10px">
                         <h5 class="text-secondary"><?= $model->description ?></h5>
                    </div>
-                   
                 </div>
             </div>
         </div>

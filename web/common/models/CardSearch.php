@@ -43,6 +43,7 @@ class CardSearch extends Card
         $query = Card::find();
 
         // add conditions that should always apply here
+        $query->andWhere(['status' => 'active']);
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,

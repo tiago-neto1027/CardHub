@@ -120,4 +120,8 @@ class Card extends \yii\db\ActiveRecord
     {
         return self::find()->where(['status' => 'inactive'])->count();
     }
+
+    public function getListingsCount(){
+        return $this->getListings()->count();
+    }
 }
