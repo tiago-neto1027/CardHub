@@ -41,7 +41,7 @@ use yii\helpers\Url;
             <div class="d-inline-flex align-items-center h-100">
                 <a href="<?= \yii\helpers\Url::home() ?>" class="text-decoration-none mr-3">
                     <span class="h1 text-uppercase text-primary px-2">Card</span>
-                    <span class="h1 text-uppercase text-dark bg-primary px-2 ml-n1">Hub</span>
+                    <span class="h1 text-uppercase text-dark bg-primary px-2 ml-n1 rounded">Hub</span>
                 </a>
             </div>
         </div>

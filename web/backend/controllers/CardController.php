@@ -136,23 +136,15 @@ class CardController extends Controller
     /* PENDING CARD ACTIONS */
     public function actionPendingApproval()
     {
-        //The same as the index but filters for 'Pending' cards only and sorts by ascendint created time
+        //The same as the index but filters for 'Pending' cards only and sorts by ascending created time
 
         $searchModel = new CardSearch();
-        $dataProvider = $searchModel->search($this->request->queryParams);
-
-        $dataProvider->query->andWhere(['status' => 'inactive']);
-        $dataProvider->query->orderBy(['created_at' => SORT_ASC]);
+        $dataProvider = $searchModel->searchPendingApproval($this->request->queryParams);
 
         return $this->render('pending-approval', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
-    }
-
-    public function actionPendingCardCount()
-    {
-        return Card::find()->where(['status' => 'inactive'])->count();
     }
 
     public function actionAccept($id)
@@ -171,7 +163,7 @@ class CardController extends Controller
     {
         $model = $this->findModel($id);
 
-        if($model &&  !empty($model->user_id))
+        if($model && !empty($model->user_id))
         {
             return $this->redirect(['user/view', 'id' => $model->user_id]);
         }

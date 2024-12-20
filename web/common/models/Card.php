@@ -115,4 +115,9 @@ class Card extends \yii\db\ActiveRecord
     {
         return $this->hasOne(User::class, ['id' => 'user_id']);
     }
+
+    public static function getPendingCardCount()
+    {
+        return self::find()->where(['status' => 'inactive'])->count();
+    }
 }

@@ -57,6 +57,10 @@ class ListingSearch extends Listing
             return $dataProvider;
         }
 
+        if (isset($params['seller_id'])) {
+            $query->andWhere(['seller_id' => $params['seller_id']]);
+        }
+
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,

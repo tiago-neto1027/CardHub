@@ -6,7 +6,10 @@ use yii\widgets\ActiveForm;
 /** @var yii\web\View $this */
 /** @var common\models\UserSearch $model */
 /** @var yii\widgets\ActiveForm $form */
+
+// Not being used right now
 ?>
+
 
 <div class="user-search">
 

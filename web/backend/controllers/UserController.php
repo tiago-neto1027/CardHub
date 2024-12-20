@@ -117,13 +117,7 @@ class UserController extends Controller
      */
     public function actionUpdate($id)
     {
-        $model = new SignupForm();
-        $user = $this->findModel($id);
-
-        $model->username = $user->username;
-        $model->email = $user->email;
-        $model->role = $user->getRole();
-        $model->status = $user->status;
+        $model = $this->findModel($id);
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->update($id)) {
             return $this->redirect(['view', 'id' => $id]);
@@ -131,7 +125,6 @@ class UserController extends Controller
 
         return $this->render('update', [
             'model' => $model,
-            'user' => $user,
         ]);
     }
 

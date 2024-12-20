@@ -6,6 +6,7 @@ use frontend\models\ResendVerificationEmailForm;
 use frontend\models\VerifyEmailForm;
 use Yii;
 use yii\base\InvalidArgumentException;
+use yii\data\ActiveDataProvider;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
@@ -81,10 +82,26 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        $data = Product::find()->all();
+        $randomProductsQuery = Product::find()
+            ->orderBy(new \yii\db\Expression('RAND()'))
+            ->limit(12);
+        $randomProducts = new ActiveDataProvider([
+            'query' => $randomProductsQuery,
+            'pagination' => false,
+        ]);
+
+
+        $recentProductsQuery = Product::find()
+            ->orderBy(['created_at' => SORT_DESC])
+            ->limit(6);
+        $recentProducts = new ActiveDataProvider([
+            'query' => $recentProductsQuery,
+            'pagination' => false,
+        ]);
 
         return $this->render('index',[
-            'products' => $data
+            'products' => $randomProducts,
+            'recentProducts' => $recentProducts,
         ]);
     }
 

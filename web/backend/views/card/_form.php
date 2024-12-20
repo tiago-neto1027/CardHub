@@ -25,9 +25,10 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'description')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'status')->dropDownList([ 'active' => 'Active', 'inactive' => 'Inactive', ], ['prompt' => 'Select a Status']) ?>
-
-    <!--<?= $form->field($model, 'created_at')->textInput() ?>-->
+    <?= $form->field($model, 'status')->dropDownList([
+            'active' => 'Active',
+            'inactive' => 'Inactive', ],
+        ['prompt' => 'Select a Status']) ?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

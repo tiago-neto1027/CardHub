@@ -71,4 +71,40 @@ class CardSearch extends Card
 
         return $dataProvider;
     }
+
+    public function searchPendingApproval($params)
+    {
+        $query = Card::find();
+
+        // add conditions that should always apply here
+        $query->andWhere(['status' => 'inactive']);
+        $query->orderBy(['created_at' => SORT_ASC]);
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        $this->load($params);
+
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+
+        // grid filtering conditions
+        $query->andFilterWhere([
+            'id' => $this->id,
+            'game_id' => $this->game_id,
+            'created_at' => $this->created_at,
+        ]);
+
+        $query->andFilterWhere(['like', 'name', $this->name])
+            ->andFilterWhere(['like', 'rarity', $this->rarity])
+            ->andFilterWhere(['like', 'image_url', $this->image_url])
+            ->andFilterWhere(['like', 'description', $this->description])
+            ->andFilterWhere(['like', 'status', $this->status]);
+
+        return $dataProvider;
+    }
 }

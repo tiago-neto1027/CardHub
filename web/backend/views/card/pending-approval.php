@@ -15,15 +15,12 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="card-pending-approval">
 
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            //'id',
             'name',
             [
                 'attribute' => 'game_id',
@@ -33,17 +30,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label' => 'Game',
             ],
             'rarity',
-            /*[
-                'attribute' => 'image_url',
-                'label' => 'Logo',
-                'format' => 'raw',
-                'value' => function ($model) {
-                    return Html::img($model->image_url, ['alt' => $model->name, 'style' => 'max-width:200px;']);
-                },
-            ],*/
-            //'image_url:url',
-            //'description',
-            //'status',
             [
                 'attribute' => 'created_at',
                 'format' => ['date', 'php:d/m/Y'],

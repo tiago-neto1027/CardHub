@@ -11,6 +11,7 @@ use common\models\User;
  */
 class UserSearch extends User
 {
+    public $user_type;
     /**
      * {@inheritdoc}
      */
@@ -18,7 +19,7 @@ class UserSearch extends User
     {
         return [
             [['id', 'status', 'created_at', 'updated_at'], 'integer'],
-            [['username', 'auth_key', 'password_hash', 'password_reset_token', 'email', 'verification_token'], 'safe'],
+            [['username', 'auth_key', 'password_hash', 'password_reset_token', 'email', 'verification_token', 'user_type'], 'safe'],
         ];
     }
 
@@ -42,6 +43,8 @@ class UserSearch extends User
     {
         $query = User::find();
 
+        $query->leftJoin('auth_assignment', 'auth_assignment.user_id = user.id');
+
         // add conditions that should always apply here
         if ($onlyDeleted) {
             $query->andWhere(['status' => 'deleted']);
@@ -50,6 +53,19 @@ class UserSearch extends User
         }
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort' => [
+                'attributes' => [
+                    'username',
+                    'email',
+                    'role' => [
+                        'asc' => ['auth_assignment.item_name' => SORT_ASC],
+                        'desc' => ['auth_assignment.item_name' => SORT_DESC],
+                        'default' => SORT_ASC,
+                    ],
+                    'created_at',
+                    'updated_at',
+                ],
+            ],
         ]);
 
         $this->load($params);
@@ -73,7 +89,8 @@ class UserSearch extends User
             ->andFilterWhere(['like', 'password_hash', $this->password_hash])
             ->andFilterWhere(['like', 'password_reset_token', $this->password_reset_token])
             ->andFilterWhere(['like', 'email', $this->email])
-            ->andFilterWhere(['like', 'verification_token', $this->verification_token]);
+            ->andFilterWhere(['like', 'verification_token', $this->verification_token])
+            ->andFilterWhere(['auth_assignment.item_name' => $this->user_type]);
 
         return $dataProvider;
     }
