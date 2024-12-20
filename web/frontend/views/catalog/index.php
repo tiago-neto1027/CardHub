@@ -1,12 +1,12 @@
 <?php
 /** @var yii\web\View $this */
+
 use yii\helpers\Html;
 use yii\helpers\Url;
 use \common\models\Product;
 use yii\widgets\ListView;
 
 use function PHPSTORM_META\type;
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -33,16 +33,6 @@ use function PHPSTORM_META\type;
                     </div>
                 </div>
                 <div class="filter-buttons border border-dark rounded mb-4" id="filter-buttons">
-                    <?php 
-                        if ($games = \common\models\Game::getAllGames()):     
-                            foreach ($games as $game) {
-                            echo Html::a($game->name, Url::current([
-                                'id' => $game->id]),
-                                ['class' => 'dropdown-item']);
-                            }
-                        endif; ?>        
-                </div>
-                <div class="filter-buttons border border-dark rounded mb-4" id="">
                     <?php
                         $productTypeOptions = Product :: getProductTypes();         //TODO fix?
                         if (empty($productTypeOptions)) {
