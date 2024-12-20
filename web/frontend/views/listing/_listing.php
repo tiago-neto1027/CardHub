@@ -22,6 +22,7 @@ use yii\helpers\Html;
             </div>
         </div>
     </div>
+    <?php if($model->seller_id == Yii::$app->user->identity->id) {?>
     <div class="position-absolute end-0 p-2" style="top: 90%; transform: translateY(-50%);">
         <?= Html::a(
             '<i class="fas fa-trash-alt" style="font-size: 1.5rem;"></i>',
@@ -33,7 +34,7 @@ use yii\helpers\Html;
                     'method' => 'post',
                 ],
             ]
-        ); ?>
+        );} ?>
     </div>
 </div>
 

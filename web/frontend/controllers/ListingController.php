@@ -4,6 +4,7 @@ namespace frontend\controllers;
 
 use common\models\Listing;
 use common\models\ListingSearch;
+use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -53,7 +54,10 @@ class ListingController extends Controller
     public function actionIndex()
     {
         $searchModel = new ListingSearch();
-        $dataProvider = $searchModel->search($this->request->queryParams);
+        $dataProvider = $searchModel->search(array_merge(
+            $this->request->queryParams,
+            ['seller_id' => Yii::$app->user->id]
+        ));
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,
