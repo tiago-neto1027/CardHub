@@ -24,14 +24,14 @@ use function PHPSTORM_META\type;
                     <a class="btn dropdown-toggle mb-4" type="button" id="dropdownMenuButton" data-toggle="dropdown"
                        aria-haspopup="true" aria-expanded="false">Type</a>
                     <div class="dropdown-menu bg-dark">
-                        <?php
-                        echo Html::a('Listings', Url::current([
-                            'type' => 'card']),
-                            ['class' => 'dropdown-item']);
-                        echo Html::a('Products', Url::current([
-                            'type' => 'product']),
-                            ['class' => 'dropdown-item']);
-                        ?>
+                        <?php    
+                            echo Html::a('Cards', Url::current([
+                                'type' => 'listing']),
+                                ['class' => 'dropdown-item']);
+                            echo Html::a('Products', Url::current([
+                                'type' => 'product']),
+                                ['class' => 'dropdown-item']);
+                         ?>  
                     </div>
                 </div>
                 <div class="filter-buttons border border-dark rounded mb-4" id="filter-buttons">
@@ -60,26 +60,33 @@ use function PHPSTORM_META\type;
                 </div>
             </div>
         </div>
-        <!-- Products-->
-        <div class="col-lg-9 pt-5">
-            <h2 class="section-title position-relative text-uppercase mx-xl-2 mb-4"><span class="bg-secondary pr-3">Product Catalog</span></h2>
-            <?php
-            if ($type === 'card') {
-                echo ListView::widget([
-                    'dataProvider' => $dataProvider,
-                    'itemOptions' => ['class' => 'item col-md-6 col-sm-6 pb-1'],
-                    'itemView' => '../listing/_listing',
-                    'layout' => "<div class='row g-3'>{items}</div>\n{pager}",
-                ]);
-            } elseif ($type === 'product') {
-                echo ListView::widget([
-                    'dataProvider' => $dataProvider,
-                    'itemOptions' => ['class' => 'item col-lg-2 col-md-4 col-sm-6 pb-1'],
-                    'itemView' => '../product/_product',
-                    'layout' => "<div class='row g-3'>{items}</div>\n{pager}"
-                ]);
-            }
-            ?>
+        <div class="col-lg-9">
+            <div class="container-fluid pt-5 pb-3">
+                <h2 class="section-title position-relative text-uppercase mx-xl-2 mb-4">
+                    <span class="bg-secondary pr-3">Product Catalog</span></h2>
+                <div class="row">
+                        <?php 
+                            if($type === 'listing')
+                            {
+                                echo ListView::widget([
+                                    'dataProvider' => $dataProvider,
+                                    'itemOptions' => ['class' => 'item col-md-6 col-sm-6 pb-1'],
+                                    'itemView' => '../listing/_listing',
+                                    'layout' => "<div class='row g-3'>{items}</div>\n{pager}",
+                                ]);
+                            }
+                            elseif($type === 'product')
+                            {
+                                echo ListView::widget([
+                                    'dataProvider' => $dataProvider,
+                                    'itemOptions' => ['class' => 'item col-lg-2 col-md-4 col-sm-6 pb-1'],
+                                    'itemView' => '../product/_product',
+                                    'layout' => "<div class='row g-3'>{items}</div>\n{pager}",
+                                ]);
+                            }
+                        ?>
+                </div>      
+            </div>
         </div>
     </div>
 </div>

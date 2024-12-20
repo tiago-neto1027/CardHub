@@ -26,7 +26,7 @@ class CartController extends Controller
         $cartItems = Cart::getItems($cartKey);
 
         // Fetch products for the cart items
-        $productIds = array_column($cartItems, 'product_id');
+        $productIds = array_column($cartItems, 'itemId');
         $products = Product::find()->where(['id' => $productIds])->indexBy('id')->all();
 
         $totalCost = Cart::getTotalCost();
@@ -42,25 +42,30 @@ class CartController extends Controller
     {
         if (Yii::$app->user->isGuest) {
             Yii::$app->session->setFlash('warning', 'Login to add items to cart.');
-
         }
-        $quantity = 1;
-        if ($type === 'card') {
+        if ($type === 'listing') {
             $item = Listing::findOne($itemId);
         } elseif ($type === 'product') {
             $item = Product::findOne($itemId);
         } else {
             throw new \yii\web\BadRequestHttpException('Invalid item type.');
         }
-
         if (!$item) {
             throw new \yii\web\NotFoundHttpException(ucfirst($type) . ' not found.');
         }
+        $quantity = 1;
 
-        if ($type === 'card') {
-            Cart::addItemToCart($itemId, $item->card->name, $item->image_url ,$item->price, $quantity, $type , 1);
-            Yii::$app->session->setFlash('success', ucfirst($type) . ' added to cart.');
+        if ($type === 'listing') {
+            if($item->status==='inactive'){
+                Yii::$app->session->setFlash('error', 'Item not for sale');
+            }
+            else{
+                Cart::addItemToCart($itemId, $item->card->name, $item->card->image_url ,$item->price, $quantity, $type , 1);
+            }
         } elseif ($type === 'product') {
+            if($item->status==='inactive'){
+                Yii::$app->session->setFlash('error', 'Item not for sale');
+            }
             if ($item->stock === 0)
                 Yii::$app->session->setFlash('error', 'Not enough products in stock!');
             else {
@@ -89,41 +94,39 @@ class CartController extends Controller
     {
         Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 
-
         $cartKey = Cart::getCartKey();
         $cart = Cart::getItems($cartKey) ?: [];
+        $uniqueKey = 'product_' . $itemId;
 
-        if (!isset($cart[$itemId])) {
+        if (!isset($cart[$uniqueKey])) {
             return ['success' => false, 'error' => 'Item not found in cart.'];
-
         }
 
         $product = Product::findOne($itemId);
-        $stock = $product->stock;
-
         if (!$product) {
             return ['success' => false, 'error' => 'Product not found.'];
         }
 
+        $stock = $product->stock;
+
         if ($quantity !== null) {
             if ($quantity < 1 || $quantity > $stock) {
-                return ['success' => false, 'error' => 'No more stock available'];
+                return ['success' => false, 'error' => 'Invalid quantity specified.'];
             }
-            $cart[$itemId]['quantity'] = $quantity;
+            $cart[$uniqueKey]['quantity'] = $quantity;
         } else {
-            $currentQuantity = $cart[$itemId]['quantity'];
+            $currentQuantity = $cart[$uniqueKey]['quantity'];
             if ($action === 'increment') {
                 if ($currentQuantity < $stock) {
-                    $cart[$itemId]['quantity']++;
+                    $cart[$uniqueKey]['quantity']++;
                 } else {
-                    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-                    return ['success' => false, 'error' => ['No more stock available']];
+                    return ['success' => false, 'error' => 'No more stock available.'];
                 }
             } elseif ($action === 'decrement') {
                 if ($currentQuantity > 1) {
-                    $cart[$itemId]['quantity']--;
+                    $cart[$uniqueKey]['quantity']--;
                 } else {
-                    return ['success' => false, 'error' => ['Minimum is 1']];
+                    return ['success' => false, 'error' => 'Minimum quantity is 1.'];
                 }
             }
         }
@@ -133,10 +136,10 @@ class CartController extends Controller
 
         return [
             'success' => true,
-            'newQuantity' => $cart[$itemId]['quantity'],
-            'newTotal' => Yii::$app->formatter->asCurrency($cart[$itemId]['price']*$cart[$itemId]['quantity']),
+            'newQuantity' => $cart[$uniqueKey]['quantity'],
+            'newTotal' => Yii::$app->formatter->asCurrency($cart[$uniqueKey]['price'] * $cart[$uniqueKey]['quantity']),
             'newCartTotal' => Yii::$app->formatter->asCurrency($totalCost),
         ];
-
     }
+
 }
