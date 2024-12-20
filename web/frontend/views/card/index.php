@@ -34,6 +34,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => function ($model) {
                     return Html::img($model->image_url, ['style' => 'width:100px; height:auto;']);
                 },
+                'label' => 'Image',
+                'filter' => false,
             ],
             'name',
             'rarity',

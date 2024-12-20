@@ -17,17 +17,38 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <div class="container-fluid pt-5 pb-3">
         <div class="row px-xl-5">
-            <div class="col-lg-8 border p-3">
-                <?php foreach ($listings as $listing): ?>
-                    <p><strong>Price:</strong> <?= Yii::$app->formatter->asCurrency($listing->price) ?></p>
-                <?php endforeach; ?>
+            <div class="col-lg-8">
+                <table class="table table-dark">
+                    <thead>
+                    <tr>
+                        <th class="text-info">Listing</th>
+                        <th class="text-info">Seller Username</th>
+                        <th class="text-info">Condition</th>
+                        <th class="text-info">Price</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <?php foreach ($listings as $listing): ?>
+                        <tr>
+                            <td>
+                                <a href="<?= Yii::$app->urlManager->createUrl(['listing/view', 'id' => $listing->id]) ?>" class="text-info">
+                                    View Listing
+                                </a>
+                            </td>
+                            <td><?= Html::encode($listing->seller->username) ?></td>
+                            <td><?= Html::encode($listing->condition) ?></td>
+                            <td><?= number_format($listing->price, 2) ?>€</td>
+                        </tr>
+                    <?php endforeach; ?>
+                    </tbody>
+                </table>
             </div>
             <div class="col-4">
                 <div class="row">
                     <div class="col-lg-7 bg-dark">
                         <div class="p-3 text-secondary">
-                            <p><strong>Description: </strong><?= $model->description ?></p>
-                            <p><strong>Available Listings:</strong> <?= $availableListingsCount ?></p>
+                            <p><strong class="text-info">Description: </strong><?= $model->description ?></p>
+                            <p><strong class="text-info">Available Listings:</strong> <?= $availableListingsCount ?></p>
                         </div>
                     </div>
                     <div class="container bg-dark p-3 col-lg-5">

@@ -23,7 +23,7 @@ use yii\helpers\Html;
         </div>
     </div>
     <div class="position-absolute end-0 p-2" style="top: 90%; transform: translateY(-50%);">
-        <?php if($model->seller_id == Yii::$app->user->identity->id) {?>
+        <?php if (Yii::$app->controller->id === 'listing' && Yii::$app->controller->action->id === 'index') {?>
         <?= Html::a(
             '<i class="fas fa-trash-alt" style="font-size: 1.5rem;"></i>',
             ['listing/delete', 'id' => $model->id],
