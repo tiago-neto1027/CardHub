@@ -24,7 +24,7 @@ class CardController extends Controller
             [
                 'access' => [
                     'class' => \yii\filters\AccessControl::class,
-                    'only' => ['create','index','delete','view'],
+                    'only' => ['create','view'],
                     'rules' => [
                         [
                             'allow' => true,

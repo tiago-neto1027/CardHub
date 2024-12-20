@@ -7,7 +7,6 @@ use \common\models\Product;
 use yii\widgets\ListView;
 
 use function PHPSTORM_META\type;
-
 ?>
 <!DOCTYPE html>
 <html lang="en">

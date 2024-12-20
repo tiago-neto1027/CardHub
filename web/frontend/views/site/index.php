@@ -1,7 +1,5 @@
 <?php
 
-/** @var yii\web\View $this */
-
 use yii\helpers\Html;
 use yii\widgets\ListView;
 
@@ -49,7 +47,7 @@ $this->title = 'My Yii Application';
             </div>
         </div>
         <div class="col-lg-2"></div>
-    </div>
+  </div>
 </div>
 
 <!-- Products -->

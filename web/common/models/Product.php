@@ -83,16 +83,22 @@ class Product extends \yii\db\ActiveRecord
         return $this->hasOne(Game::class, ['id' => 'game_id']);
     }
 
+    public static function getStock($productId)
+    {
+        $product = self::findOne($productId);
+        return $product ? $product->stock : 0;
+    }
+
     public function getProductType()
     {
         return $this->hasOne(Game::class, ['id' => 'game_id']);
     }
 
-    public static function getProductTypes()
-{
+    public static function getProductTypes(){
     return self::find()
                ->select('type')   // Select only the 'type' column
                ->distinct()        // Ensure we only get unique product types
                ->all();            // Get the result as an array of product types
-}
+  }
+
 }
