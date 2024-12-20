@@ -13,6 +13,7 @@ use function PHPSTORM_META\type;
     <body>
         <div class="container-fluid">
         <div class="row">
+        <!-- Filters -->
         <div class="col-lg-3" >
             <div class="container-fluid pt-5 pb-3">
                 <h2 class="section-title position-relative text-uppercase mb-4"><span class="bg-secondary pr-3">Filters</span></h2>
@@ -57,8 +58,8 @@ use function PHPSTORM_META\type;
                 </div>
             </div>
         </div>
+        <!-- Products-->
         <div class="col-lg-9">
-            <!-- Products Start -->
             <div class="container-fluid pt-5 pb-3">
                 <h2 class="section-title position-relative text-uppercase mx-xl-2 mb-4"><span class="bg-secondary pr-3">Product Catalog</span></h2>
                 <div class="row">
@@ -76,7 +77,7 @@ use function PHPSTORM_META\type;
                             {
                                 echo ListView::widget([
                                     'dataProvider' => $dataProvider,
-                                    'itemOptions' => ['class' => 'item col-lg-3 col-md-4 col-sm-6 pb-1'],
+                                    'itemOptions' => ['class' => 'item col-lg-2 col-md-4 col-sm-6 pb-1'],
                                     'itemView' => '../product/_product',
                                     'layout' => "<div class='row g-3'>{items}</div>\n{pager}",
                                 ]);
@@ -84,47 +85,7 @@ use function PHPSTORM_META\type;
                         ?>
                 </div>      
             </div>
-            <!-- Products End -->
         </div>
-          
-        <div class= "d-flex justify-content-center pagination-container mt-4">
-            <div class="pagination">
-                <!-- Backward Button -->
-                <?php /*if ($page > 1): ?>
-                    <a class="btn active rounded" href="?<?= http_build_query(array_merge($_GET, ['page' => $page - 1])) ?>">&laquo;</a>
-                <?php else: ?>
-                    <span class="btn disabled rounded">&laquo;</span>
-                <?php endif; */?>
-
-                <!-- Pagination -->
-                <?php /*
-                $totalPages = ceil($totalCount / $pageSize); 
-                for ($i = 1; $i <= $totalPages; $i++): ?>
-                    <a class="btn rounded <?= $i === $page ? 'active' : '' ?>" 
-                    href="?<?= http_build_query(array_merge($_GET, ['page' => $i])) ?>">
-                    <?= $i ?>
-                    </a>
-                <?php endfor; ?>
-
-                <!-- Forward Button -->
-                <?php if ($page < $totalPages): ?>
-                    <a class="btn active rounded" href="?<?= http_build_query(array_merge($_GET, ['page' => $page + 1])) ?>">&raquo;</a>
-                <?php else: ?>
-                    <span class="btn disabled rounded">&raquo;</span>
-                <?php endif; */?>
-
-            <?php 
-            use yii\widgets\LinkPager;
-
-            /*echo LinkPager::widget([
-                'pagination' => $pages,
-                
-            ]);*/
-            ?>
-
-
-            </div>
-        </div>    
     </body>
 </html>
 
