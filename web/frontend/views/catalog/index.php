@@ -51,7 +51,8 @@ use function PHPSTORM_META\type;
         <!-- Products-->
         <div class="col-lg-9">
             <div class="container-fluid pt-5 pb-3">
-                <h2 class="section-title position-relative text-uppercase mx-xl-2 mb-4"><span class="bg-secondary pr-3">Product Catalog</span></h2>
+                <h2 class="section-title position-relative text-uppercase mx-xl-2 mb-4">
+                    <span class="bg-secondary pr-3">Product Catalog</span></h2>
                 <div class="row">
                         <?php 
                             if($type === 'card')

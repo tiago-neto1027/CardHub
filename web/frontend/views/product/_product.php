@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use \common\models\Product;
+use yii\helpers\Url;
 
 ?>
 
@@ -9,9 +10,20 @@ use \common\models\Product;
             <div class="product-img position-relative overflow-hidden">
                 <img class="img-fluid w-100" src="<?= $model->image_url ?>" alt="">
                 <div class="product-action">
-                    <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-shopping-cart"></i></a>
-                    <a class="btn btn-outline-dark btn-square" href=""><i class="far fa-heart"></i></a>
-                    <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-search"></i></a>
+                    <?php
+                    echo '
+                        <a href="' . Url::to(['/cart/add-to-cart','itemId'=>$model->id,'type' => $model instanceof Product ? 'product' : 'card']) . '" class="btn btn-outline-dark btn-square">
+                            <i class="fa fa-shopping-cart"></i>                                           
+                        </a>';
+                    echo '
+                        <a href="' . Url::to(['/favorites/index']) . '" class="btn btn-outline-dark btn-square">
+                            <i class="far fa-heart"></i>                                           
+                        </a>';
+                    echo '
+                        <a href="' . Url::to(['/catalog/view','id'=>$model->id, 'type' => $model instanceof Product ? 'product' : 'card']) . '" class="btn btn-outline-dark btn-square">
+                            <i class="fa fa-search"></i>                                           
+                        </a>';
+                    ?>
                 </div>
             </div>
             <div class="text-center py-4">

@@ -56,7 +56,7 @@ if (empty($cartItems)) {
                         <td class="col-3 align-self-center align-middle" title="Name"><?= $item['quantity'] ?></td>
                     <?php endif; ?>
                     <td class="align-middle" id="product-price"><?= Yii::$app->formatter->asCurrency($item['price'])?></td>
-                    <td class="align-middle" id="product-total"><?= Yii::$app->formatter->asCurrency($item['price'] * $item['quantity']) ?></td>
+                    <td class="align-middle" id="product-total-<?= $item['product_id'] ?>"><?= Yii::$app->formatter->asCurrency($item['price'] * $item['quantity']) ?></td>
                     <td class="align-middle">
                         <?= Html::a('Remove', ['cart/remove-from-cart', 'itemId' => $itemId,'type' => "product"], [
                             'class' => 'btn btn-danger btn-lg text-white',
@@ -120,7 +120,7 @@ if (empty($cartItems)) {
             .then(data => {
                 if (data.success) {
                     document.getElementById(`quantity-${itemId}`).innerText = data.newQuantity;
-                    document.getElementById('product-total').innerText = data.newTotal;
+                    document.getElementById(`product-total-${itemId}`).innerText = data.newTotal;
                     document.getElementById('cart-total').innerText = data.newCartTotal;
                 } else {
                     alert(data.error || 'Failed to update quantity.');
