@@ -28,22 +28,22 @@ class Cart
     public static function addItemToCart($itemId, $name, $imageUrl, $price, $quantity, $type, $stock)
     {
         $cartKey = self::getCartKey();
-
         $cartItems = self::getItems($cartKey) ?: [];
+        $uniqueKey = $type . '_' . $itemId;
 
-        if (isset($cartItems[$itemId])) {
-            if ($type === 'card') {
+        if (isset($cartItems[$uniqueKey])) {
+            if ($type === 'listing') {
                 Yii::$app->session->setFlash('warning', 'This card is already in the cart.');
-            } elseif ($type === 'product' && $cartItems[$itemId]['quantity'] >= $stock) {
+            } elseif ($type === 'product' && $cartItems[$uniqueKey]['quantity'] >= $stock) {
                 Yii::$app->session->setFlash('warning', 'Not enough items in stock.');
             } elseif ($type === 'product') {
-                $cartItems[$itemId]['quantity'] += $quantity;
+                $cartItems[$uniqueKey]['quantity'] += $quantity;
                 Yii::$app->session->setFlash('success', ucfirst($type) . ' added to cart.');
                 self::setItem($cartKey, $cartItems);
             }
         } else {
-            $cartItems[$itemId] = [
-                'product_id' => $itemId,
+            $cartItems[$uniqueKey] = [
+                'itemId' => $itemId,
                 'name' => $name,
                 'image' => $imageUrl,
                 'price' => $price,

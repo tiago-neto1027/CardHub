@@ -32,7 +32,7 @@ class CatalogController extends \yii\web\Controller
             $searchModel = new ProductSearch();
             $query = $productQuery;
         }
-        elseif($type === 'card'){
+        elseif($type === 'listing'){
             $searchModel = new ListingSearch();
             $query = $cardQuery;
         }
@@ -63,8 +63,8 @@ class CatalogController extends \yii\web\Controller
         if ($type === 'product') {
             $model = Product::findOne($id);
             
-        } elseif ($type === 'card') {
-            $model = Card::findOne($id);
+        } elseif ($type === 'listing') {
+            $model = Listing::findOne($id);
         } else {
             throw new \yii\web\BadRequestHttpException('Invalid type provided.');
         }

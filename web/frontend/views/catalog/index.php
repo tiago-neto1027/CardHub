@@ -24,7 +24,7 @@ use function PHPSTORM_META\type;
                     <div class="dropdown-menu bg-dark">
                         <?php    
                             echo Html::a('Cards', Url::current([
-                                'type' => 'card']),
+                                'type' => 'listing']),
                                 ['class' => 'dropdown-item']);
                             echo Html::a('Products', Url::current([
                                 'type' => 'product']),
@@ -55,7 +55,7 @@ use function PHPSTORM_META\type;
                     <span class="bg-secondary pr-3">Product Catalog</span></h2>
                 <div class="row">
                         <?php 
-                            if($type === 'card')
+                            if($type === 'listing')
                             {
                                 echo ListView::widget([
                                     'dataProvider' => $dataProvider,

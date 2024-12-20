@@ -41,12 +41,9 @@ $this->title =  $model->card->name;
                     <div class=" align-items-left">
 
                     <h5 class="text-secondary mb-4"><i class="text-primary bi bi-bag-check-fill me-2"></i>In Stock: <?= $model->stock ?></h5>
-                    <?php
-                    echo '
-                            <a href="' . Url::to(['/cart/add-to-cart','itemId'=>$model->id,'type'=>"listing"]) . '" class="rounded bg-primary text-secondary btn btn-lg">
-                               Add to cart!                                       
-                            </a>';
-                    ?>
+                    <?= Html::a('Add to cart!', ['/cart/add-to-cart', 'itemId' => $model->id, 'type' => 'listing'], [
+                    'class' => 'btn btn-primary btn-lg rounded',
+                ]) ?>
                     </div><?php
                 }
                 ?>
