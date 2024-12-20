@@ -41,6 +41,20 @@ use yii\helpers\Url;
             </div>
         </div>
     </div>
+    <div class="position-absolute end-0 p-2" style="top: 90%; transform: translateY(-50%);">
+        <?php if (Yii::$app->controller->id === 'listing' && Yii::$app->controller->action->id === 'index') {?>
+        <?= Html::a(
+            '<i class="fas fa-trash-alt" style="font-size: 1.5rem;"></i>',
+            ['listing/delete', 'id' => $model->id],
+            [
+                'class' => 'text-danger',
+                'data' => [
+                    'confirm' => 'Are you sure you want to delete this item?',
+                    'method' => 'post',
+                ],
+            ]
+        );} ?>
+    </div>
 </div>
 <style>
 

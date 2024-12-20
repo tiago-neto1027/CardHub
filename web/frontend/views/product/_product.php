@@ -25,11 +25,13 @@ use yii\helpers\Url;
         <div class="text-center py-4">
             <a class="h6 text-decoration-none text-truncate d-block" href="<?= \yii\helpers\Url::to(['/catalog/view', 'id' => $model->id, 'type' => $model instanceof Product ? 'product' : 'card'])?>"><?= $model->name ?></a>
             <div class="d-flex align-items-center justify-content-center mt-2">
-                <?php
-                if (empty($model->price)) {
-                        echo "<h5>No price available.</h5>";
-                }  else{?>
-                    <h5>€ <?= $model->price ?></h5><?php }?>
+                <?php 
+                    if (empty($model->price)) { 
+                            echo "<h5>No price available.</h5>";
+                    }  else{?>
+                        <h5><?= $model->price ?>€</h5>
+                    <?php }?>
+                </div>
             </div>
         </div>
     </div>

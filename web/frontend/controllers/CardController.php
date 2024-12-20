@@ -31,6 +31,11 @@ class CardController extends Controller
                             'actions' => ['create'],
                             'roles' => ['seller'],
                         ],
+                        [
+                            'allow' => true,
+                            'actions' => ['index','view'],
+                            'roles' => ['?', 'buyer', 'seller'],
+                        ]
                     ],
                 ],
                 'verbs' => [
@@ -63,13 +68,23 @@ class CardController extends Controller
     /**
      * Displays a single Card model.
      * @param int $id ID
-     * @return string
+     * @return string|\yii\console\Response|\yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionView($id)
     {
+        $model = $this->findModel($id);
+
+        if($model->status === 'inactive')
+            throw new \yii\web\ForbiddenHttpException('This card is inactive and cannot be viewed.');
+
+        $availableListingsCount = $model->getListingsCount();
+        $listings = $model->listings;
+
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
+            'availableListingsCount' => $availableListingsCount,
+            'listings' => $listings,
         ]);
     }
 
@@ -95,40 +110,6 @@ class CardController extends Controller
         return $this->render('create', [
             'model' => $model,
         ]);
-    }
-
-    /**
-     * Updates an existing Card model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param int $id ID
-     * @return string|\yii\web\Response
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionUpdate($id)
-    {
-        $model = $this->findModel($id);
-
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        }
-
-        return $this->render('update', [
-            'model' => $model,
-        ]);
-    }
-
-    /**
-     * Deletes an existing Card model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param int $id ID
-     * @return \yii\web\Response
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionDelete($id)
-    {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
     }
 
     /**
