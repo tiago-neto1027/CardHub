@@ -29,4 +29,4 @@ $this->params['breadcrumbs'][] = $this->title;
     'itemOptions' => ['class' => 'item col-md-4'],
     'itemView' => '_listing',
     'layout' => "<div class='row g-3'>{items}</div>\n{pager}"
-]) ?>
+]) ?>   
