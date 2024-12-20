@@ -137,8 +137,8 @@ class CartController extends Controller
         return [
             'success' => true,
             'newQuantity' => $cart[$uniqueKey]['quantity'],
-            'newTotal' => Yii::$app->formatter->asCurrency($cart[$uniqueKey]['price'] * $cart[$uniqueKey]['quantity']),
-            'newCartTotal' => Yii::$app->formatter->asCurrency($totalCost),
+            'newTotal' => Yii::$app->formatter->asCurrency($cart[$uniqueKey]['price'] * $cart[$uniqueKey]['quantity'], 'EUR'),
+            'newCartTotal' => Yii::$app->formatter->asCurrency($totalCost), 'EUR',
         ];
     }
 

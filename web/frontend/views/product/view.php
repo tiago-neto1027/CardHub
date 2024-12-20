@@ -24,7 +24,7 @@ $this->title =  $model->name;
                 if (empty($model->price)) {
                     echo '<h5 class="text-secondary">No price available.</h5>';
                 }  else{?>
-                    € <?= $model->price ?>
+                    <?= Yii::$app->formatter->asCurrency($model->price, 'EUR') ?>
 
                 <?php }?></h3>
 

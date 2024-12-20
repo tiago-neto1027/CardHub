@@ -21,7 +21,7 @@ use yii\helpers\Url;
                         <h5 class="card-title"><?= Html::encode($model->card->name) ?></h5>
                         <p class="card-text"><?= Html::encode($model->card->description) ?></p>
                         <p class="card-text"><strong>Condition: </strong><?= Html::encode($model->condition) ?></p>
-                        <p class="card-text"><strong>Price: </strong><?= number_format($model->price, 2) ?> €</p>
+                        <p class="card-text"><strong>Price: </strong><?= Yii::$app->formatter->asCurrency($model->price, 'EUR') ?></p>
 
                         <div class="col-md-8 d-flex  product-action mt-auto">
                             <?php if($model->status === "inactive"):?>

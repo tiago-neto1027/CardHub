@@ -59,8 +59,8 @@ if (empty($cartItems)) {
                     <?php elseif($item['type']==='listing'):?>
                         <td class="col-1 align-self-center align-middle" title="Name"><?= $item['quantity'] ?></td>
                     <?php endif; ?>
-                    <td class="align-middle" id="product-price"><?= Yii::$app->formatter->asCurrency($item['price'])?></td>
-                    <td class="align-middle" id="product-total-<?= $item['itemId'] ?>"><?= Yii::$app->formatter->asCurrency($item['price'] * $item['quantity']) ?></td>
+                    <td class="align-middle" id="product-price"><?= Yii::$app->formatter->asCurrency($item['price'], 'EUR')?></td>
+                    <td class="align-middle" id="product-total-<?= $item['itemId'] ?>"><?= Yii::$app->formatter->asCurrency($item['price'] * $item['quantity'], 'EUR')?></td>
                     <td class="align-middle">
                         <?= Html::a('Remove', ['cart/remove-from-cart', 'itemId' => $itemId,'type' => "product"], [
                             'class' => 'btn btn-danger btn-lg text-white',
@@ -73,7 +73,7 @@ if (empty($cartItems)) {
         <tr class="fs-4">
             <th colspan="5" >Total</th>
             <th class="align-content-end" id="cart-total">
-                <?= Yii::$app->formatter->asCurrency($totalCost) ?>
+                <?= Yii::$app->formatter->asCurrency($totalCost, 'EUR') ?>
             </th>
         </tr>
         </tbody>

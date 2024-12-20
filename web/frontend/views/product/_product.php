@@ -29,9 +29,8 @@ use yii\helpers\Url;
                     if (empty($model->price)) { 
                             echo "<h5>No price available.</h5>";
                     }  else{?>
-                        <h5><?= $model->price ?>€</h5>
+                        <h5><?=Yii::$app->formatter->asCurrency($model->price, 'EUR') ?></h5>
                     <?php }?>
                 </div>
             </div>
         </div>
-    </div>
