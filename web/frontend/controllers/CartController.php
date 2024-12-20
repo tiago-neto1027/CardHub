@@ -58,13 +58,13 @@ class CartController extends Controller
         }
 
         if ($type === 'card') {
-            Cart::addItemToCart($itemId, $item->card->name, $item->price, $quantity,$type);
+            Cart::addItemToCart($itemId, $item->card->name, $item->image_url ,$item->price, $quantity, $type , 1);
             Yii::$app->session->setFlash('success', ucfirst($type) . ' added to cart.');
         } elseif ($type === 'product') {
-            if($item->stock = 0)
+            if ($item->stock === 0)
                 Yii::$app->session->setFlash('error', 'Not enough products in stock!');
-            else{
-                Cart::addItemToCart($itemId, $item->name, $item->price, $quantity, $type);
+            else {
+                Cart::addItemToCart($itemId, $item->name, $item->image_url, $item->price, $quantity, $type, $item->stock);
             }
         }
         return $this->redirect(Yii::$app->request->referrer);
@@ -85,4 +85,58 @@ class CartController extends Controller
         return $this->redirect(['cart/index']);
     }
 
+    public function actionUpdateQuantity($itemId, $action = null, $quantity = null)
+    {
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+
+        $cartKey = Cart::getCartKey();
+        $cart = Cart::getItems($cartKey) ?: [];
+
+        if (!isset($cart[$itemId])) {
+            return ['success' => false, 'error' => 'Item not found in cart.'];
+
+        }
+
+        $product = Product::findOne($itemId);
+        $stock = $product->stock;
+
+        if (!$product) {
+            return ['success' => false, 'error' => 'Product not found.'];
+        }
+
+        if ($quantity !== null) {
+            if ($quantity < 1 || $quantity > $stock) {
+                return ['success' => false, 'error' => 'No more stock available'];
+            }
+            $cart[$itemId]['quantity'] = $quantity;
+        } else {
+            $currentQuantity = $cart[$itemId]['quantity'];
+            if ($action === 'increment') {
+                if ($currentQuantity < $stock) {
+                    $cart[$itemId]['quantity']++;
+                } else {
+                    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+                    return ['success' => false, 'error' => ['No more stock available']];
+                }
+            } elseif ($action === 'decrement') {
+                if ($currentQuantity > 1) {
+                    $cart[$itemId]['quantity']--;
+                } else {
+                    return ['success' => false, 'error' => ['Minimum is 1']];
+                }
+            }
+        }
+
+        Cart::setItem($cartKey, $cart);
+        $totalCost = Cart::getTotalCost();
+
+        return [
+            'success' => true,
+            'newQuantity' => $cart[$itemId]['quantity'],
+            'newTotal' => Yii::$app->formatter->asCurrency($cart[$itemId]['price']*$cart[$itemId]['quantity']),
+            'newCartTotal' => Yii::$app->formatter->asCurrency($totalCost),
+        ];
+
+    }
 }

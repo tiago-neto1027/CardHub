@@ -30,6 +30,7 @@ use yii\helpers\Url;
 
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
 </head>
 
 <!-- Topbar Start -->

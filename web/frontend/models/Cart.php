@@ -25,19 +25,18 @@ class Cart
     }
 
 
-    public static function addItemToCart($itemId, $name, $price, $quantity, $type)
+    public static function addItemToCart($itemId, $name, $imageUrl, $price, $quantity, $type, $stock)
     {
         $cartKey = self::getCartKey();
 
         $cartItems = self::getItems($cartKey) ?: [];
 
         if (isset($cartItems[$itemId])) {
-            if($type === 'card') {
+            if ($type === 'card') {
                 Yii::$app->session->setFlash('warning', 'This card is already in the cart.');
-            }
-            elseif ($type === 'product' && $cartItems[$itemId]['quantity']>=Product::getStock($itemId))
-                Yii::$app->session->setFlash('warning', 'Not enough items in Stock');
-            elseif ($type === 'product') {
+            } elseif ($type === 'product' && $cartItems[$itemId]['quantity'] >= $stock) {
+                Yii::$app->session->setFlash('warning', 'Not enough items in stock.');
+            } elseif ($type === 'product') {
                 $cartItems[$itemId]['quantity'] += $quantity;
                 Yii::$app->session->setFlash('success', ucfirst($type) . ' added to cart.');
                 self::setItem($cartKey, $cartItems);
@@ -46,14 +45,16 @@ class Cart
             $cartItems[$itemId] = [
                 'product_id' => $itemId,
                 'name' => $name,
+                'image' => $imageUrl,
                 'price' => $price,
+                'type' => $type,
                 'quantity' => $quantity,
             ];
             Yii::$app->session->setFlash('success', ucfirst($type) . ' added to cart.');
             self::setItem($cartKey, $cartItems);
         }
-
     }
+
 
 
     /**
@@ -94,5 +95,7 @@ class Cart
 
         return $totalCost;
     }
+
+
 }
 
