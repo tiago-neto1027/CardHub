@@ -25,11 +25,11 @@ class ListingController extends Controller
             [
             'access' => [
                 'class' => \yii\filters\AccessControl::class,
-                'only' => ['create', 'index', 'delete', 'view'],
+                'only' => ['create', 'index', 'delete'],
                 'rules' => [
                     [
                         'allow' => true,
-                        'actions' => ['create', 'index','delete','view'],
+                        'actions' => ['create', 'index','delete'],
                         'roles' => ['seller'],
                     ],
                 ],

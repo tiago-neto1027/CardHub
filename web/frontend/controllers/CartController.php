@@ -16,7 +16,25 @@ use common\models\Product;
 
 class CartController extends Controller
 {
-
+    public function behaviors()
+    {
+        return array_merge(
+            parent::behaviors(),
+            [
+                'access' => [
+                    'class' => \yii\filters\AccessControl::class,
+                    'only' => ['index'],
+                    'rules' => [
+                        [
+                            'allow' => true,
+                            'actions' => ['index'],
+                            'roles' => ['?', 'buyer', 'seller'],
+                        ]
+                    ],
+                ],
+            ]
+        );
+    }
     public function actionIndex()
     {
         $cartKey = Yii::$app->user->isGuest
@@ -42,6 +60,8 @@ class CartController extends Controller
     {
         if (Yii::$app->user->isGuest) {
             Yii::$app->session->setFlash('warning', 'Login to add items to cart.');
+            return $this->redirect(Yii::$app->request->referrer);
+
         }
         if ($type === 'listing') {
             $item = Listing::findOne($itemId);
@@ -76,9 +96,9 @@ class CartController extends Controller
     }
 
 
-    public function actionRemoveFromCart($itemId)
+    public function actionRemoveFromCart($type , $itemId)
     {
-        Cart::removeItem($itemId);
+        Cart::removeItem($type, $itemId);
         Yii::$app->session->setFlash('success', 'Item removed from cart.');
         return $this->redirect(['cart/index']);
     }

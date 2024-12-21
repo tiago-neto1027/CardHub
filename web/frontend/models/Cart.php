@@ -62,13 +62,15 @@ class Cart
      *
      * @param int $productId
      */
-    public static function removeItem(int $ItemId)
+    public static function removeItem($type, $itemId)
     {
         $cartKey = self::getCartKey();
+        $uniqueKey = $type . '_' . $itemId;
+
 
         $cart = self::getItems($cartKey);
-        if (isset($cart[$ItemId])) {
-            unset($cart[$ItemId]);
+        if (isset($cart[$uniqueKey])) {
+            unset($cart[$uniqueKey]);
             self::setItem($cartKey, $cart);
         }
     }
