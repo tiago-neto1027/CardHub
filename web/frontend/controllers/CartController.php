@@ -16,7 +16,25 @@ use common\models\Product;
 
 class CartController extends Controller
 {
-
+    public function behaviors()
+    {
+        return array_merge(
+            parent::behaviors(),
+            [
+                'access' => [
+                    'class' => \yii\filters\AccessControl::class,
+                    'only' => ['index'],
+                    'rules' => [
+                        [
+                            'allow' => true,
+                            'actions' => ['index'],
+                            'roles' => ['?', 'buyer', 'seller'],
+                        ]
+                    ],
+                ],
+            ]
+        );
+    }
     public function actionIndex()
     {
         $cartKey = Yii::$app->user->isGuest

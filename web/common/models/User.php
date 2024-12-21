@@ -245,4 +245,9 @@ class User extends ActiveRecord implements IdentityInterface
 
         return $count;
     }
+
+    public function getFavorites($id)
+    {
+        return \common\models\Favorites::find()->where(['user_id' => $id])->count();
+    }
 }

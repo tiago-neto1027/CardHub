@@ -82,13 +82,15 @@ use yii\helpers\Url;
                                             ' . Yii::$app->user->identity->getListings(Yii::$app->user->id) . '
                                         </span>
                                     </a>';
-                }
-                ?>
-                <a href="" class="btn px-0 ml-2">
-                    <i class="fas fa-heart text-dark"></i>
-                    <span class="badge text-secondary border border-secondary rounded-circle"
-                          style="padding-bottom: 2px;">0</span>
-                </a>
+                }?>
+
+
+                <?php if (Yii::$app->user->isGuest === false): ?>
+                    <a href="<?= Url::to(['/favorites/index']) ?>" class="btn px-0">
+                        <i class="fas fa-fa-heart text-primary"></i>
+                        <span class="badge text-secondary border border-secondary rounded-circle"</span>
+                    </a>
+                <?php endif; ?>
                 <?php
                 $itemCount = 0;
 
@@ -165,26 +167,28 @@ use yii\helpers\Url;
                     if (!Yii::$app->user->isGuest) {
                         if (Yii::$app->user->identity->getRole() == 'seller')
                             echo '
-                                    <a href="' . Url::to(['/listing/index']) . '" class="btn px-0">
-                                        <i class="fas fa-book-open text-primary"></i>
-                                        <span class="badge text-secondary border border-secondary rounded-circle" style="padding-bottom: 2px;">
-                                            ' . Yii::$app->user->identity->getListings(Yii::$app->user->id) . '
-                                        </span>
-                                    </a>';
+                    <a href="' . Url::to(['/listing/index']) . '" class="btn px-0">
+                        <i class="fas fa-book-open text-primary"></i>
+                        <span class="badge text-secondary border border-secondary rounded-circle" style="padding-bottom: 2px;">
+                            ' . Yii::$app->user->identity->getListings(Yii::$app->user->id) . '
+                        </span>
+                    </a>';
                     }
                     ?>
-                    <a href="" class="btn px-0 ml-3">
-                        <i class="fas fa-heart text-primary"></i>
-                        <span class="badge text-secondary border border-secondary rounded-circle"
-                              style="padding-bottom: 2px;">0</span>
-                    </a>
+                    <?php if (Yii::$app->user->isGuest === false): ?>
+                        <?php $itemCount = Yii::$app->user->identity->getCartItemCount(); ?>
+                        <a href="<?= Url::to(['/favorites/index']) ?>" class="btn px-0 ml-2">
+                            <i class="fas fa-heart text-primary"></i> <!-- Corrected here -->
+                            <span class="badge text-secondary border border-secondary rounded-circle"
+                                  style="padding-bottom: 2px;"><?php $itemCount?></span>
+                        </a>
+                    <?php endif; ?>
                     <?php
                     $itemCount = 0;
 
                     if (Yii::$app->user->isGuest) {
                         $cartItems = Yii::$app->session->get('cart', []);
                         $itemCount = array_sum(array_column($cartItems, 'quantity'));
-
                     } else {
                         $itemCount = Yii::$app->user->identity->getCartItemCount();
                     }
@@ -194,10 +198,10 @@ use yii\helpers\Url;
                         <i class="fas fa-shopping-cart text-dark"></i>
                         <span class="badge text-secondary border border-secondary rounded-circle"
                               style="padding-bottom: 2px;">
-                        <?= $itemCount ?> </span>
+                            <?= $itemCount ?> </span>
                     </a>
-
                 </div>
+
             </div>
         </nav>
     </div>
