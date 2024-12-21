@@ -246,8 +246,20 @@ class User extends ActiveRecord implements IdentityInterface
         return $count;
     }
 
-    public function getFavorites($id)
+    /**
+     * Get the user's favorites
+     */
+    public function getFavorites()
     {
-        return \common\models\Favorites::find()->where(['user_id' => $id])->count();
+        return $this->hasMany(Favorites::class, ['user_id' => 'id']);
+    }
+
+    /**
+     * Get the count of the user's favorite items (cards).
+     * @return int
+     */
+    public function getFavoritesItemCount()
+    {
+        return $this->getFavorites()->count();  // Count the number of related favorite items for this user
     }
 }

@@ -72,43 +72,55 @@ use yii\helpers\Url;
             </div>
             <!-- Little Icons SMALL -->
             <div class="d-inline-flex align-items-center d-block d-lg-none">
-                <?php
-                if (!Yii::$app->user->isGuest) {
-                    if (Yii::$app->user->identity->getRole() == 'seller')
-                        echo '
-                                    <a href="' . Url::to(['/listing/index']) . '" class="btn px-0">
-                                        <i class="fas fa-book-open text-primary"></i>
-                                        <span class="badge text-secondary border border-secondary rounded-circle" style="padding-bottom: 2px;">
-                                            ' . Yii::$app->user->identity->getListings(Yii::$app->user->id) . '
-                                        </span>
-                                    </a>';
-                }?>
-
-
-                <?php if (Yii::$app->user->isGuest === false): ?>
-                    <a href="<?= Url::to(['/favorites/index']) ?>" class="btn px-0">
-                        <i class="fas fa-fa-heart text-primary"></i>
-                        <span class="badge text-secondary border border-secondary rounded-circle"</span>
-                    </a>
+                <?php if (!Yii::$app->user->isGuest && Yii::$app->user->identity->getRole() === 'seller'): ?>
+                    <?= Html::a(
+                        '<i class="fas fa-book-open text-primary"></i>
+                            <span class="badge text-secondary border border-secondary rounded-circle" style="padding-bottom: 2px;">' .
+                                 Yii::$app->user->identity->getListings(Yii::$app->user->id) .
+                            '</span>',
+                            ['/listing/index'],
+                            ['class' => 'btn px-0']
+                    ) ?>
                 <?php endif; ?>
+
+                <?php
+                $itemCount = 0;
+                if (!Yii::$app->user->isGuest) {
+                    $itemCount = Yii::$app->user->identity->getFavoritesItemCount() ?? 0;
+                }
+                ?>
+
+                <?= Html::a(
+                    '<i class="fas fa-heart text-primary"></i>
+                    <span class="badge text-secondary border border-secondary rounded-circle" style="padding-bottom: 2px;">' .
+                    $itemCount .
+                    '</span>',
+                    ['/favorites/index'],
+                    ['class' => 'btn px-0 ml-2']
+                ) ?>
+
+
+
+
                 <?php
                 $itemCount = 0;
 
                 if (Yii::$app->user->isGuest) {
                     $cartItems = Yii::$app->session->get('cart', []);
                     $itemCount = array_sum(array_column($cartItems, 'quantity'));
-
                 } else {
                     $itemCount = Yii::$app->user->identity->getCartItemCount();
                 }
                 ?>
 
-                <a href="<?= Url::to(['/cart/index']) ?>" class="btn px-0 ml-2">
-                    <i class="fas fa-shopping-cart text-dark"></i>
-                    <span class="badge text-secondary border border-secondary rounded-circle"
-                          style="padding-bottom: 2px;">
-                <?= $itemCount ?></span>
-                </a>
+                <?= Html::a(
+                    '<i class="fas fa-shopping-cart text-dark"></i>
+                                <span class="badge text-secondary border border-secondary rounded-circle" style="padding-bottom: 2px;">' .
+                    $itemCount .
+                    '</span>',
+                    ['/cart/index'],
+                    ['class' => 'btn px-0 ml-2']
+                ) ?>
 
             </div>
         </div>
@@ -163,26 +175,32 @@ use yii\helpers\Url;
                     <?php endif; ?>
                 </div>
                 <div class="navbar-nav ml-auto py-0 d-none d-lg-block ">
+                    <?php if (!Yii::$app->user->isGuest && Yii::$app->user->identity->getRole() === 'seller'): ?>
+                        <?= Html::a(
+                            '<i class="fas fa-book-open text-primary"></i>
+                            <span class="badge text-secondary border border-secondary rounded-circle" style="padding-bottom: 2px;">' .
+                            Yii::$app->user->identity->getListings(Yii::$app->user->id) .
+                            '</span>',
+                            ['/listing/index'],
+                            ['class' => 'btn px-0']
+                        ) ?>
+                    <?php endif; ?>
                     <?php
+                    $itemCount = 0;
                     if (!Yii::$app->user->isGuest) {
-                        if (Yii::$app->user->identity->getRole() == 'seller')
-                            echo '
-                    <a href="' . Url::to(['/listing/index']) . '" class="btn px-0">
-                        <i class="fas fa-book-open text-primary"></i>
-                        <span class="badge text-secondary border border-secondary rounded-circle" style="padding-bottom: 2px;">
-                            ' . Yii::$app->user->identity->getListings(Yii::$app->user->id) . '
-                        </span>
-                    </a>';
+                        $itemCount = Yii::$app->user->identity->getFavoritesItemCount() ?? 0;
                     }
                     ?>
-                    <?php if (Yii::$app->user->isGuest === false): ?>
-                        <?php $itemCount = Yii::$app->user->identity->getCartItemCount(); ?>
-                        <a href="<?= Url::to(['/favorites/index']) ?>" class="btn px-0 ml-2">
-                            <i class="fas fa-heart text-primary"></i> <!-- Corrected here -->
-                            <span class="badge text-secondary border border-secondary rounded-circle"
-                                  style="padding-bottom: 2px;"><?php $itemCount?></span>
-                        </a>
-                    <?php endif; ?>
+
+                    <?= Html::a(
+                        '<i class="fas fa-heart text-primary"></i>
+                        <span class="badge text-secondary border border-secondary rounded-circle" style="padding-bottom: 2px;">' .
+                        $itemCount .
+                        '</span>',
+                        ['/favorites/index'],
+                        ['class' => 'btn px-0 ml-2']
+                    ) ?>
+
                     <?php
                     $itemCount = 0;
 
@@ -194,12 +212,15 @@ use yii\helpers\Url;
                     }
                     ?>
 
-                    <a href="<?= Url::to(['/cart/index']) ?>" class="btn px-0 ml-2">
-                        <i class="fas fa-shopping-cart text-dark"></i>
-                        <span class="badge text-secondary border border-secondary rounded-circle"
-                              style="padding-bottom: 2px;">
-                            <?= $itemCount ?> </span>
-                    </a>
+                    <?= Html::a(
+                        '<i class="fas fa-shopping-cart text-dark"></i>
+                                <span class="badge text-secondary border border-secondary rounded-circle" style="padding-bottom: 2px;">' .
+                                    $itemCount .
+                                '</span>',
+                            ['/cart/index'],
+                            ['class' => 'btn px-0 ml-2']
+                    ) ?>
+
                 </div>
 
             </div>

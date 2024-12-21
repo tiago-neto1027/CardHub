@@ -60,6 +60,8 @@ class CartController extends Controller
     {
         if (Yii::$app->user->isGuest) {
             Yii::$app->session->setFlash('warning', 'Login to add items to cart.');
+            return $this->redirect(Yii::$app->request->referrer);
+
         }
         if ($type === 'listing') {
             $item = Listing::findOne($itemId);
