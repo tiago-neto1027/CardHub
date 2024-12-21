@@ -22,7 +22,7 @@ class m241029_183336_create_cards_table extends Migration
             'rarity' => $this->string(50)->notNull(),
             'image_url' => $this->string(255)->notNull(),
             'status' => "ENUM('active','inactive') NOT NULL",
-            'description' => $this->string(255),
+            'description' => $this->text(),
             'created_at' => $this->integer()->notNull(),
             'updated_at' => $this->integer()->notNull(),
             'user_id' => $this->integer()->null(),

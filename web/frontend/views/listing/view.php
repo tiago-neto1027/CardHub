@@ -20,7 +20,7 @@ $this->title = $model->card->name;
         <div class="col-lg-5">
             <h4 class="text-secondary mb-4 mt-2"><?= $model->card->name ?></h4>
             <div class="container-fluid bg-dark mt-4 mb-4 rounded-1" style="padding: 10px">
-                <h5 class="text-secondary"><?= $model->card->description ?></h5>
+                <h5 class="text-secondary"><?= nl2br(Html::encode($model->card->description)) ?></h5>
             </div>
             <h3 class="text-primary mb-4"><?= Yii::$app->formatter->asCurrency($model->price, 'EUR') ?></h3>
             <div>

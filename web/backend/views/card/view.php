@@ -45,7 +45,10 @@ $this->params['breadcrumbs'][] = $this->title;
                     return Html::img($model->image_url, ['alt' => $model->name, 'style' => 'max-width:200px;']);
                 },
             ],
-            'description',
+            [
+                'attribute' => 'description',
+                'format' => 'ntext',
+            ],
             'status',
             [
                 'attribute' => 'created_at',
