@@ -11,9 +11,16 @@ use yii\helpers\Html;
             'class' => 'img-fluid w-100 p-1',
         ]); ?>
         <div class="product-action">
-            <?= Html::a('<i class="fa fa-shopping-cart"></i>',
-                ['/cart/add-to-cart', 'itemId' => $model->id, 'type' => $model instanceof Listing ? 'listing' : 'product'],
-                ['class' => 'btn btn-outline-dark btn-square btn-bg-dark']);
+            <?php
+            if ($model->seller_id != Yii::$app->user->identity->id) {
+                echo Html::a('<i class="fa fa-shopping-cart"></i>',
+                    ['/cart/add-to-cart', 'itemId' => $model->id, 'type' => $model instanceof Listing ? 'listing' : 'product'],
+                    ['class' => 'c']);
+            } else{
+                echo Html::a('<i class="fa fa-trash"></i>',
+                    ['/listing/delete', 'id' => $model->id],
+                    ['class' => 'btn btn-outline-dark btn-square btn-bg-dark', 'data-method' => 'post',]);
+            }
             ?>
             <?= Html::a('<i class="fa fa-search"></i>',
                 ['/listing/view', 'id' => $model->id],
