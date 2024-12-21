@@ -47,7 +47,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="row">
                     <div class="col-lg-7 bg-dark">
                         <div class="p-3 text-secondary">
-                            <p><strong class="text-info">Description: </strong><?= nl2br(Html::encode($model->description)) ?></p>
+                            <?php if (!empty($model->description)): ?>
+                                <p><strong class="text-info">Description: </strong><?= nl2br(Html::encode($model->description)) ?></p>
+                            <?php endif; ?>
                             <p><strong class="text-info">Available Listings:</strong> <?= $availableListingsCount ?></p>
                         </div>
                     </div>
