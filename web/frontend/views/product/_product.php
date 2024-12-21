@@ -9,6 +9,7 @@ use yii\helpers\Html;
         <?= Html::img($model->image_url, [
             'alt' => html::encode($model->name),
             'class' => 'img-fluid w-100',
+            'style' => 'object-fit: cover; height: 330px;',
         ]); ?>
         <div class="product-action">
             <?= Html::a('<i class="fa fa-shopping-cart"></i>',

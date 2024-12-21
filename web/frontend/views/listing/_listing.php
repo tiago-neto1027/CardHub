@@ -9,6 +9,7 @@ use yii\helpers\Html;
         <?= Html::img($model->card->image_url, [
             'alt' => html::encode($model->card->name),
             'class' => 'img-fluid w-100 p-1',
+            'style' => 'height: 330px;',
         ]); ?>
         <div class="product-action">
             <?php
