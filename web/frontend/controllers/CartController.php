@@ -76,9 +76,9 @@ class CartController extends Controller
     }
 
 
-    public function actionRemoveFromCart($itemId)
+    public function actionRemoveFromCart($type , $itemId)
     {
-        Cart::removeItem($itemId);
+        Cart::removeItem($type, $itemId);
         Yii::$app->session->setFlash('success', 'Item removed from cart.');
         return $this->redirect(['cart/index']);
     }

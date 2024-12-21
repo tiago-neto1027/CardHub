@@ -62,7 +62,7 @@ if (empty($cartItems)) {
                     <td class="align-middle" id="product-price"><?= Yii::$app->formatter->asCurrency($item['price'], 'EUR')?></td>
                     <td class="align-middle" id="product-total-<?= $item['itemId'] ?>"><?= Yii::$app->formatter->asCurrency($item['price'] * $item['quantity'], 'EUR')?></td>
                     <td class="align-middle">
-                        <?= Html::a('Remove', ['cart/remove-from-cart', 'itemId' => $itemId,'type' => "product"], [
+                        <?= Html::a('Remove', ['cart/remove-from-cart', 'itemId' => $itemId,'type' => $item['type']], [
                             'class' => 'btn btn-danger btn-lg text-white',
                             'data-method' => 'post',
                         ]) ?>
