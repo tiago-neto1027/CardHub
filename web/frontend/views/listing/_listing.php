@@ -15,11 +15,11 @@ use yii\helpers\Html;
             if ($model->seller_id != Yii::$app->user->identity->id) {
                 echo Html::a('<i class="fa fa-shopping-cart"></i>',
                     ['/cart/add-to-cart', 'itemId' => $model->id, 'type' => $model instanceof Listing ? 'listing' : 'product'],
-                    ['class' => 'c']);
+                    ['class' => 'btn btn-outline-dark btn-square btn-bg-dark']);
             } else{
                 echo Html::a('<i class="fa fa-trash"></i>',
                     ['/listing/delete', 'id' => $model->id],
-                    ['class' => 'btn btn-outline-dark btn-square btn-bg-dark', 'data-method' => 'post',]);
+                    ['class' => 'btn btn-outline-dark btn-square btn-bg-dark', 'data-method' => 'post']);
             }
             ?>
             <?= Html::a('<i class="fa fa-search"></i>',
