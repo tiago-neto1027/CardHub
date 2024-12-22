@@ -19,7 +19,7 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
     <div class="col-4 text-end align-content-end">
         <p>
-            <?= Html::a('Sell other product', ['create'], ['class' => 'btn btn-success']) ?>
+            <?= Html::a('Sell other product', ['create'], ['class' => 'btn bg-primary text-dark']) ?>
         </p>
     </div>
 </div>
