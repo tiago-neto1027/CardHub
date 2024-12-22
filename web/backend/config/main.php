@@ -52,7 +52,13 @@ return [
             'showScriptName' => false,
             'rules' => [
                 ['class'=>'yii\rest\UrlRule', 'controller'=>'api/user'],
-                ['class'=>'yii\rest\UrlRule', 'controller'=>'api/card'],
+                [
+                    'class'=>'yii\rest\UrlRule',
+                    'controller'=>'api/card',
+                    'extraPatterns'=>[
+                        'GET {id}/countlistings' => 'countlistings',
+                    ],
+                ],
                 ['class'=>'yii\rest\UrlRule', 'controller'=>'api/favorite'],
                 ['class'=>'yii\rest\UrlRule', 'controller'=>'api/game'],
                 ['class'=>'yii\rest\UrlRule', 'controller'=>'api/listing'],
