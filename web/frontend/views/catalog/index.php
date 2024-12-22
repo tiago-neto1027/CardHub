@@ -70,7 +70,7 @@ use function PHPSTORM_META\type;
                             {
                                 echo ListView::widget([
                                     'dataProvider' => $dataProvider,
-                                    'itemOptions' => ['class' => 'item col-md-6 col-sm-6 pb-1'],
+                                    'itemOptions' => ['class' => 'item col-lg-2 col-md-4 col-sm-6 pb-1'],
                                     'itemView' => '../listing/_listing',
                                     'layout' => "<div class='row g-3'>{items}</div>\n{pager}",
                                 ]);
@@ -79,7 +79,7 @@ use function PHPSTORM_META\type;
                             {
                                 echo ListView::widget([
                                     'dataProvider' => $dataProvider,
-                                    'itemOptions' => ['class' => 'item col-lg-2 col-md-4 col-sm-6 pb-1'],
+                                    'itemOptions' => ['class' => 'item col-lg-3 col-md-4 col-sm-6 pb-1'],
                                     'itemView' => '../product/_product',
                                     'layout' => "<div class='row g-3'>{items}</div>\n{pager}",
                                 ]);

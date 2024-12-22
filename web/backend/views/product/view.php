@@ -49,7 +49,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
             ],
             'type',
-            'description',
+            [
+                'attribute' => 'description',
+                'format' => 'ntext',
+            ],
             [
                 'attribute' => 'created_at',
                 'format' => ['date', 'php:d/m/Y'],

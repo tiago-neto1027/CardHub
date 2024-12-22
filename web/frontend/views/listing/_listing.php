@@ -2,79 +2,51 @@
 
 use common\models\Listing;
 use yii\helpers\Html;
-use yii\helpers\Url;
 
 ?>
-<div class="col-12">
-    <div class="container-fluid">
-        <div class="product-item bg-light mb-4 ">
-            <div class="row g-0">
-                <div class="col-md-4 d-flex align-items-stretch">
-                    <?= Html::img($model->card->image_url, [
-                        'alt' => $model->card->name,
-                        'class' => 'img-fluid rounded-start card-img',
-                    ]); ?>
-                </div>
+<div class="product-item bg-light mb-4">
+    <div class="product-img position-relative overflow-hidden">
+        <?= Html::img($model->card->image_url, [
+            'alt' => html::encode($model->card->name),
+            'class' => 'img-fluid w-100 p-1',
+        ]); ?>
+        <div class="product-action">
+            <?php if (Yii::$app->controller->id === 'favorites' && Yii::$app->controller->action->id === 'index'):?>
+                <?= Html::a(
+                    '<i class="fas fa-heart-broken"></i> Remove from Favourites',  // Using a broken heart icon
+                    ['/favorites/remove', 'id' => $model->card_id],  // Pass the card_id to the remove action
+                    [
+                        'class' => 'btn btn-outline-danger btn-sm',
+                        'data-method' => 'post',  // Ensure this is a POST request to avoid accidental GET requests
+                        'data-confirm' => 'Are you sure you want to remove this item from your favourites?'
+                    ]
+                ) ?>
+                <?php
+                // Debugging output to ensure multiple items are being passed
+                ?>
 
-                <div class="col-md-8 d-flex">
-                    <div class="card-body d-flex flex-column justify-content-between h-100">
-                        <h5 class="card-title"><?= Html::encode($model->card->name) ?></h5>
-                        <p class="card-text"><?= Html::encode($model->card->description) ?></p>
-                        <p class="card-text"><strong>Condition: </strong><?= Html::encode($model->condition) ?></p>
-                        <p class="card-text"><strong>Price: </strong><?= Yii::$app->formatter->asCurrency($model->price, 'EUR') ?></p>
-
-                        <?php if (Yii::$app->controller->id === 'favorites' && Yii::$app->controller->action->id === 'index'):?>
-                            <?= Html::a(
-                                '<i class="fas fa-heart-broken"></i> Remove from Favourites',  // Using a broken heart icon
-                                ['/favorites/remove', 'id' => $model->card_id],  // Pass the card_id to the remove action
-                                [
-                                    'class' => 'btn btn-outline-danger btn-sm',
-                                    'data-method' => 'post',  // Ensure this is a POST request to avoid accidental GET requests
-                                    'data-confirm' => 'Are you sure you want to remove this item from your favourites?'
-                                ]
-                            ) ?>
-                            <?php
-                            // Debugging output to ensure multiple items are being passed
-                            ?>
-
-                        <?php else:?>
-                            <div class="col-md-8 d-flex product-action mt-auto">
-                                <?php if($model->status === "inactive"):?>
-                                    <?=Html::a(
-                                        '<i class="fa fa-shopping-cart"></i>',
-                                        null,
-                                        [
-                                            'class' => 'btn btn-square disabled',
-                                            'style' => 'background-color: #343a40; color: #fff; pointer-events: none;',
-                                            'aria-disabled' => 'true',
-                                        ]
-                                    ) ;?>
-                                <?php else: ?>
-                                    <?= Html::a('<i class="fa fa-shopping-cart"></i>', ['/cart/add-to-cart', 'itemId' => $model->id, 'type' => $model instanceof Listing ? 'listing' : 'product'], ['class' => 'btn btn-outline-dark btn-square btn-bg-dark']); ?>
-                                <?php endif; ?>
-                                <?= Html::a('<i class="far fa-heart"></i>', ['/favorites/create', 'id'=>$model->card_id], ['class' => 'btn btn-outline-dark btn-square']) ?>
-                                <?= Html::a('<i class="fa fa-search"></i>', ['/listing/view', 'id' => $model->id], ['class' => 'btn btn-outline-dark btn-square']) ?>
-                            </div>
-                            <div class="position-absolute end-0 " style="top: 90%; left: 80%; transform: translateY(-50%);">
-                                <?php if (Yii::$app->controller->id === 'listing' && Yii::$app->controller->action->id === 'index') {?>
-                                    <?= Html::a(
-                                        '<i class="fas fa-trash-alt" style="font-size: 1.5rem;"></i>',
-                                        ['listing/delete', 'id' => $model->id],
-                                        [
-                                            'class' => 'text-danger',
-                                            'data' => [
-                                                'confirm' => 'Are you sure you want to delete this item?',
-                                                'method' => 'post',
-                                            ],
-                                        ]
-                                    );} ?>
-                            </div>
-                        <?php endif; ?>
-                    </div>
-                </div>
-            </div>
-
+            if ($model->seller_id != Yii::$app->user->identity->id) {
+                echo Html::a('<i class="fa fa-shopping-cart"></i>',
+                    ['/cart/add-to-cart', 'itemId' => $model->id, 'type' => $model instanceof Listing ? 'listing' : 'product'],
+                    ['class' => 'btn btn-outline-dark btn-square btn-bg-dark']);
+            } else{
+                echo Html::a('<i class="fa fa-trash"></i>',
+                    ['/listing/delete', 'id' => $model->id],
+                    ['class' => 'btn btn-outline-dark btn-square btn-bg-dark', 'data-method' => 'post']);
+            }
+            ?>
+            <?= Html::a('<i class="fa fa-search"></i>',
+                ['/listing/view', 'id' => $model->id],
+                ['class' => 'btn btn-outline-dark btn-square'])
+            ?>
         </div>
+    </div>
+    <div class="text-center py-4">
+        <?= Html::a(html::encode($model->card->name),
+            ['/listing/view', 'id' => $model->id],
+            ['class' => 'h6 text-decoration-none text-truncate d-block px-3', 'title' => html::encode($model->card->name)])
+        ?>
+        <h5><?= Yii::$app->formatter->asCurrency($model->price, 'EUR') ?></h5>
     </div>
 </div>
 <style>
