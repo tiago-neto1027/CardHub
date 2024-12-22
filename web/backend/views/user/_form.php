@@ -10,7 +10,9 @@ use yii\widgets\ActiveForm;
 
 <div class="user-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin([
+        'action' => ['update', 'id' => $model->id]  // Set the action to the update route with the user ID
+    ]); ?>
 
     <?= $form->field($model, 'username')->textInput(['autofocus' => true]) ?>
 
@@ -22,10 +24,10 @@ use yii\widgets\ActiveForm;
     <?php endif; ?>
 
     <?= $form->field($model, 'role')->dropDownList([
-            'manager' => 'manager',
-            'admin' => 'admin',
-            'seller' => 'seller',
-            'buyer' => 'buyer',
+        'manager' => 'manager',
+        'admin' => 'admin',
+        'seller' => 'seller',
+        'buyer' => 'buyer',
     ], ['prompt' => 'Select Role']) ?>
 
     <?php if (Yii::$app->controller->action->id === 'update'): ?>

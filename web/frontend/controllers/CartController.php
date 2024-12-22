@@ -23,12 +23,12 @@ class CartController extends Controller
             [
                 'access' => [
                     'class' => \yii\filters\AccessControl::class,
-                    'only' => ['index'],
+                    'only' => ['index','view'],
                     'rules' => [
                         [
                             'allow' => true,
-                            'actions' => ['index'],
-                            'roles' => ['?', 'buyer', 'seller'],
+                            'actions' => ['index','view'],
+                            'roles' => ['?', 'seller','buyer'],
                         ]
                     ],
                 ],

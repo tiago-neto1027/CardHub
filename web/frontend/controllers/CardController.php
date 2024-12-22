@@ -34,17 +34,10 @@ class CardController extends Controller
                         [
                             'allow' => true,
                             'actions' => ['index','view'],
-                            'roles' => ['?', 'buyer', 'seller'],
+                            'roles' => ['?', '@'],
                         ]
                     ],
                 ],
-                'verbs' => [
-                    'class' => VerbFilter::className(),
-                    'actions' => [
-                        'delete' => ['POST'],
-                    ],
-                ],
-
             ]
         );
     }

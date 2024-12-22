@@ -28,14 +28,16 @@ class DetailController extends Controller
             [
                 'access' => [
                     'class' => \yii\filters\AccessControl::class,
+                    'only' => ['index'],
                     'rules' => [
-                            [
-                                'allow' => true,
-                                'roles' => ["seller",'buyer'],
-                            ],
-                        ],
+                        [
+                            'allow' => true,
+                            'actions' => ['index'],
+                            'roles' => ['seller','buyer'],
+                        ]
                     ],
-                ]
+                ],
+            ]
         );
     }
     public function actionIndex()

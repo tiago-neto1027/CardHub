@@ -23,19 +23,29 @@ class FavoritesController extends Controller
             [
                 'access' => [
                     'class' => \yii\filters\AccessControl::class,
-                    'only' => ['index'],
+                    'only' => ['index', 'create', 'view', 'update', 'delete'],
                     'rules' => [
                         [
                             'allow' => true,
-                            'actions' => ['index'],
-                            'roles' => ['buyer', 'seller'],
-                        ]
+                            'actions' => ['index', 'create'],
+                            'roles' => ['seller', 'buyer'], // No matchCallback needed
+                        ],
+                        [
+                            'allow' => true,
+                            'actions' => ['view', 'update', 'delete'],
+                            'roles' => ['seller', 'buyer'],
+                            'matchCallback' => function ($rule, $action) {
+                                $modelId = Yii::$app->request->get('id'); // Assume `id` is passed as a parameter
+                                $model = Favorites::findOne($modelId);
+                                return $model && $model->user_id == Yii::$app->user->id;
+                            },
+                        ],
                     ],
                 ],
             ]
         );
-
     }
+
 
     public function actionIndex()
     {
