@@ -2,12 +2,12 @@
 
 namespace common\models;
 
-use frontend\controllers\FavoritesController;
+use frontend\controllers\FavoriteController;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\models\Favorites;
+use common\models\Favorite;
 
-class FavoritesSearch extends Favorites
+class FavoriteSearch extends Favorite
 {
     public function rules()
     {
@@ -21,7 +21,7 @@ class FavoritesSearch extends Favorites
      */
     public function search($params)
     {
-        $query = Favorites::find()
+        $query = Favorite::find()
             ->joinWith('card')  // Join with the 'card' relation to access card properties
             ->where(['favorites.user_id' => \Yii::$app->user->id]);  // Filter by user_id
 

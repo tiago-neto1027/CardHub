@@ -119,10 +119,11 @@ class UserController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->update($id)) {
-            return $this->redirect(['view', 'id' => $id]);
+        if ($this->request->isPost){
+            if($model->load($this->request->post()) && $model->save()){
+                return $this->redirect(['view', 'id' => $id]);
+            }
         }
-
         return $this->render('update', [
             'model' => $model,
         ]);

@@ -23,10 +23,10 @@ use yii\helpers\Url;
                         <p class="card-text"><strong>Condition: </strong><?= Html::encode($model->condition) ?></p>
                         <p class="card-text"><strong>Price: </strong><?= Yii::$app->formatter->asCurrency($model->price, 'EUR') ?></p>
 
-                        <?php if (Yii::$app->controller->id === 'favorites' && Yii::$app->controller->action->id === 'index'):?>
+                        <?php if (Yii::$app->controller->id === 'favorite' && Yii::$app->controller->action->id === 'index'):?>
                             <?= Html::a(
                                 '<i class="fas fa-heart-broken"></i> Remove from Favourites',  // Using a broken heart icon
-                                ['/favorites/remove', 'id' => $model->card_id],  // Pass the card_id to the remove action
+                                ['/favorite/remove', 'id' => $model->card_id],  // Pass the card_id to the remove action
                                 [
                                     'class' => 'btn btn-outline-danger btn-sm',
                                     'data-method' => 'post',  // Ensure this is a POST request to avoid accidental GET requests
@@ -52,7 +52,7 @@ use yii\helpers\Url;
                                 <?php else: ?>
                                     <?= Html::a('<i class="fa fa-shopping-cart"></i>', ['/cart/add-to-cart', 'itemId' => $model->id, 'type' => $model instanceof Listing ? 'listing' : 'product'], ['class' => 'btn btn-outline-dark btn-square btn-bg-dark']); ?>
                                 <?php endif; ?>
-                                <?= Html::a('<i class="far fa-heart"></i>', ['/favorites/create', 'id'=>$model->card_id], ['class' => 'btn btn-outline-dark btn-square']) ?>
+                                <?= Html::a('<i class="far fa-heart"></i>', ['/favorite/create', 'id'=>$model->card_id], ['class' => 'btn btn-outline-dark btn-square']) ?>
                                 <?= Html::a('<i class="fa fa-search"></i>', ['/listing/view', 'id' => $model->id], ['class' => 'btn btn-outline-dark btn-square']) ?>
                             </div>
                             <div class="position-absolute end-0 " style="top: 90%; left: 80%; transform: translateY(-50%);">

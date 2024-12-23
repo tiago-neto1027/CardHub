@@ -5,10 +5,12 @@ use yii\widgets\ActiveForm;
 
 /** @var yii\web\View $this */
 /** @var common\models\User $model */
+/** @var backend\models\SignupForm $model */
 /** @var yii\widgets\ActiveForm $form */
 ?>
 
 <div class="user-form">
+
 
     <?php $form = ActiveForm::begin([
         'action' => ['update', 'id' => $model->id]  // Set the action to the update route with the user ID
