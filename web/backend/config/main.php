@@ -31,6 +31,10 @@ return [
             'enableAutoLogin' => true,
             'identityCookie' => ['name' => '_identity-backend', 'httpOnly' => true],
         ],
+        'authenticator' => [
+            'class' => \yii\filters\auth\HttpBasicAuth::class,
+            'except' => ['auth/login'],
+        ],
         'session' => [
             // this is the name of the session cookie used for login on the backend
             'name' => 'advanced-backend',
@@ -63,6 +67,7 @@ return [
                 ['class'=>'yii\rest\UrlRule', 'controller'=>'api/game'],
                 ['class'=>'yii\rest\UrlRule', 'controller'=>'api/listing'],
                 ['class'=>'yii\rest\UrlRule', 'controller'=>'api/product'],
+                ['class'=>'yii\rest\UrlRule', 'controller'=>'api/auth'],
             ],
         ],
         'view' => [
