@@ -60,7 +60,7 @@ class AuthController extends BaseController
         Yii::$app->user->login($user);
 
         return [
-            'status' => 'success',
+            'status' => 200,
             'message' => 'Login successful',
         ];
     }
