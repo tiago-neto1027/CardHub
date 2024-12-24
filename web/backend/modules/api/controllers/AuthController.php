@@ -9,7 +9,7 @@ use yii\rest\Controller;
 use yii\web\BadRequestHttpException;
 use yii\web\UnauthorizedHttpException;
 
-class AuthController extends Controller
+class AuthController extends BaseController
 {
     public function behaviors()
     {

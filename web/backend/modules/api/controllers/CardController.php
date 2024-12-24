@@ -7,7 +7,7 @@ use Yii;
 use yii\rest\ActiveController;
 use yii\web\Response;
 
-class CardController extends ActiveController
+class CardController extends BaseActiveController
 {
     public $modelClass = 'common\models\Card';
 
