@@ -1,7 +1,9 @@
-@ -0,0 +1,47 @@
 <?php
 
+namespace backend\modules\api\controllers;
+
 use common\models\User;
+use Yii;
 use yii\filters\auth\HttpBasicAuth;
 use yii\rest\Controller;
 use yii\web\BadRequestHttpException;
