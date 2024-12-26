@@ -53,7 +53,7 @@ public class RestAPIClient {
     }
 
     //Login API doesnt implement a getRequest() because it uses the direct username and password that are passed to it
-    public void loginAPI(final String username, final String password) {
+    public void loginAPI(final String username, final String password, final APIResponseCallback callback) {
 
         if(!NetworkUtils.hasInternet(context)) {
             Toast.makeText(context, R.string.no_internet, Toast.LENGTH_SHORT).show();
@@ -72,18 +72,19 @@ public class RestAPIClient {
 
                             if (statusCode == 200) {
                                 userUtils.saveCredentials(context, username, password);
-                                Toast.makeText(context, "Logged in successfully.", Toast.LENGTH_SHORT).show();
+                                callback.onSuccess(jsonResponse);
+                            } else {
+                                callback.onError("Invalid status code: " + statusCode);
                             }
-
                         } catch (JSONException e) {
-                            Toast.makeText(context, "Error parsing response", Toast.LENGTH_SHORT).show();
+                            callback.onError("Error parsing response");
                         }
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(context, "Wrong credentials.", Toast.LENGTH_SHORT).show();
+                        callback.onError("Wrong credentials or network error.");
                     }
                 }) {
             @Override

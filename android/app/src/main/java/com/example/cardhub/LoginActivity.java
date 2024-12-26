@@ -1,5 +1,6 @@
 package com.example.cardhub;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -10,6 +11,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.cardhub.utils.UserUtils;
+
+import org.json.JSONObject;
 
 import models.RestAPIClient;
 
@@ -36,7 +39,6 @@ public class LoginActivity extends AppCompatActivity {
 
         // Check if the user is already logged in
         if (userUtils.isLoggedIn(getApplicationContext())) {
-            Toast.makeText(this, "You are Logged In", Toast.LENGTH_SHORT).show();
             navigateToMainScreen();
         }
 
@@ -54,14 +56,24 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-        apiClient.loginAPI(username, password);
+        apiClient.loginAPI(username, password, new RestAPIClient.APIResponseCallback() {
+            @Override
+            public void onSuccess(JSONObject response) {
+                navigateToMainScreen();
+            }
+
+            @Override
+            public void onError(String error) {
+                Toast.makeText(LoginActivity.this, error, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void navigateToMainScreen() {
-        //Intent intent = new Intent(LoginActivity.this, AppMainActivity.class);
-        //intent.putExtra(AppMainActivity.USERNAME, etUsername.getText().toString());
-        //startActivity(intent);
-        //finish();
+        Intent intent = new Intent(LoginActivity.this, AppMainActivity.class);
+        intent.putExtra(AppMainActivity.USERNAME, etUsername.getText().toString());
+        startActivity(intent);
+        finish();
     }
 
     public void onClickSignup(View view) {
