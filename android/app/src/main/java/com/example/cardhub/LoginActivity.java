@@ -1,7 +1,5 @@
 package com.example.cardhub;
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -11,12 +9,16 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import models.SingletonAPIManager;
+import com.example.cardhub.utils.UserUtils;
+
+import models.RestAPIClient;
 
 public class LoginActivity extends AppCompatActivity {
 
+    UserUtils userUtils = new UserUtils();
+
     private EditText etUsername, etPassword;
-    private SingletonAPIManager apiManager;
+    private RestAPIClient apiClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,11 +32,11 @@ public class LoginActivity extends AppCompatActivity {
         Button btnSignup = findViewById(R.id.btnSignUp);
         ImageButton ibtnSettings = findViewById(R.id.ibtnSettings);
 
-        apiManager = SingletonAPIManager.getInstance(this);
+        apiClient = RestAPIClient.getInstance(this);
 
         // Check if the user is already logged in
-        if (apiManager.isLoggedIn()) {
-            Toast.makeText(this, "Username and password are required", Toast.LENGTH_SHORT).show();
+        if (userUtils.isLoggedIn(getApplicationContext())) {
+            Toast.makeText(this, "You are Logged In", Toast.LENGTH_SHORT).show();
             navigateToMainScreen();
         }
 
@@ -52,7 +54,7 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-        apiManager.loginAPI(username, password, getApplicationContext());
+        apiClient.loginAPI(username, password);
     }
 
     private void navigateToMainScreen() {
