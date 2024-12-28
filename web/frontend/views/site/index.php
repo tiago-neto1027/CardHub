@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ListView;
+use yii\helpers\Url;
 
 $this->title = 'My Yii Application';
 ?>
@@ -69,21 +70,25 @@ $this->title = 'My Yii Application';
     <div class="row px-xl-5">
         <div class="col-md-6">
             <div class="product-offer mb-30" style="height: 300px;">
-                <img class="img-fluid" src="img/offer-1.jpg" alt="">
+                <?= Html::img('@web/img/offer_cards.jpg', [
+                    'class' => 'img-fluid w-100 h-100',
+                ]) ?>
                 <div class="offer-text">
-                    <h6 class="text-white text-uppercase">Save 20%</h6>
-                    <h3 class="text-white mb-3">Special Offer</h3>
-                    <a href="" class="btn btn-primary">Shop Now</a>
+                    <h6 class="text-white text-uppercase">Check our collection of</h6>
+                    <h3 class="text-white mb-3">CARDS!</h3>
+                    <a href="<?= Url::to(['/card/index'])?>" class="btn btn-primary">Browse</a>
                 </div>
             </div>
         </div>
         <div class="col-md-6">
             <div class="product-offer mb-30" style="height: 300px;">
-                <img class="img-fluid" src="img/offer-2.jpg" alt="">
+                <?= Html::img('@web/img/offer_products.jpg', [
+                    'class' => 'img-fluid w-100 h-100',
+                ]) ?>
                 <div class="offer-text">
-                    <h6 class="text-white text-uppercase">Save 20%</h6>
-                    <h3 class="text-white mb-3">Special Offer</h3>
-                    <a href="" class="btn btn-primary">Shop Now</a>
+                    <h6 class="text-white text-uppercase">Browse our product</h6>
+                    <h3 class="text-white mb-3">CATALOG!</h3>
+                    <a href="<?= Url::to(['/catalog/index?type=product'])?>" class="btn btn-primary">Shop Now</a>
                 </div>
             </div>
         </div>
