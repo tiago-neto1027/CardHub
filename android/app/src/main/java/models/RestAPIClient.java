@@ -60,7 +60,7 @@ public class RestAPIClient {
             return;
         }
 
-        String url = Endpoints.BASE_URL + Endpoints.LOGIN_ENDPOINT;
+        String url = Endpoints.getBaseUrl(context) + Endpoints.LOGIN_ENDPOINT;
 
         StringRequest loginRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
@@ -102,7 +102,7 @@ public class RestAPIClient {
 
     //region Private Base Methods
     private void getRequest(String endpoint, final APIResponseCallback callback) {
-        String url = Endpoints.BASE_URL + endpoint;
+        String url = Endpoints.getBaseUrl(context) + endpoint;
         JsonObjectRequest jsonRequest = new JsonObjectRequest(
                 Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
@@ -130,7 +130,7 @@ public class RestAPIClient {
     }
 
     private void postRequest(String endpoint, JSONObject postData, final APIResponseCallback callback) {
-        String url = Endpoints.BASE_URL + endpoint;
+        String url = Endpoints.getBaseUrl(context) + endpoint;
         JsonObjectRequest jsonRequest = new JsonObjectRequest(
                 Request.Method.POST, url, postData,
                 new Response.Listener<JSONObject>() {
@@ -160,7 +160,7 @@ public class RestAPIClient {
     }
 
     private void putRequest(String endpoint, JSONObject putData, final APIResponseCallback callback) {
-        String url = Endpoints.BASE_URL + endpoint;
+        String url = Endpoints.getBaseUrl(context) + endpoint;
         JsonObjectRequest jsonRequest = new JsonObjectRequest(
                 Request.Method.PUT, url, putData,
                 new Response.Listener<JSONObject>() {
@@ -190,7 +190,7 @@ public class RestAPIClient {
     }
 
     private void deleteRequest(String endpoint, final APIResponseCallback callback) {
-        String url = Endpoints.BASE_URL + endpoint;
+        String url = Endpoints.getBaseUrl(context) + endpoint;
         StringRequest stringRequest = new StringRequest(
                 Request.Method.DELETE, url,
                 new Response.Listener<String>() {

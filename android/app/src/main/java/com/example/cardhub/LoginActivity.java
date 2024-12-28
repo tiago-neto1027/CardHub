@@ -82,7 +82,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void onClickSettings(View view) {
-        // Navigate to settings page (for changing IP or other settings)
-        Toast.makeText(this, "Navigate to settings", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this, SettingsActivity.class);
+        startActivity(intent);
     }
 }

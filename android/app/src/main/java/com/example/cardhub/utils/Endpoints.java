@@ -1,8 +1,13 @@
 package com.example.cardhub.utils;
 
-public class Endpoints {
-    public static String BASE_URL = "http://13.39.156.210:8080/api";
+import android.content.Context;
+import android.content.SharedPreferences;
 
+public class Endpoints {
+    //Shared Preferences BASE_URL
+    private static final String PREFERENCES_NAME = "com.example.cardhub.PREFERENCES";
+    private static final String BASE_URL_KEY = "BASE_URL";
+    private static final String DEFAULT_BASE_URL = "http://13.39.156.210:8080/api";
 
     public static final String LOGIN_ENDPOINT = "/auth/login";
 
@@ -21,11 +26,16 @@ public class Endpoints {
 
 
     //Methods
-    public String getBaseUrl() {
-        return Endpoints.BASE_URL;
+    public static String getBaseUrl(Context context) {
+        SharedPreferences prefs = context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE);
+
+        return prefs.getString(BASE_URL_KEY, DEFAULT_BASE_URL);
     }
 
-    public void setBaseUrl(String baseUrl) {
-        Endpoints.BASE_URL = baseUrl;
+    public static void setBaseUrl(Context context, String baseUrl) {
+        SharedPreferences prefs = context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString(BASE_URL_KEY, baseUrl);
+        editor.apply();
     }
 }
