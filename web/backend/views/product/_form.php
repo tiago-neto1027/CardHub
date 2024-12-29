@@ -29,7 +29,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'type')->dropDownList([ 'booster' => 'Booster', 'sleeve' => 'Sleeve', 'playmat' => 'Playmat', 'storage' => 'Storage', 'guide' => 'Guide', 'apparel' => 'Apparel', ], ['prompt' => '']) ?>
 
-    <?= $form->field($model, 'description')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'description')->textarea() ?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

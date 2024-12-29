@@ -85,7 +85,7 @@ class ListingController extends Controller
     {
         $model = new Listing();
         $model->seller_id = \Yii::$app->user->identity->id;
-        $model->status = 'inactive';
+        $model->status = 'active';
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {

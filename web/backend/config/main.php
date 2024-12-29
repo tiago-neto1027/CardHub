@@ -14,15 +14,30 @@ return [
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'backend\controllers',
     'bootstrap' => ['log'],
-    'modules' => [],
+    'modules' => [
+        'api' => [
+            'class' => 'backend\modules\api\ModuleAPI',
+        ],
+    ],
     'components' => [
+        'response' => [
+            'format' => yii\web\Response::FORMAT_JSON,
+            'charset' => 'UTF-8',
+        ],
         'request' => [
-            'csrfParam' => '_csrf-backend',
+            'class' => 'yii\web\Request',
+            'parsers' => [
+                'application/json' => 'yii\web\JsonParser',
+            ]
         ],
         'user' => [
             'identityClass' => 'common\models\User',
             'enableAutoLogin' => true,
             'identityCookie' => ['name' => '_identity-backend', 'httpOnly' => true],
+        ],
+        'authenticator' => [
+            'class' => \yii\filters\auth\HttpBasicAuth::class,
+            'except' => ['auth/login'],
         ],
         'session' => [
             // this is the name of the session cookie used for login on the backend
@@ -44,16 +59,29 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                ['class'=>'yii\rest\UrlRule', 'controller'=>'api/user'],
+                [
+                    'class'=>'yii\rest\UrlRule',
+                    'controller'=>'api/card',
+                    'extraPatterns'=>[
+                        'GET {id}/countlistings' => 'countlistings',
+                    ],
+                ],
+                ['class'=>'yii\rest\UrlRule', 'controller'=>'api/favorite'],
+                ['class'=>'yii\rest\UrlRule', 'controller'=>'api/game'],
+                ['class'=>'yii\rest\UrlRule', 'controller'=>'api/listing'],
+                ['class'=>'yii\rest\UrlRule', 'controller'=>'api/product'],
+                ['class'=>'yii\rest\UrlRule', 'controller'=>'api/auth'],
             ],
         ],
         'view' => [
             'class' => View::class,
-         'theme' => [
-             'pathMap' => [
-                '@app/views' => '@backend/views'
-             ],
-         ],
-    ],
+            'theme' => [
+                'pathMap' => [
+                    '@app/views' => '@backend/views'
+                ],
+            ],
+        ],
     ],
     'params' => $params,
 ];

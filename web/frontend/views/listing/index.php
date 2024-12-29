@@ -19,14 +19,14 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
     <div class="col-4 text-end align-content-end">
         <p>
-            <?= Html::a('Sell other product', ['create'], ['class' => 'btn btn-success']) ?>
+            <?= Html::a('Sell other product', ['create'], ['class' => 'btn bg-primary text-dark']) ?>
         </p>
     </div>
 </div>
 
 <?= ListView::widget([
     'dataProvider' => $dataProvider,
-    'itemOptions' => ['class' => 'item col-md-4'],
+    'itemOptions' => ['class' => 'item col-lg-2 col-md-4 col-sm-6 pb-1'],
     'itemView' => '_listing',
     'layout' => "<div class='row g-3'>{items}</div>\n{pager}"
 ]) ?>   

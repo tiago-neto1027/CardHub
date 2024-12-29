@@ -64,7 +64,7 @@ class CatalogController extends \yii\web\Controller
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
             'pagination' => [
-                'pageSize' => 30,
+                'pageSize' => 20,
             ],
         ]);
 

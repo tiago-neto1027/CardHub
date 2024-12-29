@@ -76,7 +76,10 @@ class CartController extends Controller
         $quantity = 1;
 
         if ($type === 'listing') {
-            if($item->status==='inactive'){
+            if($item->seller_id === Yii::$app->user->id) {
+                Yii::$app->session->setFlash('error', "You can't buy your own items.");
+            }
+            elseif($item->status==='inactive'){
                 Yii::$app->session->setFlash('error', 'Item not for sale');
             }
             else{

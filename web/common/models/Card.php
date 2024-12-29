@@ -44,7 +44,8 @@ class Card extends \yii\db\ActiveRecord
             [['status'], 'string'],
             [['name'], 'string', 'max' => 100],
             [['rarity'], 'string', 'max' => 50],
-            [['image_url', 'description'], 'string', 'max' => 255],
+            [['description'], 'string'],
+            [['image_url'], 'string', 'max' => 255],
             [['game_id'], 'exist', 'skipOnError' => true, 'targetClass' => Game::class, 'targetAttribute' => ['game_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],
         ];
@@ -123,5 +124,12 @@ class Card extends \yii\db\ActiveRecord
 
     public function getListingsCount(){
         return $this->getListings()->count();
+    }
+
+    public function isFavorited()
+    {
+        return Favorites::find()
+            ->where(['user_id' => Yii::$app->user->getId(), 'card_id' => $this->id])
+            ->exists();
     }
 }

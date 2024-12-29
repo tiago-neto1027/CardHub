@@ -25,6 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'summary' => false,
+        'tableOptions' => ['class' => 'table table-dark table-bordered'],
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 

@@ -42,7 +42,8 @@ class Product extends \yii\db\ActiveRecord
             [['price'], 'number'],
             [['status', 'type'], 'string'],
             [['name'], 'string', 'max' => 100],
-            [['image_url', 'description'], 'string', 'max' => 255],
+            [['description'], 'string'],
+            [['image_url'], 'string', 'max' => 255],
             [['game_id'], 'exist', 'skipOnError' => true, 'targetClass' => Game::class, 'targetAttribute' => ['game_id' => 'id']],
         ];
     }
