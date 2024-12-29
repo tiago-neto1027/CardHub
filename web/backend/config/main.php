@@ -20,10 +20,6 @@ return [
         ],
     ],
     'components' => [
-        'response' => [
-            'format' => yii\web\Response::FORMAT_JSON,
-            'charset' => 'UTF-8',
-        ],
         'request' => [
             'class' => 'yii\web\Request',
             'parsers' => [
