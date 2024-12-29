@@ -6,4 +6,5 @@
     <string name="password">Password</string>
     <string name="signupNowMessage">Not signed in yet, sign up now</string>
     <string name="sign_up">Sign Up</string>
+    <string name="no_internet">Please connect to the internet first.</string>
 </resources>
