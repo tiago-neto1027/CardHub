@@ -231,6 +231,22 @@ class User extends ActiveRecord implements IdentityInterface
         return reset($roles) ? reset($roles)->name :null;
     }
 
+    public function setRole($id, $roleName)
+    {
+        $auth = Yii::$app->authManager;
+
+        $role = $auth->getRole($roleName);
+
+        if ($role) {
+            $auth->revokeAll($id);
+
+            $auth->assign($role, $id);
+        } else {
+            throw new \Exception("The role '{$roleName}' does not exist.");
+        }
+    }
+
+
     public function getListings($id)
     {
         return \common\models\Listing::find()->where(['seller_id' => $id])->count();

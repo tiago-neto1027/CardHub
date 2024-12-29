@@ -12,9 +12,7 @@ use yii\widgets\ActiveForm;
 <div class="user-form">
 
 
-    <?php $form = ActiveForm::begin([
-        'action' => ['update', 'id' => $model->id]  // Set the action to the update route with the user ID
-    ]); ?>
+    <?php $form = ActiveForm::begin(); ?>
 
     <?= $form->field($model, 'username')->textInput(['autofocus' => true]) ?>
 

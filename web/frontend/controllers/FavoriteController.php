@@ -35,7 +35,7 @@ class FavoriteController extends Controller
                             'actions' => ['view', 'update', 'delete'],
                             'roles' => ['seller', 'buyer'],
                             'matchCallback' => function ($rule, $action) {
-                                $modelId = Yii::$app->request->get('id'); // Assume `id` is passed as a parameter
+                                $modelId = Yii::$app->request->get('id');
                                 $model = Favorite::findOne($modelId);
                                 return $model && $model->user_id == Yii::$app->user->id;
                             },
