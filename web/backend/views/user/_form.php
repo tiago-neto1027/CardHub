@@ -5,10 +5,12 @@ use yii\widgets\ActiveForm;
 
 /** @var yii\web\View $this */
 /** @var common\models\User $model */
+/** @var backend\models\SignupForm $model */
 /** @var yii\widgets\ActiveForm $form */
 ?>
 
 <div class="user-form">
+
 
     <?php $form = ActiveForm::begin(); ?>
 
@@ -22,10 +24,10 @@ use yii\widgets\ActiveForm;
     <?php endif; ?>
 
     <?= $form->field($model, 'role')->dropDownList([
-            'manager' => 'manager',
-            'admin' => 'admin',
-            'seller' => 'seller',
-            'buyer' => 'buyer',
+        'manager' => 'manager',
+        'admin' => 'admin',
+        'seller' => 'seller',
+        'buyer' => 'buyer',
     ], ['prompt' => 'Select Role']) ?>
 
     <?php if (Yii::$app->controller->action->id === 'update'): ?>

@@ -54,10 +54,13 @@ class User extends ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
-            ['status', 'default', 'value' => self::STATUS_INACTIVE],
-            ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE, self::STATUS_DELETED]],
+            [['username', 'email'], 'required'],
+            [['email'], 'email'],
+            [['username'], 'string', 'max' => 255],
+            [['status'], 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE]],
         ];
     }
+
 
     /**
      * {@inheritdoc}
@@ -228,6 +231,22 @@ class User extends ActiveRecord implements IdentityInterface
         return reset($roles) ? reset($roles)->name :null;
     }
 
+    public function setRole($id, $roleName)
+    {
+        $auth = Yii::$app->authManager;
+
+        $role = $auth->getRole($roleName);
+
+        if ($role) {
+            $auth->revokeAll($id);
+
+            $auth->assign($role, $id);
+        } else {
+            throw new \Exception("The role '{$roleName}' does not exist.");
+        }
+    }
+
+
     public function getListings($id)
     {
         return \common\models\Listing::find()->where(['seller_id' => $id])->count();
@@ -251,7 +270,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function getFavorites()
     {
-        return $this->hasMany(Favorites::class, ['user_id' => 'id']);
+        return $this->hasMany(Favorite::class, ['user_id' => 'id']);
     }
 
     /**

@@ -7,7 +7,9 @@ use common\models\User;
 use common\models\UserSearch;
 use Yii;
 use yii\filters\AccessControl;
+use yii\web\BadRequestHttpException;
 use yii\web\Controller;
+use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
@@ -24,7 +26,6 @@ class UserController extends Controller
         return array_merge(
             parent::behaviors(),
             [
-                // Restrict actions to specific HTTP methods
                 'verbs' => [
                     'class' => \yii\filters\VerbFilter::class,
                     'actions' => [
@@ -37,8 +38,18 @@ class UserController extends Controller
                     'rules' => [
                         [
                             'allow' => true,
-                            'actions' => ['create','update'],
+                            'actions' => ['update'],
                             'roles' => ['admin'],
+                            'matchCallback' => function ($rule, $action) {
+                                $auth = Yii::$app->authManager;
+                                $targetId = Yii::$app->request->get('id');
+                                $userId = Yii::$app->user->id;
+                                $userRole = $auth->getRolesByUser($userId); // Current user's roles
+                                $targetRole = $auth->getRolesByUser($targetId); // Target user's roles
+
+                                return isset($userRole['admin']) &&
+                                    ($userId == $targetId || !isset($targetRole['admin']));
+                            },
                         ],
                     ],
 
@@ -117,16 +128,35 @@ class UserController extends Controller
      */
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);
+        $auth = Yii::$app->authManager;
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->update($id)) {
-            return $this->redirect(['view', 'id' => $id]);
+        $model = $this->findModel($id);
+        $userRoles = $auth->getRolesByUser($id);
+
+
+        if ($this->request->isPost) {
+            if((isset($userRoles['admin'])) && (Yii::$app->user->id != $id)){
+                throw new ForbiddenHttpException('You are not allowed to update this user.');
+            }
+            if ($model->load($this->request->post()) && $model->save()) {
+                $roleName = $this->request->post('User')['role'];
+
+                $role = $auth->getRole($roleName);
+                if (!$role) {
+                    throw new BadRequestHttpException('Invalid role specified.');
+                }
+
+                $model->setRole($id, $roleName);
+
+                return $this->redirect(['view', 'id' => $id]);
+            }
         }
 
         return $this->render('update', [
             'model' => $model,
         ]);
     }
+
 
     /**
      * Deletes an existing User model.

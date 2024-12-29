@@ -28,14 +28,16 @@ class DetailController extends Controller
             [
                 'access' => [
                     'class' => \yii\filters\AccessControl::class,
+                    'only' => ['index'],
                     'rules' => [
-                            [
-                                'allow' => true,
-                                'roles' => ["seller",'buyer'],
-                            ],
-                        ],
+                        [
+                            'allow' => true,
+                            'actions' => ['index'],
+                            'roles' => ['seller','buyer'],
+                        ]
                     ],
-                ]
+                ],
+            ]
         );
     }
     public function actionIndex()
@@ -98,15 +100,14 @@ class DetailController extends Controller
 
         if (!$user) {
             Yii::$app->session->setFlash('error', 'User not found.');
-            return $this->redirect(['site/index']); // Redirect to a safe place, like the homepage
+            return $this->redirect(['site/index']);
         }
 
         // Handle the form submission
         if (Yii::$app->request->isPost) {
             // Get the new email from the POST data
-            $newEmail = Yii::$app->request->post('newEmail'); // Ensure this matches the input field name in the form
+            $newEmail = Yii::$app->request->post('newEmail');
 
-            // Validate the new email
             if (filter_var($newEmail, FILTER_VALIDATE_EMAIL)) {
                 // Check if the new email is already taken
                 if (User::find()->where(['email' => $newEmail])->exists()) {

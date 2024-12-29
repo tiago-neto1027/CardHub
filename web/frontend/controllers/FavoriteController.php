@@ -3,8 +3,8 @@
 namespace frontend\controllers;
 
 use common\models\CardSearch;
-use common\models\Favorites;
-use common\models\FavoritesSearch;
+use common\models\Favorite;
+use common\models\FavoriteSearch;
 use common\models\ListingSearch;
 use Yii;
 use yii\data\ActiveDataProvider;
@@ -14,7 +14,7 @@ use common\models\User;
 use common\models\Listing;
 
 
-class FavoritesController extends Controller
+class FavoriteController extends Controller
 {
     public function behaviors()
     {
@@ -23,23 +23,33 @@ class FavoritesController extends Controller
             [
                 'access' => [
                     'class' => \yii\filters\AccessControl::class,
-                    'only' => ['index'],
+                    'only' => ['index', 'create', 'view', 'update', 'delete'],
                     'rules' => [
                         [
                             'allow' => true,
-                            'actions' => ['index'],
-                            'roles' => ['buyer', 'seller'],
-                        ]
+                            'actions' => ['index', 'create'],
+                            'roles' => ['seller', 'buyer'], // No matchCallback needed
+                        ],
+                        [
+                            'allow' => true,
+                            'actions' => ['view', 'update', 'delete'],
+                            'roles' => ['seller', 'buyer'],
+                            'matchCallback' => function ($rule, $action) {
+                                $modelId = Yii::$app->request->get('id');
+                                $model = Favorite::findOne($modelId);
+                                return $model && $model->user_id == Yii::$app->user->id;
+                            },
+                        ],
                     ],
                 ],
             ]
         );
-
     }
+
 
     public function actionIndex()
     {
-        $searchModel = new FavoritesSearch();
+        $searchModel = new FavoriteSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams); // Use queryParams to pass the filters
 
         return $this->render('index', [
@@ -60,13 +70,13 @@ class FavoritesController extends Controller
 
         $userId = Yii::$app->user->id;
 
-        $existingFavorite = Favorites::findOne(['card_id' => $cardId, 'user_id' => $userId]);
+        $existingFavorite = Favorite::findOne(['card_id' => $cardId, 'user_id' => $userId]);
         if ($existingFavorite) {
             Yii::$app->session->setFlash('error', 'This card is already in your favorites.');
             return $this->redirect(Yii::$app->request->referrer);
         }
 
-        $favorite = new Favorites();
+        $favorite = new Favorite();
         $favorite->card_id = $cardId;
         $favorite->user_id = $userId;
 
@@ -83,7 +93,7 @@ class FavoritesController extends Controller
     {
         $userId = Yii::$app->user->id;
 
-        $favorite = Favorites::findOne(['card_id' => $id, 'user_id' => $userId]);
+        $favorite = Favorite::findOne(['card_id' => $id, 'user_id' => $userId]);
 
         if ($favorite) {
             $favorite->delete();

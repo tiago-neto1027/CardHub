@@ -11,7 +11,7 @@ use Yii;
  * @property int $user_id
  * @property int $card_id
  */
-class Favorites extends \yii\db\ActiveRecord
+class Favorite extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}

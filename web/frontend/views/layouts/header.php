@@ -95,7 +95,7 @@ use yii\helpers\Url;
                     <span class="badge text-secondary border border-secondary rounded-circle" style="padding-bottom: 2px;">' .
                     $itemCount .
                     '</span>',
-                    ['/favorites/index'],
+                    ['/favorite/index'],
                     ['class' => 'btn px-0 ml-2']
                 ) ?>
 
@@ -197,7 +197,7 @@ use yii\helpers\Url;
                         <span class="badge text-secondary border border-secondary rounded-circle" style="padding-bottom: 2px;">' .
                         $itemCount .
                         '</span>',
-                        ['/favorites/index'],
+                        ['/favorite/index'],
                         ['class' => 'btn px-0 ml-2']
                     ) ?>
 
