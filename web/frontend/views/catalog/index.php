@@ -73,6 +73,21 @@ use function PHPSTORM_META\type;
                                     'itemOptions' => ['class' => 'item col-lg-2 col-md-4 col-sm-6 pb-1'],
                                     'itemView' => '../listing/_listing',
                                     'layout' => "<div class='row g-3'>{items}</div>\n{pager}",
+                                    //pager options
+                                    'pager' => [
+                                        'class' => \yii\bootstrap5\LinkPager::class,
+                                        'options' => [
+                                            'class' => 'pagination justify-content-center ',
+                                        ],
+                                        'linkOptions' => [
+                                            'class' => 'btn rounded bg-primary text-dark mr-1',
+                                        ],
+                                        'prevPageLabel' => '<',
+                                        'nextPageLabel' => '>',
+                                        'maxButtonCount' => 5,
+                                        'pagination' => ['params' => ['main-page' => true], 
+                                        ],
+                                    ],
                                 ]);
                             }
                             elseif($type === 'product')
@@ -82,6 +97,21 @@ use function PHPSTORM_META\type;
                                     'itemOptions' => ['class' => 'item col-lg-3 col-md-4 col-sm-6 pb-1'],
                                     'itemView' => '../product/_product',
                                     'layout' => "<div class='row g-3'>{items}</div>\n{pager}",
+                                    //pager options
+                                    'pager' => [
+                                        'class' => \yii\bootstrap5\LinkPager::class,
+                                        'options' => [
+                                            'class' => 'pagination justify-content-center ',
+                                        ],
+                                        'linkOptions' => [
+                                            'class' => 'btn rounded bg-primary text-dark mr-1',
+                                        ],
+                                        'prevPageLabel' => '<',
+                                        'nextPageLabel' => '>',
+                                        'maxButtonCount' => 5,
+                                        'pagination' => ['params' => ['main-page' => true], 
+                                        ],
+                                    ],
                                 ]);
                             }
                         ?>

@@ -6227,7 +6227,7 @@ button.bg-dark:focus {
 }
 
 .border-primary {
-  border-color: #FFD333 !important;
+  border-color: var(--cardhub-blue-medium) !important;
 }
 
 .border-secondary {
@@ -9273,7 +9273,7 @@ button.bg-dark:focus {
 }
 
 a.text-primary:hover, a.text-primary:focus {
-  color: #e6b400 !important;
+  color: var(--cardhub-blue-light) !important;
 }
 
 .text-secondary {
