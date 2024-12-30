@@ -41,10 +41,11 @@ $this->title = $model->card->name;
                     <h5 class="text-secondary mb-4"><i class="text-primary bi bi-bag-check-fill me-2"></i>Available!
                     </h5>
                     <?php
-                    if ($model->seller_id != Yii::$app->user->identity->id)
                         echo Html::a('Add to cart!', ['/cart/add-to-cart', 'itemId' => $model->id, 'type' => 'listing'], [
-                            'class' => 'btn btn-primary btn-lg rounded',]) ?>
-                    </div><?php
+                            'class' => 'btn btn-primary btn-lg rounded',]);
+                        ?>
+                    </div>
+                    <?php
                 } ?>
             </div>
         </div>

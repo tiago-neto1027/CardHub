@@ -78,7 +78,7 @@ if (empty($cartItems)) {
         'data-confirm' => 'Are you sure you want to clear the cart?',
     ]) ?>
 
-    <?= Html::a('Pay', ['cart/payment'], [
+    <?= Html::a('Pay', ['payment/view'], [
         'class' => 'btn btn-success text-light col-3',
         'data-method' => 'post',
     ]) ?>
