@@ -128,7 +128,7 @@ class Card extends \yii\db\ActiveRecord
 
     public function isFavorited()
     {
-        return Favorites::find()
+        return Favorite::find()
             ->where(['user_id' => Yii::$app->user->getId(), 'card_id' => $this->id])
             ->exists();
     }

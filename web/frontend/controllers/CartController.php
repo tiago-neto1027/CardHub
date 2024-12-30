@@ -23,27 +23,27 @@ class CartController extends Controller
             [
                 'access' => [
                     'class' => \yii\filters\AccessControl::class,
-                    'only' => ['index','view'],
+                    'only' => ['index', 'view'],
                     'rules' => [
                         [
                             'allow' => true,
-                            'actions' => ['index','view'],
-                            'roles' => ['?', 'seller','buyer'],
+                            'actions' => ['index', 'view'],
+                            'roles' => ['?', 'seller', 'buyer'],
                         ]
                     ],
                 ],
             ]
         );
     }
+
     public function actionIndex()
     {
         $cartKey = Yii::$app->user->isGuest
-            ? 'cart_guest_' . Yii::$app->session->id // For guest users
+            ? 'cart_guest_' . Yii::$app->session->id
             : 'cart_' . Yii::$app->user->id;
 
         $cartItems = Cart::getItems($cartKey);
 
-        // Fetch products for the cart items
         $productIds = array_column($cartItems, 'itemId');
         $products = Product::find()->where(['id' => $productIds])->indexBy('id')->all();
 
@@ -61,8 +61,8 @@ class CartController extends Controller
         if (Yii::$app->user->isGuest) {
             Yii::$app->session->setFlash('warning', 'Login to add items to cart.');
             return $this->redirect(Yii::$app->request->referrer);
-
         }
+
         if ($type === 'listing') {
             $item = Listing::findOne($itemId);
         } elseif ($type === 'product') {
@@ -70,50 +70,58 @@ class CartController extends Controller
         } else {
             throw new \yii\web\BadRequestHttpException('Invalid item type.');
         }
+
         if (!$item) {
             throw new \yii\web\NotFoundHttpException(ucfirst($type) . ' not found.');
         }
+
         $quantity = 1;
 
         if ($type === 'listing') {
-            if($item->seller_id === Yii::$app->user->id) {
-                Yii::$app->session->setFlash('error', "You can't buy your own items.");
+            if ($item->status === 'inactive') {
+                if ($item->seller_id === Yii::$app->user->id) {
+                    Yii::$app->session->setFlash('error', "You can't buy your own items.");
+                } else {
+                    Yii::$app->session->setFlash('error', 'Item not for sale');
+                }
+            } else {
+                Cart::addItemToCart($itemId, $item->card->name, $item->card->image_url, $item->price, $quantity, $type, 1);
             }
-            elseif($item->status==='inactive'){
+        }
+
+        if ($type === 'product') {
+            if ($item->status === 'inactive') {
                 Yii::$app->session->setFlash('error', 'Item not for sale');
-            }
-            else{
-                Cart::addItemToCart($itemId, $item->card->name, $item->card->image_url ,$item->price, $quantity, $type , 1);
-            }
-        } elseif ($type === 'product') {
-            if($item->status==='inactive'){
-                Yii::$app->session->setFlash('error', 'Item not for sale');
-            }
-            if ($item->stock === 0)
+            } elseif ($item->stock === 0) {
                 Yii::$app->session->setFlash('error', 'Not enough products in stock!');
-            else {
+            } else {
                 Cart::addItemToCart($itemId, $item->name, $item->image_url, $item->price, $quantity, $type, $item->stock);
             }
         }
+
         return $this->redirect(Yii::$app->request->referrer);
     }
 
 
-    public function actionRemoveFromCart($type , $itemId)
+
+    public
+    function actionRemoveFromCart($type, $itemId)
     {
         Cart::removeItem($type, $itemId);
         Yii::$app->session->setFlash('success', 'Item removed from cart.');
         return $this->redirect(['cart/index']);
     }
 
-    public function actionClearCart()
+    public
+    function actionClearCart()
     {
         Cart::clearCart();
         Yii::$app->session->setFlash('success', 'Cart cleared');
         return $this->redirect(['cart/index']);
     }
 
-    public function actionUpdateQuantity($itemId, $action = null, $quantity = null)
+    public
+    function actionUpdateQuantity($itemId, $action = null, $quantity = null)
     {
         Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 
@@ -164,5 +172,5 @@ class CartController extends Controller
             'newCartTotal' => Yii::$app->formatter->asCurrency($totalCost), 'EUR',
         ];
     }
-
 }
+

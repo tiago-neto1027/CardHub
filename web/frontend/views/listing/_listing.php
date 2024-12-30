@@ -26,11 +26,11 @@ use yii\helpers\Html;
             <?php // Favorite Button
             if (!$model->card->isFavorited()) {
                 echo Html::a('<i class="far fa-heart"></i>',
-                    ['/favorites/create', 'id' => $model->card_id],
+                    ['/favorite/create', 'id' => $model->card_id],
                     ['class' => 'btn btn-outline-dark btn-square']);
             } else {
                 echo Html::a('<i class="fas fa-heart-broken"></i>',
-                    ['/favorites/remove', 'id' => $model->card_id],
+                    ['/favorite/remove', 'id' => $model->card_id],
                     ['class' => 'btn btn-outline-dark btn-square',
                         'disabled' => true,
                         'title' => 'This item is already in your favorites',]);
