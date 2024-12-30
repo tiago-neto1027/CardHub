@@ -54,9 +54,11 @@ class CatalogController extends \yii\web\Controller
             'type' => $type,
         ]);
     }
+
     /**
      * Displays a single Product model.
      */
+    /*
     public function actionView($id, $type)
     {
             // Determines the model by type
@@ -79,6 +81,7 @@ class CatalogController extends \yii\web\Controller
             'type' => $type, // Optionally pass the type to the view
         ]);
     }
+    */
 
     /**
      * Finds the Product model based on its primary key value.

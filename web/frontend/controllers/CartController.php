@@ -45,13 +45,11 @@ class CartController extends Controller
 
         // Fetch products for the cart items
         $productIds = array_column($cartItems, 'itemId');
-        $products = Product::find()->where(['id' => $productIds])->indexBy('id')->all();
 
         $totalCost = Cart::getTotalCost();
 
         return $this->render('index', [
             'cartItems' => $cartItems,
-            'products' => $products,
             'totalCost' => $totalCost,
         ]);
     }

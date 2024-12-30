@@ -26,43 +26,34 @@ if (empty($cartItems)) {
         </thead>
         <tbody>
         <?php foreach ($cartItems as $item): ?>
-            <?php
-            if (isset($item['itemId'])) {
-                $itemId = $item['itemId'];
-                $product = $products[$itemId] ?? null;
-            } else {
-                continue;
-            }
-            ?>
-            <?php if ($product):?>
-
+            <?php if (isset($item)): ?>
                 <tr class="fs-5 text-center center ">
                     <td class="align-middle">
                         <?php
                         echo '
-                         <a href="' . Url::to(['/catalog/view','id'=>$item['itemId']]) . '" >
-                             <img class="img-fluid w-100 rounded-3 " src="'.  $item['image'] .'" alt="">
-                         </a>
-                        '
+                 <a href="' . Url::to([$item['type'] === 'product' ? '/product/view' : '/catalog/view', 'id' => $item['itemId']]) . '" >
+                     <img class="img-fluid w-100 rounded-3 " src="' . $item['image'] . '" alt="">
+                 </a>
+                '
                         ?>
                     </td>
-                    <td class="col-3 align-self-center align-middle" title="Name"><?= Html::encode(($product->name)) ?></td>
+                    <td class="col-3 align-self-center align-middle" title="Name"><?= Html::encode(($item['name'])) ?></td>
 
-                    <?php if($item['type']==='product'):?>
-                    <td class="col-1 align-self-center align-middle">
-                        <div class="d-flex align-items-center">
-                            <button class="btn btn-sm btn-danger me-2" onclick="updateQuantity(<?= $item['itemId'] ?>, 'decrement')">-</button>
-                            <span id="quantity-<?= $item['itemId'] ?>"><?= $item['quantity'] ?></span>
-                            <button class="btn btn-sm btn-success ms-2" onclick="updateQuantity(<?= $item['itemId'] ?>, 'increment')">+</button>
-                        </div>
-                    </td>
-                    <?php elseif($item['type']==='listing'):?>
-                        <td class="col-1 align-self-center align-middle" title="Name"><?= $item['quantity'] ?></td>
+                    <?php if ($item['type'] === 'product'): ?>
+                        <td class="col-1 align-middle">
+                            <div class="d-flex align-items-center justify-content-center">
+                                <button class="btn btn-sm btn-danger me-2" onclick="updateQuantity(<?= $item['itemId'] ?>, 'decrement')">-</button>
+                                <span id="quantity-<?= $item['itemId'] ?>"><?= $item['quantity'] ?></span>
+                                <button class="btn btn-sm btn-success ms-2" onclick="updateQuantity(<?= $item['itemId'] ?>, 'increment')">+</button>
+                            </div>
+                        </td>
+                    <?php elseif ($item['type'] === 'listing'): ?>
+                        <td class="col-1 align-middle text-center" title="Name"><?= $item['quantity'] ?></td>
                     <?php endif; ?>
-                    <td class="align-middle" id="product-price"><?= Yii::$app->formatter->asCurrency($item['price'], 'EUR')?></td>
-                    <td class="align-middle" id="product-total-<?= $item['itemId'] ?>"><?= Yii::$app->formatter->asCurrency($item['price'] * $item['quantity'], 'EUR')?></td>
+                    <td class="align-middle" id="product-price"><?= Yii::$app->formatter->asCurrency($item['price'], 'EUR') ?></td>
+                    <td class="align-middle" id="product-total-<?= $item['itemId'] ?>"><?= Yii::$app->formatter->asCurrency($item['price'] * $item['quantity'], 'EUR') ?></td>
                     <td class="align-middle">
-                        <?= Html::a('Remove', ['cart/remove-from-cart', 'itemId' => $itemId,'type' => $item['type']], [
+                        <?= Html::a('Remove', ['cart/remove-from-cart', 'itemId' => $item['itemId'], 'type' => $item['type']], [
                             'class' => 'btn btn-danger btn-lg text-white',
                             'data-method' => 'post',
                         ]) ?>
@@ -70,6 +61,7 @@ if (empty($cartItems)) {
                 </tr>
             <?php endif; ?>
         <?php endforeach; ?>
+
         <tr class="fs-4">
             <th colspan="5" >Total</th>
             <th class="align-content-end" id="cart-total">
@@ -137,3 +129,5 @@ if (empty($cartItems)) {
     }
 
 </script>
+
+
