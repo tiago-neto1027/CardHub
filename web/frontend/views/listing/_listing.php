@@ -42,7 +42,8 @@ use yii\helpers\Html;
         </div>
     </div>
     <div class="text-center py-4">
-        <?= Html::a(html::encode($model->card->name),
+        <?= // Search Button
+            Html::a(html::encode($model->card->name),
             ['/listing/view', 'id' => $model->id],
             ['class' => 'h6 text-decoration-none text-truncate d-block px-3', 'title' => html::encode($model->card->name)])
         ?>
