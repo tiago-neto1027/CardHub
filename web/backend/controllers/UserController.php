@@ -147,6 +147,7 @@ class UserController extends Controller
                 }
 
                 $model->setRole($id, $roleName);
+                $model->setRole($id, $roleName);
 
                 return $this->redirect(['view', 'id' => $id]);
             }
