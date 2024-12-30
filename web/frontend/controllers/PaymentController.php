@@ -105,10 +105,9 @@ class PaymentController extends \yii\web\Controller
                         $invoiceLine->price = $item['price'] * $item['quantity'];
                         $invoiceLine->quantity = $item['quantity'];
                         $invoiceLine->product_name = $item['name'];
-                        if ($item['type'] === 'listing'){
+                        if ($item['type'] === 'listing') {
                             $invoiceLine->card_transaction_id = $transactionModel->id;
-                        }
-                        elseif($item['type'] === 'product'){
+                        } elseif ($item['type'] === 'product') {
                             $invoiceLine->product_transaction_id = $transactionModel->id;
                         }
 
@@ -140,42 +139,81 @@ class PaymentController extends \yii\web\Controller
     {
         $payment = Payment::findOne($id);
 
+        if (!$payment || $payment->user_id !== Yii::$app->user->id) {
+            throw new \Exception('Payment not found or access denied.');
+        }
+
         $transaction = Yii::$app->db->beginTransaction();
-
         try {
-            $invoice = new Invoice();
-            $invoice->payment_id = $payment->id;
-            $invoice->client_id = $payment->user_id;
-            $invoice->date = time();
-
-            if (!$invoice->save()) {
-                throw new \Exception('Failed to create invoice.');
-            }
-
             $payment->status = 'complete';
             if (!$payment->save()) {
                 throw new \Exception('Failed to update payment status.');
             }
 
-            $invoice = Invoice::findOne($payment->id);
+            $invoice = Invoice::findOne(['payment_id' => $payment->id]);
             if (!$invoice) {
                 throw new \Exception('Invoice not found for this payment.');
             }
 
-            $invoiceLines = InvoiceLine::find()
-                ->where(['invoice_id' => $invoice->id])
-                ->all();
-
-                $transaction->commit();
-
-                return $this->render('success', ['payment' => $payment]);
-
-            } catch (\Exception $e) {
-                // If an error occurs, roll back the transaction
-                $transaction->rollBack();
-                Yii::$app->session->setFlash('error', $e->getMessage());
-                return $this->redirect(['cart/index']);
+            $invoiceLines = InvoiceLine::findAll(['invoice_id' => $invoice->id]);
+            if (empty($invoiceLines)) {
+                throw new \Exception('No invoice lines found.');
             }
-        }
 
+            foreach ($invoiceLines as $invoiceLine) {
+                if ($invoiceLine->card_transaction_id) {
+                    $transactionModel = CardTransaction::findOne($invoiceLine->card_transaction_id);
+                    if (!$transactionModel) {
+                        throw new \Exception('Card transaction not found for invoice line ID: ' . $invoiceLine->id);
+                    }
+
+                    $transactionModel->status = 'completed';
+                    if (!$transactionModel->save()) {
+                        throw new \Exception('Failed to update CardTransaction status for transaction ID: ' . $transactionModel->id);
+                    }
+
+                    $listing = Listing::findOne($transactionModel->listing_id);
+                    if ($listing) {
+                        $listing->status = 'inactive';
+                        if (!$listing->save()) {
+                            throw new \Exception('Failed to update listing status to inactive for listing ID: ' . $listing->id);
+                        }
+                    } else {
+                        throw new \Exception('Listing not found for CardTransaction ID: ' . $transactionModel->id);
+                    }
+                }
+
+                if ($invoiceLine->product_transaction_id) {
+                    $transactionModel = ProductTransaction::findOne($invoiceLine->product_transaction_id);
+                    if (!$transactionModel) {
+                        throw new \Exception('Product transaction not found for invoice line ID: ' . $invoiceLine->id);
+                    }
+
+                    $transactionModel->status = 'completed';
+                    if (!$transactionModel->save()) {
+                        throw new \Exception('Failed to update ProductTransaction status for transaction ID: ' . $transactionModel->id);
+                    }
+
+                    $product = Product::findOne($transactionModel->product_id);
+                    if ($product) {
+                        $product->stock -= 1;
+                        if (!$product->save()) {
+                            throw new \Exception('Failed to reduce product quantity for product ID: ' . $product->id);
+                        }
+                    } else {
+                        throw new \Exception('Product not found for ProductTransaction ID: ' . $transactionModel->id);
+                    }
+                }
+            }
+
+            $transaction->commit();
+
+            return $this->render('success', ['payment' => $payment]);
+
+        } catch (\Exception $e) {
+            $transaction->rollBack();
+            Yii::$app->session->setFlash('error', $e->getMessage());
+            return $this->redirect(['cart/index']);
+        }
+    }
 }
