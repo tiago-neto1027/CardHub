@@ -15,10 +15,10 @@ use Yii;
  *
  * @property User $buyer
  * @property InvoiceLines $invoiceLines
- * @property Products $product
+ * @property Product $product
  * @property ProductReviews[] $productReviews
  */
-class ProductTransactions extends \yii\db\ActiveRecord
+class ProductTransaction extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
@@ -39,7 +39,7 @@ class ProductTransactions extends \yii\db\ActiveRecord
             [['date'], 'safe'],
             [['status'], 'string'],
             [['buyer_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['buyer_id' => 'id']],
-            [['product_id'], 'exist', 'skipOnError' => true, 'targetClass' => Products::class, 'targetAttribute' => ['product_id' => 'id']],
+            [['product_id'], 'exist', 'skipOnError' => true, 'targetClass' => Product::class, 'targetAttribute' => ['product_id' => 'id']],
         ];
     }
 
@@ -84,7 +84,7 @@ class ProductTransactions extends \yii\db\ActiveRecord
      */
     public function getProduct()
     {
-        return $this->hasOne(Products::class, ['id' => 'product_id']);
+        return $this->hasOne(Product::class, ['id' => 'product_id']);
     }
 
     /**

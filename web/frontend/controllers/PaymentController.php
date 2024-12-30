@@ -1,9 +1,15 @@
 <?php
 
-namespace app\controllers;
+namespace frontend\controllers;
 
 use app\models\PaymentForm;
+use common\models\CardTransaction;
+use common\models\Invoice;
+use common\models\InvoiceLine;
+use common\models\Listing;
 use common\models\Payment;
+use common\models\Product;
+use common\models\ProductTransaction;
 use frontend\models\Cart;
 use Yii;
 use yii\db\Transaction;
@@ -20,12 +26,16 @@ class PaymentController extends \yii\web\Controller
     {
         $cartKey = Cart::getCartKey();
         $cartItems = Cart::getItems($cartKey) ?: [];
+        $totalCost = Cart::getTotalCost();
 
         $model = new PaymentForm();
-
+        if ($totalCost <= 0) {
+            return $this->render('cart/index');
+        }
         return $this->render('view', [
             'cartItems' => $cartItems,
             'model' => $model,
+            'totalCost' => $totalCost,
         ]);
     }
 
@@ -36,9 +46,9 @@ class PaymentController extends \yii\web\Controller
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $userId = Yii::$app->user->id;
 
-            // Retrieve cart items from the cache
             $cartKey = Cart::getCartKey();
             $cartItems = Cart::getItems($cartKey) ?: [];
+            $totalCost = Cart::getTotalCost();
 
             if (empty($cartItems)) {
                 Yii::$app->session->setFlash('error', 'Your cart is empty.');
@@ -47,46 +57,74 @@ class PaymentController extends \yii\web\Controller
 
             $transaction = Yii::$app->db->beginTransaction();
             try {
-                // Calculate total amount
-                $totalAmount = array_reduce($cartItems, function ($sum, $item) {
-                    return $sum + ($item->price * $item->quantity);
-                }, 0);
 
-                // Create a new payment
                 $payment = new Payment();
                 $payment->user_id = $userId;
-                $payment->total_amount = $totalAmount;
-                $payment->payment_method = $model->payment_method; // Use validated form data
+                $payment->payment_method = $model->payment_method;
+                $payment->total = $totalCost;
                 $payment->status = 'pending';
-                $payment->created_at = time();
-                $payment->updated_at = time();
+                $payment->date = time();
 
                 if (!$payment->save()) {
                     throw new \Exception('Failed to create payment.');
                 }
 
-                // Create transactions for each cart item
-                foreach ($cartItems as $item) {
-                    $transactionModel = new Transaction();
-                    $transactionModel->payment_id = $payment->id;
-                    $transactionModel->item_id = $item->item_id;
-                    $transactionModel->item_type = $item->item_type;
-                    $transactionModel->amount = $item->price * $item->quantity;
-                    $transactionModel->status = 'pending';
-                    $transactionModel->created_at = time();
-                    $transactionModel->updated_at = time();
+                $invoice = new Invoice();
+                $invoice->payment_id = $payment->id;
+                $invoice->client_id = $userId;
+                $invoice->date = time();
+                if (!$invoice->save()) {
+                    throw new \Exception('Failed to create invoice.');
+                }
 
-                    if (!$transactionModel->save()) {
-                        throw new \Exception('Failed to create transaction for item ID: ' . $item->item_id);
+                foreach ($cartItems as $item) {
+                    if ($item['type'] === 'product') {
+                        $transactionModel = new ProductTransaction();
+                        $transactionModel->buyer_id = $userId;
+                        $transactionModel->product_id = $item['itemId'];
+                        $transactionModel->date = time();
+                        $transactionModel->status = 'pending';
+                    }
+                    if ($item['type'] === 'listing') {
+                        $product = Listing::findOne($item['itemId']);
+                        $transactionModel = new CardTransaction();
+                        $transactionModel->seller_id = $product->seller_id;
+                        $transactionModel->buyer_id = $userId;
+                        $transactionModel->listing_id = $item['itemId'];
+                        $transactionModel->date = time();
+                        $transactionModel->status = 'pending';
+                    }
+
+                    if ($transactionModel) {
+                        if (!$transactionModel->save()) {
+                            throw new \Exception('Failed to create transaction for item ID: ' . $item['itemId']);
+                        }
+
+                        $invoiceLine = new InvoiceLine();
+                        $invoiceLine->invoice_id = $invoice->id;
+                        $invoiceLine->price = $item['price'] * $item['quantity'];
+                        $invoiceLine->quantity = $item['quantity'];
+                        $invoiceLine->product_name = $item['name'];
+                        if ($item['type'] === 'listing'){
+                            $invoiceLine->card_transaction_id = $transactionModel->id;
+                        }
+                        elseif($item['type'] === 'product'){
+                            $invoiceLine->product_transaction_id = $transactionModel->id;
+                        }
+
+                        if (!$invoiceLine->save()) {
+                            throw new \Exception('Failed to create invoice line for transaction ID: ' . $transactionModel->id);
+                        }
+                    } else {
+                        throw new \Exception('Invalid item type or missing transaction model for item ID: ' . $item['itemId']);
                     }
                 }
 
-                // Clear the user's cart after transactions are created
                 Cart::clearCart();
 
                 $transaction->commit();
 
-                return $this->redirect(['payment/success', 'id' => $payment->id]);
+                return $this->redirect(['success', 'id' => $payment->id]);
             } catch (\Exception $e) {
                 $transaction->rollBack();
                 Yii::$app->session->setFlash('error', $e->getMessage());
@@ -94,7 +132,6 @@ class PaymentController extends \yii\web\Controller
             }
         }
 
-        // If validation fails, return to the form with errors
         return $this->render('index', ['model' => $model]);
     }
 
@@ -103,13 +140,42 @@ class PaymentController extends \yii\web\Controller
     {
         $payment = Payment::findOne($id);
 
-        if (!$payment || $payment->user_id !== Yii::$app->user->id) {
-            throw new \Exception('Payment not found or access denied.');
+        $transaction = Yii::$app->db->beginTransaction();
+
+        try {
+            $invoice = new Invoice();
+            $invoice->payment_id = $payment->id;
+            $invoice->client_id = $payment->user_id;
+            $invoice->date = time();
+
+            if (!$invoice->save()) {
+                throw new \Exception('Failed to create invoice.');
+            }
+
+            $payment->status = 'complete';
+            if (!$payment->save()) {
+                throw new \Exception('Failed to update payment status.');
+            }
+
+            $invoice = Invoice::findOne($payment->id);
+            if (!$invoice) {
+                throw new \Exception('Invoice not found for this payment.');
+            }
+
+            $invoiceLines = InvoiceLine::find()
+                ->where(['invoice_id' => $invoice->id])
+                ->all();
+
+                $transaction->commit();
+
+                return $this->render('success', ['payment' => $payment]);
+
+            } catch (\Exception $e) {
+                // If an error occurs, roll back the transaction
+                $transaction->rollBack();
+                Yii::$app->session->setFlash('error', $e->getMessage());
+                return $this->redirect(['cart/index']);
+            }
         }
-
-        return $this->render('success', ['payment' => $payment]);
-    }
-
-
 
 }

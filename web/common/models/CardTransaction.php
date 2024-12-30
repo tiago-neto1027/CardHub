@@ -15,13 +15,13 @@ use Yii;
  * @property string $date
  *
  * @property User $buyer
- * @property InvoiceLines $invoiceLines
- * @property Listings $listing
+ * @property InvoiceLine $invoiceLines
+ * @property Listing $listing
  * @property Reports $reports
  * @property Reviews $reviews
  * @property User $seller
  */
-class CardTransactions extends \yii\db\ActiveRecord
+class CardTransaction extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
@@ -42,7 +42,7 @@ class CardTransactions extends \yii\db\ActiveRecord
             [['status'], 'string'],
             [['date'], 'safe'],
             [['buyer_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['buyer_id' => 'id']],
-            [['listing_id'], 'exist', 'skipOnError' => true, 'targetClass' => Listings::class, 'targetAttribute' => ['listing_id' => 'id']],
+            [['listing_id'], 'exist', 'skipOnError' => true, 'targetClass' => Listing::class, 'targetAttribute' => ['listing_id' => 'id']],
             [['seller_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['seller_id' => 'id']],
         ];
     }
@@ -89,7 +89,7 @@ class CardTransactions extends \yii\db\ActiveRecord
      */
     public function getListing()
     {
-        return $this->hasOne(Listings::class, ['id' => 'listing_id']);
+        return $this->hasOne(Listing::class, ['id' => 'listing_id']);
     }
 
     /**

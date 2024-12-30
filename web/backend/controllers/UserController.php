@@ -34,7 +34,7 @@ class UserController extends Controller
                 ],
                 'access' => [
                     'class' => \yii\filters\AccessControl::class,
-                    'only' => ['create','update'],
+                    'only' => ['update'],
                     'rules' => [
                         [
                             'allow' => true,

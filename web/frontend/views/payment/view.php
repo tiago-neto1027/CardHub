@@ -25,10 +25,13 @@ use yii\widgets\ActiveForm;
                 <?php endforeach; ?>
             </ul>
 
-            <!-- Payment Form -->
             <?php $form = ActiveForm::begin(['action' => ['payment/checkout']]); ?>
+            <div class="d-flex justify-content-between list-group-item">
+                <span>Total cost:</span>
+                <span><?= Yii::$app->formatter->asCurrency($totalCost, 'EUR') ?></span>
+            </div>
 
-            <div class="mb-3">
+            <div class="mb-3 mt-4">
                 <?= $form->field($model, 'payment_method')->dropdownList(
                     Payment::getPaymentMethods(),
                     ['prompt' => 'Select Payment Method', 'class' => 'form-select']
