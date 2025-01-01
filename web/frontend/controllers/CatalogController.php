@@ -4,6 +4,7 @@ namespace app\controllers;
 namespace frontend\controllers;
 
 use \common\models\Product;
+use Yii;
 use \common\models\Card;
 use common\models\ListingSearch;
 use \common\models\ProductSearch;
@@ -39,34 +40,25 @@ class CatalogController extends \yii\web\Controller
 
     public function actionIndex($id, $type)
     {   
-        //Fetch the Products/Listings
-        $productQuery = Product::find();
-        $cardQuery = Listing::find();
-        if ($id !== null) {
-            $productQuery->andWhere(['game_id' => $id]); 
-            $cardQuery->joinWith('card')->andWhere(['cards.game_id' => $id]);
-        }
-
-        //Load the correct data according to the type
         if ($type === 'product') {
             $searchModel = new ProductSearch();
-            $query = $productQuery;
-        }
-        elseif($type === 'listing'){
+            $queryParams = Yii::$app->request->queryParams;
+    
+                // add game id to the parameters
+                $queryParams['ProductSearch']['game_id'] = $id;
+    
+            $dataProvider = $searchModel->search($queryParams);
+        } elseif ($type === 'listing') {
             $searchModel = new ListingSearch();
-            $query = $cardQuery;
-        }
-        else{
+            $queryParams = Yii::$app->request->queryParams;
+    
+                // add game id to the parameters
+                $queryParams['ListingSearch']['game_id'] = $id;
+    
+            $dataProvider = $searchModel->search($queryParams);
+        } else {
             return $this->redirect(['site/error']);
         }
-
-        //Load the DataProvider and Return with the right items
-        $dataProvider = new ActiveDataProvider([
-            'query' => $query,
-            'pagination' => [
-                'pageSize' => 20,
-            ],
-        ]);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
