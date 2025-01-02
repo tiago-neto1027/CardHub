@@ -29,8 +29,8 @@ use function PHPSTORM_META\type;
                 ?>
 
                 <div class="dropdown">
-                    <a class="btn dropdown-toggle mb-2" type="button" id="dropdownMenuButton" data-toggle="dropdown"
-                       aria-haspopup="true" aria-expanded="false">Type</a>
+                    <a class="btn dropdown-toggle mb-3" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false">Catalog</a>
                     <div class="dropdown-menu bg-dark">
                         <?php    
                             echo Html::a('Cards', Url::current([
@@ -43,7 +43,7 @@ use function PHPSTORM_META\type;
                     </div>
                 </div>
                 
-                <div class="filter-buttons border border-dark rounded mb-4" id="filter-buttons">
+                <div class="filter-buttons border border-dark rounded mb-3" id="filter-buttons">
                     <?php
                     if ($games = \common\models\Game::getAllGames()):
                         foreach ($games as $game) {
@@ -56,7 +56,7 @@ use function PHPSTORM_META\type;
                 
             </div>
             <div>
-            <?php use yii\widgets\ActiveForm; ?>
+                <?php use yii\widgets\ActiveForm; ?>
 
                 <div class="search-form">
                     <?php 
@@ -66,15 +66,16 @@ use function PHPSTORM_META\type;
                             'method' => 'get',
                         ]); ?>
 
-                        <?= $form->field($searchModel, 'name')->textInput(['placeholder' => 'Search by name']) ?>
                         <?= 
                             $form->field($searchModel, 'type')->dropDownList(
                                 $productTypes, // Array of product types, e.g., ['type1' => 'Type 1', 'type2' => 'Type 2']
-                                ['prompt' => 'Select Product Type'],
-                                
-
+                                [
+                                    'prompt' => 'Select Product Type',
+                                    'class' => 'dropdown-item border rounded border-dark text-primary bg-dark'
+                                ],
                             ) 
                         ?>
+                        <?= $form->field($searchModel, 'name')->textInput(['placeholder' => 'Search by name']) ?>
 
                         <div class="form-group">
                             <?= \yii\helpers\Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
