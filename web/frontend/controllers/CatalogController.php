@@ -38,8 +38,11 @@ class CatalogController extends \yii\web\Controller
         );
     }
 
-    public function actionIndex($id, $type)
+    public function actionIndex($type)
     {   
+        $request = \Yii::$app->request;
+        $id=$request->get('id', null);
+
         if ($type === 'product') {
             $searchModel = new ProductSearch();
             $queryParams = Yii::$app->request->queryParams;
@@ -60,10 +63,13 @@ class CatalogController extends \yii\web\Controller
             return $this->redirect(['site/error']);
         }
 
+        $productTypes = \yii\helpers\ArrayHelper::map(Product::find()->select(['type'])->distinct()->all(), 'type', 'type');      
+
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'type' => $type,
+            'productTypes' => $productTypes,
         ]);
     }
 

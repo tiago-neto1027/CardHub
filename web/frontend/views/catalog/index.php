@@ -18,10 +18,18 @@ use function PHPSTORM_META\type;
             <div class="container-fluid pt-5 pb-3">
                 <h2 class="section-title position-relative text-uppercase mb-4"><span
                             class="bg-secondary pr-3">Filters</span></h2>
-                <a class="btn rounded mb-4" href="<?= \yii\helpers\Url::to(['/catalog']) ?>">Clear</a>
+    
+                <?php
+                    if($type === 'product')
+                    {
+                        ?><a class="btn bg-primary text-dark rounded mb-4" href="<?= \yii\helpers\Url::to(['/catalog/index?type=product']) ?>">Clear</a><?php   
+                    }elseif($type === 'listing'){
+                        ?><a class="btn bg-primary text-dark rounded mb-4" href="<?= \yii\helpers\Url::to(['/catalog/index?type=listing']) ?>">Clear</a><?php
+                    }
+                ?>
 
                 <div class="dropdown">
-                    <a class="btn dropdown-toggle mb-4" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+                    <a class="btn dropdown-toggle mb-2" type="button" id="dropdownMenuButton" data-toggle="dropdown"
                        aria-haspopup="true" aria-expanded="false">Type</a>
                     <div class="dropdown-menu bg-dark">
                         <?php    
@@ -34,6 +42,7 @@ use function PHPSTORM_META\type;
                          ?>  
                     </div>
                 </div>
+                
                 <div class="filter-buttons border border-dark rounded mb-4" id="filter-buttons">
                     <?php
                     if ($games = \common\models\Game::getAllGames()):
@@ -44,19 +53,43 @@ use function PHPSTORM_META\type;
                         }
                     endif; ?>
                 </div>
-                <div class="filter-buttons border border-dark rounded mb-4" id="">
-                    <?php
-                    $productTypeOptions = Product:: getProductTypes();         //TODO fix?
-                    if (empty($productTypeOptions)) {
-                        echo "<p>No product types available.</p>";
-                    } else {
-                        foreach ($productTypeOptions as $productType) {
-                            echo Html::a($productType->type, Url::current([
-                                'productType' => $productType->type]),
-                                ['class' => 'dropdown-item']);
-                        }
+                
+            </div>
+            <div>
+            <?php use yii\widgets\ActiveForm; ?>
+
+                <div class="search-form">
+                    <?php 
+                    if($type === 'product')
+                    {
+                            $form = ActiveForm::begin([
+                            'method' => 'get',
+                        ]); ?>
+
+                        <?= $form->field($searchModel, 'name')->textInput(['placeholder' => 'Search by name']) ?>
+                        <?= 
+                            $form->field($searchModel, 'type')->dropDownList(
+                                $productTypes, // Array of product types, e.g., ['type1' => 'Type 1', 'type2' => 'Type 2']
+                                ['prompt' => 'Select Product Type'],
+                                
+
+                            ) 
+                        ?>
+
+                        <div class="form-group">
+                            <?= \yii\helpers\Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
+                        </div>
+
+                        <?php ActiveForm::end(); 
+
+                    }elseif($type === 'listing'){
+                        $form = ActiveForm::begin([
+                            'method' => 'get',
+                        ]); ?>
+
+                        <?php ActiveForm::end();
                     }
-                    ?>
+                    ?>  
                 </div>
             </div>
         </div>
