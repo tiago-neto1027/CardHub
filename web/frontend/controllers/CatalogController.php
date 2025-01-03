@@ -38,11 +38,8 @@ class CatalogController extends \yii\web\Controller
         );
     }
 
-    public function actionIndex($type)
-    {   
-       $request = \Yii::$app->request;
-        $id=$request->get('id', null);
-      
+    public function actionIndex($id, $type)
+    {
         //Fetch the Products/Listings
         $productQuery = Product::find();
         $cardQuery = Listing::find();
@@ -52,25 +49,19 @@ class CatalogController extends \yii\web\Controller
             $cardQuery->joinWith('card')
                 ->andWhere(['cards.game_id' => $id])
                 ->andWhere(['listings.status' => 'active']);
+
         }
 
+        //Load the correct data according to the type
         if ($type === 'product') {
             $searchModel = new ProductSearch();
-            $queryParams = Yii::$app->request->queryParams;
-    
-                // add game id to the parameters
-                $queryParams['ProductSearch']['game_id'] = $id;
-    
-            $dataProvider = $searchModel->search($queryParams);
-        } elseif ($type === 'listing') {
+            $query = $productQuery;
+        }
+        elseif($type === 'listing'){
             $searchModel = new ListingSearch();
-            $queryParams = Yii::$app->request->queryParams;
-    
-                // add game id to the parameters
-                $queryParams['ListingSearch']['game_id'] = $id;
-    
-            $dataProvider = $searchModel->search($queryParams);
-        } else {
+            $query = $cardQuery;
+        }
+        else{
             return $this->redirect(['site/error']);
         }
 
@@ -80,14 +71,11 @@ class CatalogController extends \yii\web\Controller
                 'pageSize' => 20,
             ],
         ]);
-      
-        $productTypes = \yii\helpers\ArrayHelper::map(Product::find()->select(['type'])->distinct()->all(), 'type', 'type');      
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'type' => $type,
-            'productTypes' => $productTypes,
         ]);
     }
 
