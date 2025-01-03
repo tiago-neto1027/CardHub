@@ -243,7 +243,7 @@ class PaymentController extends \yii\web\Controller
 
                     $listing = Listing::findOne($transactionModel->listing_id);
                     if ($listing) {
-                        $listing->status = 'inactive';
+                        $listing->status = 'sold';
                         if (!$listing->save()) {
                             throw new \Exception('Failed to update listing status to inactive for listing ID: ' . $listing->id);
                         }

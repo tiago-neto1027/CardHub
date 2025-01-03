@@ -22,7 +22,7 @@ class m241104_192443_create_listings_table extends Migration
             'card_id' => $this->integer()->notNull(),
             'price' => $this->float()->notNull(),
             'condition' => "ENUM('Brand new', 'Very good', 'Good', 'Played', 'Poor', 'Damaged') NOT NULL",
-            'status' => "ENUM('active','inactive') NOT NULL DEFAULT 'active'",
+            'status' => "ENUM('active','inactive','sold') NOT NULL DEFAULT 'active'",
             'created_at' => $this->integer()->notNull(),
             'updated_at' => $this->integer()->notNull(),
         ], 'ENGINE=InnoDB');
