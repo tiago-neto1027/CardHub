@@ -10,7 +10,7 @@ use yii\widgets\ListView;
 /** @var common\models\ListingSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = 'My listings';
+$this->title = 'Sold listings';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="listing-index row">
@@ -43,4 +43,3 @@ $this->params['breadcrumbs'][] = $this->title;
         </p>
     </div>
 </div>
-

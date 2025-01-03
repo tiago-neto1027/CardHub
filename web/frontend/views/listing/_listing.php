@@ -11,6 +11,7 @@ use yii\helpers\Html;
             'class' => 'img-fluid w-100 p-1',
         ]); ?>
         <div class="product-action">
+            <?php if($isActiveView === true): ?>
             <?php //Shopping Cart // Trash
             if (Yii::$app->user->isGuest || $model->seller_id != Yii::$app->user->identity->id) {
                 echo Html::a('<i class="fa fa-shopping-cart"></i>',
@@ -35,7 +36,7 @@ use yii\helpers\Html;
                         'disabled' => true,
                         'title' => 'This item is already in your favorites',]);
             } ?>
-
+            <?php endif ?>
             <?= Html::a('<i class="fa fa-search"></i>',
                 ['/listing/view', 'id' => $model->id],
                 ['class' => 'btn btn-outline-dark btn-square']); ?>

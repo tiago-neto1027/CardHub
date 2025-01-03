@@ -249,7 +249,10 @@ class User extends ActiveRecord implements IdentityInterface
 
     public function getListings($id)
     {
-        return \common\models\Listing::find()->where(['seller_id' => $id])->count();
+        return \common\models\Listing::find()
+            ->where(['seller_id' => $id])
+            ->andWhere(['status' => 'active'])
+            ->count();
     }
 
     public function getCartItemCount()

@@ -40,7 +40,6 @@ class CatalogController extends \yii\web\Controller
 
     public function actionIndex($id, $type)
     {
-        //Fetch the Products/Listings
         $productQuery = Product::find();
         $cardQuery = Listing::find();
         if ($id !== null) {
@@ -49,10 +48,8 @@ class CatalogController extends \yii\web\Controller
             $cardQuery->joinWith('card')
                 ->andWhere(['cards.game_id' => $id])
                 ->andWhere(['listings.status' => 'active']);
-
         }
 
-        //Load the correct data according to the type
         if ($type === 'product') {
             $searchModel = new ProductSearch();
             $query = $productQuery;
@@ -76,9 +73,10 @@ class CatalogController extends \yii\web\Controller
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'type' => $type,
+            'isActiveView' => true,
         ]);
     }
-
+  
     /**
      * Displays a single Product model.
      */
