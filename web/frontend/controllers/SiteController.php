@@ -2,6 +2,7 @@
 
 namespace frontend\controllers;
 
+use common\models\User;
 use frontend\models\ResendVerificationEmailForm;
 use frontend\models\VerifyEmailForm;
 use Yii;
@@ -290,5 +291,32 @@ class SiteController extends Controller
         return $this->render('resendVerificationEmail', [
             'model' => $model
         ]);
+    }
+
+    public function actionSellerForm($id)
+    {
+        return $this->render('sellerForm', [
+            'id' => $id,
+        ]);
+    }
+
+    public function actionBecomeSeller($id)
+    {
+        $user = User::findOne($id);
+        if ($user->getRole() == 'seller') {
+            Yii::$app->session->setFlash('info', 'You are already a seller.');
+            return $this->redirect(['profile']);
+        }
+
+        if($user->getRole() == 'buyer') {
+            $user->setRole($id,'seller');
+
+            if ($user->save()) {
+                Yii::$app->session->setFlash('success', 'You are now a seller!');
+            } else {
+                Yii::$app->session->setFlash('error', 'An error occurred while updating your role.');
+            }
+        }
+        return $this->redirect(\yii\helpers\Url::home());
     }
 }
