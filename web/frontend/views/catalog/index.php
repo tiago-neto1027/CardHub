@@ -105,13 +105,17 @@ use function PHPSTORM_META\type;
                                 echo ListView::widget([
                                     'dataProvider' => $dataProvider,
                                     'itemOptions' => ['class' => 'item col-lg-2 col-md-4 col-sm-6 pb-1'],
-                                    'itemView' => '../listing/_listing',
+                                    'itemView' => function ($model, $key, $index, $widget) use ($isActiveView) {
+                                        return $this->render('../listing/_listing', [
+                                            'model' => $model,
+                                            'isActiveView' => $isActiveView,
+                                        ]);
+                                    },
                                     'layout' => "<div class='row g-3'>{items}</div>\n{pager}",
-                                    //pager options
                                     'pager' => [
                                         'class' => \yii\bootstrap5\LinkPager::class,
                                         'options' => [
-                                            'class' => 'pagination justify-content-center ',
+                                            'class' => 'pagination justify-content-center',
                                         ],
                                         'linkOptions' => [
                                             'class' => 'btn rounded bg-primary text-dark mr-1',
@@ -119,10 +123,12 @@ use function PHPSTORM_META\type;
                                         'prevPageLabel' => '<',
                                         'nextPageLabel' => '>',
                                         'maxButtonCount' => 5,
-                                        'pagination' => ['params' => ['main-page' => true], 
+                                        'pagination' => [
+                                            'params' => ['main-page' => true],
                                         ],
                                     ],
                                 ]);
+
                             }
                             elseif($type === 'product')
                             {

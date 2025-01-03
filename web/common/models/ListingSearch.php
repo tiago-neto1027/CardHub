@@ -43,25 +43,16 @@ class ListingSearch extends Listing
     {
         $query = Listing::find();
 
-        // add conditions that should always apply here
-
-        $dataProvider = new ActiveDataProvider([
-            'query' => $query,
-        ]);
-
         $this->load($params);
-
-        if (!$this->validate()) {
-            // uncomment the following line if you do not want to return any records when validation fails
-            // $query->where('0=1');
-            return $dataProvider;
-        }
 
         if (isset($params['seller_id'])) {
             $query->andWhere(['seller_id' => $params['seller_id']]);
         }
 
-        // grid filtering conditions
+        if (isset($params['status'])) {
+            $query->andWhere(['status' => $params['status']]);
+        }
+
         $query->andFilterWhere([
             'id' => $this->id,
             'seller_id' => $this->seller_id,
@@ -71,9 +62,23 @@ class ListingSearch extends Listing
             'updated_at' => $this->updated_at,
         ]);
 
-        $query->andFilterWhere(['like', 'condition', $this->condition])
-            ->andFilterWhere(['like', 'status', $this->status]);
+        $query->andFilterWhere(['like', 'condition', $this->condition]);
 
-        return $dataProvider;
+        if (!$this->validate()) {
+            return new ActiveDataProvider([
+                'query' => $query,
+                'pagination' => [
+                    'pageSize' => 20,
+                ],
+            ]);
+        }
+
+        return new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => [
+                'pageSize' => 20,
+            ],
+        ]);
     }
+
 }

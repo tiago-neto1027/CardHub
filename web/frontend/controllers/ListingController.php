@@ -68,13 +68,52 @@ class ListingController extends Controller
         $searchModel = new ListingSearch();
         $dataProvider = $searchModel->search(array_merge(
             $this->request->queryParams,
-            ['seller_id' => Yii::$app->user->id]
+            [
+                'seller_id' => Yii::$app->user->id,
+                'status' => 'active'
+            ]
         ));
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,
+            'isActiveView' => true,
         ]);
     }
+
+    public function actionCanceled()
+    {
+        $searchModel = new ListingSearch();
+        $dataProvider = $searchModel->search(array_merge(
+            $this->request->queryParams,
+            [
+                'seller_id' => Yii::$app->user->id,
+                'status' => 'inactive'
+            ]
+        ));
+
+        return $this->render('canceled', [
+            'dataProvider' => $dataProvider,
+            'isActiveView' => false,
+        ]);
+    }
+
+    public function actionSold()
+    {
+        $searchModel = new ListingSearch();
+        $dataProvider = $searchModel->search(array_merge(
+            $this->request->queryParams,
+            [
+                'seller_id' => Yii::$app->user->id,
+                'status' => 'sold'
+            ]
+        ));
+
+        return $this->render('sold', [
+            'dataProvider' => $dataProvider,
+            'isActiveView' => false,
+        ]);
+    }
+
 
     /**
      * Creates a new Listing model.
