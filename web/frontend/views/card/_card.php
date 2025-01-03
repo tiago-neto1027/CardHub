@@ -13,7 +13,7 @@ use yii\helpers\Url;
                 <div class="col-md-4 d-flex align-items-stretch p-0">
                     <?= Html::img($model->card->image_url, [
                         'alt' => $model->card->name,
-                        'class' => 'img-fluid rounded-start card-img h-100 w-100 object-cover',
+                        'class' => 'img-fluid card-img w-100 object-cover',
                     ]); ?>
                 </div>
 
@@ -30,7 +30,7 @@ use yii\helpers\Url;
                                 '<i class="fas fa-heart"></i> Remove', // Heart icon and text
                                 ['remove', 'id' => $model->card->id],
                                 [
-                                    'class' => 'btn btn-warning btn-sm', // Yellow button color
+                                    'class' => 'btn border border-primary bg-light text-primary btn-sm', // Yellow button color
                                     'title' => 'Remove from cart', // Tooltip text
                                     'data-toggle' => 'tooltip', // Enable Bootstrap tooltip
                                 ]
@@ -40,7 +40,7 @@ use yii\helpers\Url;
                             <?= Html::a(
                                 'Items for Sale', // Button text
                                 ['card/view', 'id' => $model->card->id],
-                                ['class' => 'btn btn-info btn-sm text-light'] // Styling for View button
+                                ['class' => 'btn bg-primary btn-sm text-light'] // Styling for View button
                             ) ?>
                         </div>
                     </div>

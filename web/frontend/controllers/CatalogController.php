@@ -4,6 +4,7 @@ namespace app\controllers;
 namespace frontend\controllers;
 
 use \common\models\Product;
+use Yii;
 use \common\models\Card;
 use common\models\ListingSearch;
 use \common\models\ProductSearch;
@@ -37,8 +38,11 @@ class CatalogController extends \yii\web\Controller
         );
     }
 
-    public function actionIndex($id, $type)
+    public function actionIndex($type)
     {   
+       $request = \Yii::$app->request;
+        $id=$request->get('id', null);
+      
         //Fetch the Products/Listings
         $productQuery = Product::find();
         $cardQuery = Listing::find();
@@ -48,19 +52,25 @@ class CatalogController extends \yii\web\Controller
             $cardQuery->joinWith('card')
                 ->andWhere(['cards.game_id' => $id])
                 ->andWhere(['listings.status' => 'active']);
-
         }
 
-        //Load the correct data according to the type
         if ($type === 'product') {
             $searchModel = new ProductSearch();
-            $query = $productQuery;
-        }
-        elseif($type === 'listing'){
+            $queryParams = Yii::$app->request->queryParams;
+    
+                // add game id to the parameters
+                $queryParams['ProductSearch']['game_id'] = $id;
+    
+            $dataProvider = $searchModel->search($queryParams);
+        } elseif ($type === 'listing') {
             $searchModel = new ListingSearch();
-            $query = $cardQuery;
-        }
-        else{
+            $queryParams = Yii::$app->request->queryParams;
+    
+                // add game id to the parameters
+                $queryParams['ListingSearch']['game_id'] = $id;
+    
+            $dataProvider = $searchModel->search($queryParams);
+        } else {
             return $this->redirect(['site/error']);
         }
 
@@ -70,11 +80,14 @@ class CatalogController extends \yii\web\Controller
                 'pageSize' => 20,
             ],
         ]);
+      
+        $productTypes = \yii\helpers\ArrayHelper::map(Product::find()->select(['type'])->distinct()->all(), 'type', 'type');      
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'type' => $type,
+            'productTypes' => $productTypes,
         ]);
     }
 

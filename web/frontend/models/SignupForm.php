@@ -51,7 +51,7 @@ class SignupForm extends Model
             $user->email = $this->email;
             $user->setPassword($this->password);
             $user->generateAuthKey();
-            //$user->status = 10;
+            $user->status = 9;
 
             if ($user->save()) {
                 $auth = Yii::$app->authManager;
@@ -61,11 +61,25 @@ class SignupForm extends Model
                     $auth->assign($buyerRole, $user->getId());
                 }
 
+                $this->sendVerificationEmail($user);
+
                 return $user;
             }
         }
 
         return null;
+    }
+
+    private function sendVerificationEmail($user)
+    {
+        $verifyLink = Yii::$app->urlManager->createAbsoluteUrl(['site/verify', 'token' => $user->auth_key]);
+
+        return Yii::$app->mailer->compose()
+            ->setFrom('automail.cardhub@gmail.com')
+            ->setTo($user->email)
+            ->setSubject('Activate your account')
+            ->setTextBody("Click the link below to activate your account:\n" . $verifyLink)
+            ->send();
     }
 
     /**

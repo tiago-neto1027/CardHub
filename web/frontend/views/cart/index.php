@@ -16,12 +16,12 @@ if (empty($cartItems)) {
     <table class="table">
         <thead class="table-info">
         <tr class="fs-4 text-center">
-            <th class="col-2">Image</th>
-            <th class="col-3">Name</th>
-            <th class="col-1">Quantity</th>
-            <th class="col-1">Price</th>
-            <th class="col-1">Total</th>
-            <th class="col-2">Actions</th>
+            <th class="col-2 bg-primary">Image</th>
+            <th class="col-3 bg-primary">Name</th>
+            <th class="col-1 bg-primary">Quantity</th>
+            <th class="col-1 bg-primary">Price</th>
+            <th class="col-1 bg-primary">Total</th>
+            <th class="col-2 bg-primary">Actions</th>
         </tr>
         </thead>
         <tbody>
@@ -42,9 +42,9 @@ if (empty($cartItems)) {
                     <?php if ($item['type'] === 'product'): ?>
                         <td class="col-1 align-middle">
                             <div class="d-flex align-items-center justify-content-center">
-                                <button class="btn btn-sm btn-danger me-2" onclick="updateQuantity(<?= $item['itemId'] ?>, 'decrement')">-</button>
+                                <button class="btn btn-sm bg-primary text-dark me-2" onclick="updateQuantity(<?= $item['itemId'] ?>, 'decrement')">-</button>
                                 <span id="quantity-<?= $item['itemId'] ?>"><?= $item['quantity'] ?></span>
-                                <button class="btn btn-sm btn-success ms-2" onclick="updateQuantity(<?= $item['itemId'] ?>, 'increment')">+</button>
+                                <button class="btn btn-sm bg-primary text-dark ms-2" onclick="updateQuantity(<?= $item['itemId'] ?>, 'increment')">+</button>
                             </div>
                         </td>
                     <?php elseif ($item['type'] === 'listing'): ?>
@@ -73,7 +73,7 @@ if (empty($cartItems)) {
 </div>
 <div class="d-flex col-10 offset-1 justify-content-between">
     <?= Html::a('Clear Cart', ['cart/clear-cart'], [
-        'class' => 'btn btn-warning text-dark',
+        'class' => 'btn btn-lg bg-primary text-dark',
         'data-method' => 'post',
         'data-confirm' => 'Are you sure you want to clear the cart?',
     ]) ?>
@@ -88,7 +88,6 @@ if (empty($cartItems)) {
     function updateQuantity(itemId, action = null, quantity = null) {
         const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-        // Construct the URL with query parameters
         const url = new URL('<?= Url::to(['cart/update-quantity']) ?>', window.location.origin);
         url.searchParams.append('itemId', itemId);
         if (action) {
@@ -98,14 +97,13 @@ if (empty($cartItems)) {
             url.searchParams.append('quantity', quantity);
         }
 
-        // Perform the fetch request
         fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'X-CSRF-Token': csrfToken // Ensure csrfToken is defined
+                'X-CSRF-Token': csrfToken 
             },
-            body: JSON.stringify({})  // Empty body, as data is sent via URL query params
+            body: JSON.stringify({}) 
         })
             .then(response => {
                 if (!response.ok) {
