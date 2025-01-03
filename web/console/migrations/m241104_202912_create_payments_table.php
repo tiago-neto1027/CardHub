@@ -19,7 +19,7 @@ class m241104_202912_create_payments_table extends Migration
             'id' => $this->primaryKey(),
             'user_id' => $this->integer()->notNull(),
             'payment_method' => "ENUM('MbWay','PayPal') NOT NULL",
-            'status' => "ENUM('Pending', 'Completed') NOT NULL DEFAULT 'Pending'",
+            'status' => "ENUM('Pending','Canceled', 'Completed') NOT NULL DEFAULT 'Pending'",
             'total' => $this->float()->notNull(),
             'date' => $this->timestamp()->notNull()->defaultExpression('CURRENT_TIMESTAMP'),
         ], 'ENGINE=InnoDB');

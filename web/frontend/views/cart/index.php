@@ -78,8 +78,8 @@ if (empty($cartItems)) {
         'data-confirm' => 'Are you sure you want to clear the cart?',
     ]) ?>
 
-    <?= Html::a('Pay', ['cart/payment'], [
-        'class' => 'btn btn-lg bg-primary text-dark col-3',
+    <?= Html::a('Pay', ['payment/view'], [
+        'class' => 'btn btn-success text-light col-3',
         'data-method' => 'post',
     ]) ?>
 </div>
@@ -88,7 +88,6 @@ if (empty($cartItems)) {
     function updateQuantity(itemId, action = null, quantity = null) {
         const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-        // Construct the URL with query parameters
         const url = new URL('<?= Url::to(['cart/update-quantity']) ?>', window.location.origin);
         url.searchParams.append('itemId', itemId);
         if (action) {
@@ -98,14 +97,13 @@ if (empty($cartItems)) {
             url.searchParams.append('quantity', quantity);
         }
 
-        // Perform the fetch request
         fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'X-CSRF-Token': csrfToken // Ensure csrfToken is defined
+                'X-CSRF-Token': csrfToken 
             },
-            body: JSON.stringify({})  // Empty body, as data is sent via URL query params
+            body: JSON.stringify({}) 
         })
             .then(response => {
                 if (!response.ok) {

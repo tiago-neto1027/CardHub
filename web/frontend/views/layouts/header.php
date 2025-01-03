@@ -59,6 +59,12 @@ use yii\helpers\Url;
                         ['class' => 'btn d-flex']
                     );
                 } else {
+                    if(Yii::$app->user->can('buyer') && !(Yii::$app->user->can('seller'))){
+                        echo Html::tag('div',
+                            Html::a('Become a seller', ['/site/seller-form', 'id' => Yii::$app->user->id], ['class' => 'btn bg-primary text-dark btn-sm']),
+                            ['class' => 'btn d-flex']
+                        );
+                    }
                     echo Html::tag('div',
                         Html::a('My Account', ['/detail/details', 'id' => Yii::$app->user->id], ['class' => 'btn bg-primary text-dark btn-sm']),
                         ['class' => 'btn d-flex']

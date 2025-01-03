@@ -40,8 +40,19 @@ class CatalogController extends \yii\web\Controller
 
     public function actionIndex($type)
     {   
-        $request = \Yii::$app->request;
+       $request = \Yii::$app->request;
         $id=$request->get('id', null);
+      
+        //Fetch the Products/Listings
+        $productQuery = Product::find();
+        $cardQuery = Listing::find();
+        if ($id !== null) {
+            $productQuery->andWhere(['game_id' => $id])
+                ->andWhere(['>  ', 'stock', 0]);
+            $cardQuery->joinWith('card')
+                ->andWhere(['cards.game_id' => $id])
+                ->andWhere(['listings.status' => 'active']);
+        }
 
         if ($type === 'product') {
             $searchModel = new ProductSearch();
@@ -63,6 +74,13 @@ class CatalogController extends \yii\web\Controller
             return $this->redirect(['site/error']);
         }
 
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => [
+                'pageSize' => 20,
+            ],
+        ]);
+      
         $productTypes = \yii\helpers\ArrayHelper::map(Product::find()->select(['type'])->distinct()->all(), 'type', 'type');      
 
         return $this->render('index', [

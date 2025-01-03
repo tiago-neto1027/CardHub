@@ -191,7 +191,7 @@ class SiteController extends Controller
     {
         $model = new SignupForm();
         if ($model->load(Yii::$app->request->post()) && $model->signup()) {
-            Yii::$app->session->setFlash('success', 'Thank you for registration. Please check your inbox for verification email.');
+            Yii::$app->session->setFlash('success', 'Thank you for registration.');
             return $this->goHome();
         }
 
@@ -308,5 +308,32 @@ class SiteController extends Controller
         return $this->render('resendVerificationEmail', [
             'model' => $model
         ]);
+    }
+
+    public function actionSellerForm($id)
+    {
+        return $this->render('sellerForm', [
+            'id' => $id,
+        ]);
+    }
+
+    public function actionBecomeSeller($id)
+    {
+        $user = User::findOne($id);
+        if ($user->getRole() == 'seller') {
+            Yii::$app->session->setFlash('info', 'You are already a seller.');
+            return $this->redirect(['profile']);
+        }
+
+        if($user->getRole() == 'buyer') {
+            $user->setRole($id,'seller');
+
+            if ($user->save()) {
+                Yii::$app->session->setFlash('success', 'You are now a seller!');
+            } else {
+                Yii::$app->session->setFlash('error', 'An error occurred while updating your role.');
+            }
+        }
+        return $this->redirect(\yii\helpers\Url::home());
     }
 }

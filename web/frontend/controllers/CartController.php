@@ -2,6 +2,7 @@
 
 namespace frontend\controllers;
 
+use app\models\PaymentForm;
 use Yii;
 use yii\base\Model;
 use yii\helpers\Console;
@@ -38,13 +39,8 @@ class CartController extends Controller
 
     public function actionIndex()
     {
-        $cartKey = Yii::$app->user->isGuest
-            ? 'cart_guest_' . Yii::$app->session->id
-            : 'cart_' . Yii::$app->user->id;
-
-        $cartItems = Cart::getItems($cartKey);
-
-        $productIds = array_column($cartItems, 'itemId');
+        $cartKey = Cart::getCartKey();
+        $cartItems = Cart::getItems($cartKey) ?: [];
 
         $totalCost = Cart::getTotalCost();
 
@@ -77,13 +73,14 @@ class CartController extends Controller
 
         if ($type === 'listing') {
             if ($item->status === 'inactive') {
+                    Yii::$app->session->setFlash('error', 'Item not for sale');
+            } else {
                 if ($item->seller_id === Yii::$app->user->id) {
                     Yii::$app->session->setFlash('error', "You can't buy your own items.");
-                } else {
-                    Yii::$app->session->setFlash('error', 'Item not for sale');
                 }
-            } else {
-                Cart::addItemToCart($itemId, $item->card->name, $item->card->image_url, $item->price, $quantity, $type, 1);
+                else{
+                    Cart::addItemToCart($itemId, $item->card->name, $item->card->image_url, $item->price, $quantity, $type, 1);
+                }
             }
         }
 

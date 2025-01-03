@@ -63,9 +63,11 @@ class SignupForm extends Model
             if ($user->save()) {
                 $auth = Yii::$app->authManager;
 
-                $role = $auth->getRole($this->role);
+                $role = $auth->getRole('buyer');
                 if ($role) {
                     $auth->assign($role, $user->getId());
+                } else {
+                    throw new \Exception('Error');
                 }
 
                 return $user;
