@@ -2,6 +2,7 @@
 
 namespace frontend\controllers;
 
+use common\models\User;
 use frontend\models\ResendVerificationEmailForm;
 use frontend\models\VerifyEmailForm;
 use Yii;
@@ -198,6 +199,23 @@ class SiteController extends Controller
             'model' => $model,
         ]);
     }
+    
+    public function actionVerify($token)
+    {
+        $user = User::find()->where(['auth_key' => $token])->one();
+
+        if ($user) {
+            $user->status = 10;
+            $user->save();
+
+            Yii::$app->session->setFlash('success', 'Your account has been activated successfully!');
+            return $this->goHome();
+        }
+
+        Yii::$app->session->setFlash('error', 'Wrong or expired verification link.');
+        return $this->goHome();
+    }
+
 
     /**
      * Requests password reset.

@@ -68,7 +68,7 @@ use function PHPSTORM_META\type;
 
                         <?= 
                             $form->field($searchModel, 'type')->dropDownList(
-                                $productTypes, // Array of product types, e.g., ['type1' => 'Type 1', 'type2' => 'Type 2']
+                                $productTypes,
                                 [
                                     'prompt' => 'Select Product Type',
                                     'class' => 'dropdown-item border rounded border-dark text-primary bg-dark'
