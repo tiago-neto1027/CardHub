@@ -14,7 +14,7 @@ use yii\widgets\ActiveForm;
         <div class="card-body">
             <!-- Cart Items -->
             <ul class="list-group mb-4">
-                <?php foreach ($cartItems as $item): ?>
+                <?php foreach ($items as $item): ?>
                     <li class="list-group-item d-flex justify-content-between align-items-center">
                         <div>
                             <strong><?= Html::encode($item['name']) ?></strong><br>
@@ -25,7 +25,8 @@ use yii\widgets\ActiveForm;
                 <?php endforeach; ?>
             </ul>
 
-            <?php $form = ActiveForm::begin(['action' => ['payment/checkout']]); ?>
+            <?php $form = ActiveForm::begin(['action' =>
+                ['payment/checkout', 'invoice_id' => $invoice_id]]); ?>
             <div class="d-flex justify-content-between list-group-item">
                 <span>Total cost:</span>
                 <span><?= Yii::$app->formatter->asCurrency($totalCost, 'EUR') ?></span>

@@ -49,4 +49,30 @@ class Invoice extends \yii\db\ActiveRecord
             'date' => 'Date',
         ];
     }
+
+    public static function getInvoicesByUser($userId)
+    {
+        return self::find()->where(['client_id' => $userId])->all();
+    }
+
+    public function getPayment()
+    {
+        return $this->hasOne(Payment::class, ['id' => 'payment_id']);
+    }
+
+    public function getStatus()
+    {
+        return $this->payment ? $this->payment->status : null;
+    }
+
+    public function getTotal()
+    {
+        return $this->payment ? $this->payment->total : null;
+    }
+
+    public function getInvoiceLines()
+    {
+        return $this->hasMany(InvoiceLine::class, ['invoice_id' => 'id']);
+    }
+
 }

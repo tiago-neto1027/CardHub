@@ -79,7 +79,7 @@ class CardTransaction extends \yii\db\ActiveRecord
      */
     public function getInvoiceLines()
     {
-        return $this->hasOne(InvoiceLines::class, ['card_transaction_id' => 'id']);
+        return $this->hasOne(InvoiceLine::class, ['card_transaction_id' => 'id']);
     }
 
     /**
@@ -99,7 +99,7 @@ class CardTransaction extends \yii\db\ActiveRecord
      */
     public function getReports()
     {
-        return $this->hasOne(Reports::class, ['transaction_id' => 'id']);
+        return $this->hasOne(Report::class, ['transaction_id' => 'id']);
     }
 
     /**
@@ -109,7 +109,7 @@ class CardTransaction extends \yii\db\ActiveRecord
      */
     public function getReviews()
     {
-        return $this->hasOne(Reviews::class, ['transaction_id' => 'id']);
+        return $this->hasOne(Review::class, ['transaction_id' => 'id']);
     }
 
     /**

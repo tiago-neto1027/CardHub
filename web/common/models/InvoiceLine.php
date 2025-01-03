@@ -63,15 +63,7 @@ class InvoiceLine extends \yii\db\ActiveRecord
         ];
     }
 
-    /**
-     * Gets query for [[CardTransaction]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getCardTransaction()
-    {
-        return $this->hasOne(CardTransactions::class, ['id' => 'card_transaction_id']);
-    }
+
 
     /**
      * Gets query for [[Invoice]].
@@ -80,7 +72,7 @@ class InvoiceLine extends \yii\db\ActiveRecord
      */
     public function getInvoice()
     {
-        return $this->hasOne(Invoices::class, ['id' => 'invoice_id']);
+        return $this->hasOne(Invoice::class, ['id' => 'invoice_id']);
     }
 
     /**
@@ -88,8 +80,20 @@ class InvoiceLine extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
+
     public function getProductTransaction()
     {
-        return $this->hasOne(ProductTransactions::class, ['id' => 'product_transaction_id']);
+        return $this->hasOne(ProductTransaction::class, ['id' => 'product_transaction_id']);
     }
+
+    /**
+     * Gets query for [[CardTransaction]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCardTransaction()
+    {
+        return $this->hasOne(CardTransaction::class, ['id' => 'card_transaction_id']);
+    }
+
 }

@@ -2,6 +2,7 @@
 
 namespace frontend\controllers;
 
+use common\models\Invoice;
 use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -28,11 +29,11 @@ class DetailController extends Controller
             [
                 'access' => [
                     'class' => \yii\filters\AccessControl::class,
-                    'only' => ['index'],
+                    'only' => ['index','view'],
                     'rules' => [
                         [
                             'allow' => true,
-                            'actions' => ['index'],
+                            'actions' => ['index','view'],
                             'roles' => ['seller','buyer'],
                         ]
                     ],
@@ -56,8 +57,11 @@ class DetailController extends Controller
             return $this->goHome();
         }
         $user = User::findOne($id);
+        $invoices = Invoice::getInvoicesByUser($user->id);
+
         return $this->render('details', [
             'user' => $user,
+            'invoices' => $invoices,
         ]);
     }
 
