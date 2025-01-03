@@ -43,8 +43,12 @@ class CatalogController extends \yii\web\Controller
         $productQuery = Product::find();
         $cardQuery = Listing::find();
         if ($id !== null) {
-            $productQuery->andWhere(['game_id' => $id]); 
-            $cardQuery->joinWith('card')->andWhere(['cards.game_id' => $id]);
+            $productQuery->andWhere(['game_id' => $id])
+                ->andWhere(['>  ', 'stock', 0]);
+            $cardQuery->joinWith('card')
+                ->andWhere(['cards.game_id' => $id])
+                ->andWhere(['listings.status' => 'active']);
+
         }
 
         //Load the correct data according to the type
@@ -60,7 +64,6 @@ class CatalogController extends \yii\web\Controller
             return $this->redirect(['site/error']);
         }
 
-        //Load the DataProvider and Return with the right items
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
             'pagination' => [
