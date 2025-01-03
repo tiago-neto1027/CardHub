@@ -48,10 +48,8 @@ class CatalogController extends \yii\web\Controller
             $cardQuery->joinWith('card')
                 ->andWhere(['cards.game_id' => $id])
                 ->andWhere(['listings.status' => 'active']);
-
         }
 
-        //Load the correct data according to the type
         if ($type === 'product') {
             $searchModel = new ProductSearch();
             $query = $productQuery;
@@ -78,7 +76,7 @@ class CatalogController extends \yii\web\Controller
             'isActiveView' => true,
         ]);
     }
-
+  
     /**
      * Displays a single Product model.
      */
