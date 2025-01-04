@@ -2,6 +2,7 @@
 
 namespace frontend\controllers;
 
+use common\models\Card;
 use common\models\CardTransaction;
 use common\models\Invoice;
 use common\models\InvoiceLine;
@@ -9,6 +10,7 @@ use common\models\Listing;
 use common\models\Payment;
 use common\models\Product;
 use common\models\ProductTransaction;
+use common\models\User;
 use Yii;
 use yii\web\Controller;
 
@@ -183,6 +185,44 @@ class InvoiceController extends Controller
         }
     }
 
+    public function actionSoldView($id)
+    {
+        $listing = Listing::findOne($id);
 
+        if ($listing === null) {
+            throw new \yii\web\NotFoundHttpException('Listing not found.');
+        }
+
+        $cardTransaction = $listing->getCardTransaction()->one();
+
+        if (!$cardTransaction) {
+            throw new \yii\web\NotFoundHttpException('Card transaction not found.');
+        }
+
+        $invoice = $cardTransaction->getInvoice();
+
+        $payment = $invoice->getPayment()->one();
+
+        if ($payment === null) {
+            \Yii::error('No payment found for card_transaction_id: ' . $id, __METHOD__);
+            return null;
+        }
+
+        $item = [
+            'itemId' => $cardTransaction->listing_id,
+            'name' => $cardTransaction->listing->card->name,
+            'quantity' => 1,
+            'price' => $cardTransaction->listing->price,
+            'image' => $cardTransaction->listing->card->image_url,
+            'type' => 'Listing',
+            'buyer' => User::findOne($cardTransaction->buyer_id)
+        ];
+
+        return $this->render('soldView', [
+            'invoice' => $invoice,
+            'item' => $item,
+            'payment' => $payment,
+        ]);
+    }
 
 }

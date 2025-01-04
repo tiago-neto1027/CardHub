@@ -37,9 +37,15 @@ use yii\helpers\Html;
                         'title' => 'This item is already in your favorites',]);
             } ?>
             <?php endif ?>
-            <?= Html::a('<i class="fa fa-search"></i>',
-                ['/listing/view', 'id' => $model->id],
-                ['class' => 'btn btn-outline-dark btn-square']); ?>
+            <?php if($model->status === 'sold'): ?>
+                <?= Html::a('<i class="fa fa-search"></i>',
+                    ['/invoice/sold-view', 'id' => $model->id],
+                    ['class' => 'btn btn-outline-dark btn-square']); ?>
+            <?php else: ?>
+                <?= Html::a('<i class="fa fa-search"></i>',
+                    ['/listing/view', 'id' => $model->id],
+                    ['class' => 'btn btn-outline-dark btn-square']); ?>
+            <?php endif?>
         </div>
     </div>
     <div class="text-center py-4">

@@ -77,7 +77,7 @@ class CardTransaction extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getInvoiceLines()
+    public function getInvoiceLine()
     {
         return $this->hasOne(InvoiceLine::class, ['card_transaction_id' => 'id']);
     }
@@ -120,5 +120,21 @@ class CardTransaction extends \yii\db\ActiveRecord
     public function getSeller()
     {
         return $this->hasOne(User::class, ['id' => 'seller_id']);
+    }
+
+        public function getInvoice(){
+            $invoiceLine = $this->hasOne(InvoiceLine::class, ['card_transaction_id' => 'id'])->one();
+
+            if ($invoiceLine === null) {
+                \Yii::error('No InvoiceLine found');
+                return null;
+            }
+
+            $invoice = Invoice::find()->where(['id'=> $invoiceLine->invoice_id])->one();
+            if ($invoice === null) {
+                \Yii::error('No Invoice found');
+                return null;
+            }
+            return $invoice;
     }
 }

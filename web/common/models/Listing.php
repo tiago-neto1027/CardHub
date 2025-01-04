@@ -85,9 +85,9 @@ class Listing extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getCardTransactions()
+    public function getCardTransaction()
     {
-        return $this->hasMany(CardTransaction::class, ['listing_id' => 'id']);
+        return $this->hasOne(CardTransaction::class, ['listing_id' => 'id']);
     }
 
     /**
