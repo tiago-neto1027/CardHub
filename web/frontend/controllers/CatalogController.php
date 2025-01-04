@@ -3,6 +3,7 @@
 namespace app\controllers;
 namespace frontend\controllers;
 
+use common\models\Game;
 use \common\models\Product;
 use Yii;
 use \common\models\Card;
@@ -53,10 +54,13 @@ class CatalogController extends \yii\web\Controller
         if ($type === 'product') {
             $searchModel = new ProductSearch();
             $query = $productQuery;
+            $productTypes = \common\models\Product::getProductTypes();
         }
         elseif($type === 'listing'){
             $searchModel = new ListingSearch();
             $query = $cardQuery;
+            $productTypes = null;
+
         }
         else{
             return $this->redirect(['site/error']);
@@ -69,10 +73,14 @@ class CatalogController extends \yii\web\Controller
             ],
         ]);
 
+        $games = Game::getAllGames();
+
         return $this->render('index', [
+            'games' => $games,
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'type' => $type,
+            'productTypes' => $productTypes,
             'isActiveView' => true,
         ]);
     }

@@ -1,10 +1,12 @@
 <?php
 /** @var yii\web\View $this */
 
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use \common\models\Product;
 use yii\widgets\ListView;
+use yii\widgets\ActiveForm;
 
 use function PHPSTORM_META\type;
 ?>
@@ -43,54 +45,44 @@ use function PHPSTORM_META\type;
                     </div>
                 </div>
                 
-                <div class="filter-buttons border border-dark rounded mb-3" id="filter-buttons">
-                    <?php
-                    if ($games = \common\models\Game::getAllGames()):
-                        foreach ($games as $game) {
-                            echo Html::a($game->name, Url::current([
-                                'id' => $game->id]),
-                                ['class' => 'dropdown-item']);
-                        }
-                    endif; ?>
-                </div>
-                
-            </div>
-            <div>
-                <?php use yii\widgets\ActiveForm; ?>
-
-                <div class="search-form">
-                    <?php 
-                    if($type === 'product')
-                    {
-                            $form = ActiveForm::begin([
-                            'method' => 'get',
-                        ]); ?>
-
-                        <?= 
+                <div class="search-form" id="filter-buttons">
+                    <div>
+                        <?php $gameList = ArrayHelper::map($games, 'id', 'name'); ?>
+                        <?php $form = ActiveForm::begin(['method' => 'get',]); ?>
+                        <?=
+                        $form->field($searchModel, 'game')->dropDownList(
+                            $gameList,
+                            ['prompt' => 'Select Game',]
+                        )?>
+                        <?php ActiveForm::end(); ?>
+                    </div>
+                    <div>
+                        <?php
+                        if($type === 'product')
+                        {
+                            $form = ActiveForm::begin(['method' => 'get',]); ?>
+                            <?=
                             $form->field($searchModel, 'type')->dropDownList(
                                 $productTypes,
-                                [
-                                    'prompt' => 'Select Product Type',
-                                    'class' => 'dropdown-item border rounded border-dark text-primary bg-dark'
-                                ],
-                            ) 
+                                ['prompt' => 'Select Product Type',]
+                            )?>
+                            <?= $form->field($searchModel, 'name')->textInput(['placeholder' => 'Search by name']) ?>
+
+                            <div class="form-group">
+                                <?= \yii\helpers\Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
+                            </div>
+
+                            <?php ActiveForm::end();
+
+                        }elseif($type === 'listing'){
+                            $form = ActiveForm::begin([
+                                'method' => 'get',
+                            ]); ?>
+
+                            <?php ActiveForm::end();
+                        }
                         ?>
-                        <?= $form->field($searchModel, 'name')->textInput(['placeholder' => 'Search by name']) ?>
-
-                        <div class="form-group">
-                            <?= \yii\helpers\Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
-                        </div>
-
-                        <?php ActiveForm::end(); 
-
-                    }elseif($type === 'listing'){
-                        $form = ActiveForm::begin([
-                            'method' => 'get',
-                        ]); ?>
-
-                        <?php ActiveForm::end();
-                    }
-                    ?>  
+                    </div>
                 </div>
             </div>
         </div>

@@ -97,9 +97,9 @@ class Product extends \yii\db\ActiveRecord
 
     public static function getProductTypes(){
     return self::find()
-               ->select('type')   // Select only the 'type' column
-               ->distinct()        // Ensure we only get unique product types
-               ->all();            // Get the result as an array of product types
-  }
-
+               ->select('type')
+               ->distinct()
+               ->column();
+    }
 }
+

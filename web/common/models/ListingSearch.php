@@ -5,19 +5,21 @@ namespace common\models;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use common\models\Listing;
+use common\models\Game;
 
 /**
  * ListingSearch represents the model behind the search form of `common\models\Listing`.
  */
 class ListingSearch extends Listing
 {
+    public $game;
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
         return [
-            [['id', 'seller_id', 'card_id'], 'integer'],
+            [['id', 'seller_id', 'card_id', 'game'], 'integer'],
             [['price'], 'number'],
             [['condition', 'status', 'created_at', 'updated_at'], 'safe'],
         ];
