@@ -132,7 +132,7 @@ class PaymentController extends \yii\web\Controller
                 $payment->payment_method = $model->payment_method;
                 $payment->total = $totalCost;
                 $payment->status = 'pending';
-                $payment->date = time();
+                $payment->date = date('Y-m-d H:i:s');
 
                 if (!$payment->save()) {
                     throw new \Exception('Failed to create payment.');
@@ -141,7 +141,7 @@ class PaymentController extends \yii\web\Controller
                 $invoice = new Invoice();
                 $invoice->payment_id = $payment->id;
                 $invoice->client_id = $userId;
-                $invoice->date = time();
+                $invoice->date = date('Y-m-d H:i:s');
                 if (!$invoice->save()) {
                     throw new \Exception('Failed to create invoice.');
                 }
@@ -151,7 +151,7 @@ class PaymentController extends \yii\web\Controller
                         $transactionModel = new ProductTransaction();
                         $transactionModel->buyer_id = $userId;
                         $transactionModel->product_id = $item['itemId'];
-                        $transactionModel->date = time();
+                        $transactionModel->date = date('Y-m-d H:i:s');
                         $transactionModel->status = 'pending';
                     }
                     if ($item['type'] === 'listing') {
@@ -160,7 +160,7 @@ class PaymentController extends \yii\web\Controller
                         $transactionModel->seller_id = $product->seller_id;
                         $transactionModel->buyer_id = $userId;
                         $transactionModel->listing_id = $item['itemId'];
-                        $transactionModel->date = time();
+                        $transactionModel->date = date('Y-m-d H:i:s');
                         $transactionModel->status = 'pending';
                     }
 
