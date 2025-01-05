@@ -22,7 +22,8 @@
         "yiisoft/yii2-swiftmailer": "2.1",
         "sendgrid/sendgrid": "^8.1",
         "kartik-v/yii2-widget-select2": "^2.2",
-        "yiisoft/yii2-jui": "^2.0"
+        "yiisoft/yii2-jui": "^2.0",
+        "mpdf/mpdf": "^8.2"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",

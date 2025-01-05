@@ -13,6 +13,7 @@ use common\models\ProductTransaction;
 use common\models\User;
 use Yii;
 use yii\web\Controller;
+use mPDF;
 
 class InvoiceController extends Controller
 {
@@ -225,4 +226,56 @@ class InvoiceController extends Controller
         ]);
     }
 
+    public function actionDownloadPdf($id)
+    {
+        $invoice = Invoice::findOne($id);
+
+        if ($invoice === null) {
+            throw new \yii\web\NotFoundHttpException('Invoice not found.');
+        }
+
+        $invoiceLines = InvoiceLine::find()
+            ->where(['invoice_id' => $invoice->id])
+            ->all();
+
+        $payment = $invoice->getPayment()->one();
+
+        foreach ($invoiceLines as $invoiceLine) {
+            if ($invoiceLine->product_transaction_id) {
+                $productTransaction = ProductTransaction::findOne($invoiceLine->product_transaction_id);
+                if ($productTransaction) {
+                    $item = [
+                        'itemId' => $productTransaction->product_id,
+                        'name' => $productTransaction->product->name,
+                        'quantity' => $invoiceLine->quantity,
+                        'price' => $productTransaction->product->price,
+                    ];
+                    $items[] = $item;
+                }
+            } elseif ($invoiceLine->card_transaction_id) {
+                $cardTransaction = CardTransaction::findOne($invoiceLine->card_transaction_id);
+                if ($cardTransaction) {
+                    $item = [
+                        'itemId' => $cardTransaction->listing_id,
+                        'name' => $cardTransaction->listing->card->name,
+                        'quantity' => 1,
+                        'price' => $cardTransaction->listing->price,
+                    ];
+                    $items[] = $item;
+                }
+            }
+        }
+
+        $content = $this->renderPartial('invoice-pdf', [
+            'invoice' => $invoice,
+            'items' => $items,
+            'payment' => $payment,
+        ]);
+
+        $mpdf = new \Mpdf\Mpdf();
+
+        $mpdf->WriteHTML($content);
+
+        return $mpdf->Output('invoice_' . $id . '.pdf', 'I');
+    }
 }

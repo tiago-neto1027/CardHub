@@ -91,6 +91,13 @@ $this->title = 'MyAccount';
                                             'data-confirm' => 'Are you sure you want to cancel this order?',
                                             'data-method' => 'post'
                                         ]) ?>
+                                    <?php elseif($invoice->status === 'Completed'): ?>
+                                        <?= Html::a('Download PDF', ['/invoice/download-pdf', 'id' => $invoice->id], [
+                                            'class' => 'btn btn-success btn-sm rounded',
+                                            'role' => 'button',
+                                            'data-method' => 'post',
+                                            'data-params' => ['id' => $invoice->id]
+                                        ]) ?>
                                     <?php endif; ?>
                                 </div>
                             </td>
