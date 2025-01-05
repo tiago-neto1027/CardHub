@@ -41,6 +41,6 @@ class ModuleAPI extends \yii\base\Module
         if ($user && $user->validatePassword($password)) {
             return $user;
         }
-        throw new \yii\web\ForbiddenHttpException('No authentication'); //403
+        throw new \yii\web\ForbiddenHttpException('No authentication');
     }
 }

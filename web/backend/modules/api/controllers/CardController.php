@@ -7,6 +7,7 @@ use common\models\Listing;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\rest\ActiveController;
+use yii\web\ForbiddenHttpException;
 use yii\web\Response;
 
 class CardController extends BaseActiveController
@@ -17,6 +18,8 @@ class CardController extends BaseActiveController
     public function actions()
     {
         $actions = parent::actions();
+
+        unset($actions['create'], $actions['update'], $actions['delete']);
 
         $actions['index']['prepareDataProvider'] = [$this, 'prepareDataProvider'];
 
@@ -32,5 +35,20 @@ class CardController extends BaseActiveController
         $count = Listing::find()->where(['card_id' => $id])->count();
         Yii::$app->response->format = Response::FORMAT_JSON;
         return ['listingCount' => $count];
+    }
+
+    public function actionCreate()
+    {
+        throw new ForbiddenHttpException('Create action is disabled.');
+    }
+
+    public function actionUpdate($id)
+    {
+        throw new ForbiddenHttpException('Update action is disabled.');
+    }
+
+    public function actionDelete($id)
+    {
+        throw new ForbiddenHttpException('Delete action is disabled.');
     }
 }
