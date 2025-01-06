@@ -60,22 +60,24 @@ class SignupForm extends Model
             $user->generateAuthKey();
             $user->status = 10;
 
+            $rolename = $this->role ?: 'buyer';
+
             if ($user->save()) {
                 $auth = Yii::$app->authManager;
 
-                $role = $auth->getRole('buyer');
+                $role = $auth->getRole($rolename);
                 if ($role) {
                     $auth->assign($role, $user->getId());
                 } else {
-                    throw new \Exception('Error');
+                    throw new \Exception('Error: Role not found.');
                 }
 
                 return $user;
             }
         }
-
         return null;
     }
+
 
     public function update($userId)
     {
