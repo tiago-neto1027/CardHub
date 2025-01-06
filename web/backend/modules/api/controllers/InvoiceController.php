@@ -113,11 +113,58 @@ class InvoiceController extends BaseController{
                             }
                         }
                     }
+
+                    if ($line->card_transaction_id) {
+                        $cardTransaction = CardTransaction::findOne($line->card_transaction_id);
+                        if ($cardTransaction) {
+                            $listing = Listing::findOne($cardTransaction->listing_id);
+                            if ($listing) {
+                                $listing->status = 'sold';
+                                if (!$listing->save()) {
+                                    return [
+                                        'success' => false,
+                                        'message' => 'Error while updating listing status to sold.',
+                                        'errors' => $listing->errors,
+                                    ];
+                                }
+                            }
+                        }
+                    }
+                }
+
+                foreach ($invoice->invoiceLines as $line) {
+                    if ($line->product_transaction_id) {
+                        $productTransaction = ProductTransaction::findOne($line->product_transaction_id);
+                        if ($productTransaction) {
+                            $productTransaction->status = 'inactive';
+                            if (!$productTransaction->save()) {
+                                return [
+                                    'success' => false,
+                                    'message' => 'Error while updating product transaction status.',
+                                    'errors' => $productTransaction->errors,
+                                ];
+                            }
+                        }
+                    }
+
+                    if ($line->card_transaction_id) {
+                        $cardTransaction = CardTransaction::findOne($line->card_transaction_id);
+                        if ($cardTransaction) {
+                            $cardTransaction->status = 'inactive'
+                            if (!$cardTransaction->save()) {
+                                return [
+                                    'success' => false,
+                                    'message' => 'Error while updating card transaction status.',
+                                    'errors' => $cardTransaction->errors,
+                                ];
+                            }
+                        }
+                    }
                 }
 
                 return [
                     'success' => true,
-                    'message' => 'Payment status updated and stock updated successfully.',
+                    'message' => 'Payment status updated, stock and listing updated successfully.',
                 ];
             }
 
