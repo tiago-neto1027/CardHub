@@ -19,7 +19,7 @@ class Invoice extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'Invoices';
+        return 'invoices';
     }
 
     /**
