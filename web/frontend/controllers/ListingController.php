@@ -9,6 +9,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\jui\AutoComplete;
+use GuzzleHttp\Client;
 
 /**
  * ListingController implements the CRUD actions for Listing model.
@@ -128,6 +129,7 @@ class ListingController extends Controller
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
+                $this->notifyBackendForNewListing($model);
                 return $this->redirect(['index']);
             }
         } else {
@@ -137,6 +139,35 @@ class ListingController extends Controller
         return $this->render('create', [
             'model' => $model,
         ]);
+    }
+
+    private function notifyBackendForNewListing($listing)
+    {
+        $url = "http://cardhub/backend/web/api/listing/publish-new-listing";
+        $data = [
+            'listing_id' => $listing->id,
+            'card_id' => $listing->card->id,
+            'name' => $listing->card->name,
+            'price' => $listing->price,
+        ];
+
+        $client = new Client();
+
+        $response = $client->post($url, [
+            'json' => $data,
+        ]);
+
+        if ($response->getStatusCode() === 200) {
+            $responseData = json_decode($response->getBody(), true);
+
+            if (isset($responseData)) {
+                $listingId = $responseData;
+            } else {
+                throw new \yii\web\BadRequestHttpException('Listing ID not found in response.');
+            }
+        } else {
+            throw new \yii\web\BadRequestHttpException('Failed to publish new listing: ' . $response->getReasonPhrase());
+        }
     }
 
     public function actionCardList($term)
