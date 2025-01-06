@@ -155,7 +155,7 @@ class InvoiceController extends BaseController{
                         'buyer_id' => $this->user->id,
                         'product_id' => $item['itemId'],
                         'date' => date('Y-m-d H:i:s'),
-                        'status' => 'pending',
+                        'status' => 'active',
                     ]);
                 } elseif ($item['type'] === 'listing') {
                     $listing = Listing::findOne($item['itemId']);
@@ -167,7 +167,7 @@ class InvoiceController extends BaseController{
                         'buyer_id' => $this->user->id,
                         'listing_id' => $item['itemId'],
                         'date' => date('Y-m-d H:i:s'),
-                        'status' => 'pending',
+                        'status' => 'active',
                     ]);
                 }
 
