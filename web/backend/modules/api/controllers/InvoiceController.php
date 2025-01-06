@@ -83,10 +83,26 @@ class InvoiceController extends BaseController{
         $payment->status = $newStatus;
 
         if ($payment->save()) {
-            return [
-                'success' => true,
-                'message' => 'Payment status updated successfully.',
-            ];
+            if ($newStatus === 'completed') {
+                foreach ($invoice->invoiceLines as $line) {
+                    if ($line->product_transaction_id) {
+                        $productTransaction = ProductTransaction::findOne($line->product_transaction_id);
+                        if ($productTransaction) {
+                            $product = Product::findOne($productTransaction->product_id);
+                            if ($product) {
+                                $product->stock -= $line->quantity;
+                                if (!$product->save()) {
+                                    return [
+                                        'success' => false,
+                                        'message' => 'The product doesn\'t have enough stock',
+                                        'errors' => $product->errors,
+                                    ];
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         return [
