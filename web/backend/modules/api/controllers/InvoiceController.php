@@ -129,7 +129,7 @@ class InvoiceController extends BaseController{
                     $itemDetails = $this->getItemDetails($item);
                     return $sum + ($itemDetails['price'] * ($item['type'] === 'listing' ? 1 : $item['quantity']));
                 }, 0),
-                'status' => 'pending',
+                'status' => 'inactive',
                 'date' => date('Y-m-d H:i:s'),
             ]);
             if (!$payment->save()) {
@@ -155,7 +155,7 @@ class InvoiceController extends BaseController{
                         'buyer_id' => $this->user->id,
                         'product_id' => $item['itemId'],
                         'date' => date('Y-m-d H:i:s'),
-                        'status' => 'pending',
+                        'status' => 'inactive',
                     ]);
                 } elseif ($item['type'] === 'listing') {
                     $listing = Listing::findOne($item['itemId']);
@@ -167,7 +167,7 @@ class InvoiceController extends BaseController{
                         'buyer_id' => $this->user->id,
                         'listing_id' => $item['itemId'],
                         'date' => date('Y-m-d H:i:s'),
-                        'status' => 'pending',
+                        'status' => 'inactive',
                     ]);
                 }
 
