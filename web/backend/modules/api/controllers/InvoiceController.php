@@ -150,7 +150,7 @@ class InvoiceController extends BaseController{
                     if ($line->card_transaction_id) {
                         $cardTransaction = CardTransaction::findOne($line->card_transaction_id);
                         if ($cardTransaction) {
-                            $cardTransaction->status = 'inactive'
+                            $cardTransaction->status = 'inactive';
                             if (!$cardTransaction->save()) {
                                 return [
                                     'success' => false,
