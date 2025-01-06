@@ -59,11 +59,11 @@ class SignupForm extends Model
             $user->setPassword($this->password);
             $user->generateAuthKey();
             $user->status = 10;
-
+            $rolename=$this->role;
             if ($user->save()) {
                 $auth = Yii::$app->authManager;
 
-                $role = $auth->getRole('buyer');
+                $role = $auth->getRole($rolename);
                 if ($role) {
                     $auth->assign($role, $user->getId());
                 } else {
