@@ -12,7 +12,7 @@ use yii\helpers\Html;
         ]); ?>
         <div class="product-action">
             <?php //Shopping Cart // Trash
-            if ($model->seller_id != Yii::$app->user->identity->id) {
+            if (yii::$app->user->isGuest|| $model->seller_id != Yii::$app->user->identity->id) {
                 echo Html::a('<i class="fa fa-shopping-cart"></i>',
                     ['/cart/add-to-cart', 'itemId' => $model->id, 'type' => $model instanceof Listing ? 'listing' : 'product'],
                     ['class' => 'btn btn-outline-dark btn-square btn-bg-dark']);
