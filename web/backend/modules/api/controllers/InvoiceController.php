@@ -3,6 +3,10 @@
 namespace backend\modules\api\controllers;
 
 use backend\modules\api\controllers\BaseController;
+use common\models\CardTransaction;
+use common\models\Listing;
+use common\models\Product;
+use common\models\ProductTransaction;
 use common\models\User;
 use Yii;
 use yii\filters\auth\HttpBasicAuth;
@@ -92,4 +96,143 @@ class InvoiceController extends BaseController{
         ];
     }
 
+    public function actionCreate()
+    {
+        $postData = Yii::$app->request->post();
+
+        $items = $postData['items'] ?? [];
+        $paymentMethod = $postData['payment_method'] ?? null;
+
+        $validPaymentMethods = ['PayPal', 'MbWay'];
+        if (!in_array($paymentMethod, $validPaymentMethods)) {
+            return [
+                'success' => false,
+                'message' => 'Invalid payment method.',
+            ];
+        }
+
+        if (empty($items)) {
+            return [
+                'success' => false,
+                'message' => 'No items were sent to the invoice.',
+            ];
+        }
+
+        $transaction = Yii::$app->db->beginTransaction();
+        try {
+            //Creates payment
+            $payment = new Payment([
+                'user_id' => $this->user->id,
+                'payment_method' => $paymentMethod,
+                //might seem odd but it just calculates the sum of the price * quantity
+                'total' => array_reduce($items, function ($sum, $item) {
+                    $itemDetails = $this->getItemDetails($item);
+                    return $sum + ($itemDetails['price'] * ($item['type'] === 'listing' ? 1 : $item['quantity']));
+                }, 0),
+                'status' => 'pending',
+                'date' => date('Y-m-d H:i:s'),
+            ]);
+            if (!$payment->save()) {
+                throw new \Exception('Error saving payment.');
+            }
+
+            //Creates invoice
+            $invoice = new Invoice([
+                'payment_id' => $payment->id,
+                'client_id' => $this->user->id,
+                'date' => date('Y-m-d H:i:s'),
+            ]);
+            if (!$invoice->save()) {
+                throw new \Exception('Error saving invoice.');
+            }
+
+            //Creates invoice_lines
+            foreach ($items as $item) {
+                $transactionModel = null;
+
+                if ($item['type'] === 'product') {
+                    $transactionModel = new ProductTransaction([
+                        'buyer_id' => $this->user->id,
+                        'product_id' => $item['itemId'],
+                        'date' => date('Y-m-d H:i:s'),
+                        'status' => 'pending',
+                    ]);
+                } elseif ($item['type'] === 'listing') {
+                    $listing = Listing::findOne($item['itemId']);
+                    if (!$listing) {
+                        throw new \Exception('Listing not found for item: ' . json_encode($item));
+                    }
+                    $transactionModel = new CardTransaction([
+                        'seller_id' => $listing->seller_id,
+                        'buyer_id' => $this->user->id,
+                        'listing_id' => $item['itemId'],
+                        'date' => date('Y-m-d H:i:s'),
+                        'status' => 'pending',
+                    ]);
+                }
+
+                if ($transactionModel && !$transactionModel->save()) {
+                    throw new \Exception('Error saving transaction to item: ' . json_encode($item));
+                }
+
+                $invoiceLine = new InvoiceLine([
+                    'invoice_id' => $invoice->id,
+                    'price' => $this->getItemDetails($item)['price'] * ($item['type'] === 'listing' ? 1 : $item['quantity']),
+                    'quantity' => $item['type'] === 'listing' ? 1 : $item['quantity'],
+                    'product_name' => $this->getItemDetails($item)['name'],
+                    'product_transaction_id' => $transactionModel instanceof ProductTransaction ? $transactionModel->id : null,
+                    'card_transaction_id' => $transactionModel instanceof CardTransaction ? $transactionModel->id : null,
+                ]);
+
+                if (!$invoiceLine->save()) {
+                    throw new \Exception('Error saving invoice line to item: ' . json_encode($item));
+                }
+            }
+
+            $transaction->commit();
+
+            return [
+                'success' => true,
+                'message' => 'Invoice created successfully.',
+                'data' => [
+                    'invoice_id' => $invoice->id,
+                    'payment_id' => $payment->id,
+                    'total' => $payment->total,
+                    'items' => $items,
+                ],
+            ];
+        } catch (\Exception $e) {
+            $transaction->rollBack();
+
+            return [
+                'success' => false,
+                'message' => 'Error creating invoice: ' . $e->getMessage(),
+            ];
+        }
+    }
+
+    private function getItemDetails($item)
+    {
+        if ($item['type'] === 'product') {
+            $product = Product::findOne($item['itemId']);
+            if (!$product) {
+                throw new \Exception('Product not found for itemId: ' . $item['itemId']);
+            }
+            return [
+                'name' => $product->name,
+                'price' => $product->price,
+            ];
+        } elseif ($item['type'] === 'listing') {
+            $listing = Listing::findOne($item['itemId']);
+            if (!$listing) {
+                throw new \Exception('Listing not found for itemId: ' . $item['itemId']);
+            }
+            return [
+                'name' => $listing->card->name,
+                'price' => $listing->price,
+            ];
+        }
+
+        throw new \Exception('Invalid item type: ' . $item['type']);
+    }
 }
