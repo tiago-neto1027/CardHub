@@ -5,6 +5,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
+use common\models\Product;
 
 /** @var yii\web\View $this */
 /** @var common\models\CardSearch $searchModel */
@@ -13,11 +14,12 @@ use yii\grid\GridView;
 $this->title = 'Cards';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="card-index">
+<div class="product-index">
     <p>
-        <?php if (!Yii::$app->user->isGuest) {
+        <?php
+        if (!Yii::$app->user->isGuest) {
             if (Yii::$app->user->identity->getRole() == 'seller')
-                Html::a('Create Card', ['create'], ['class' => 'btn btn-success']);
+                Html::a('Create Product', ['create'], ['class' => 'btn btn-success']);
         } ?>
     </p>
 
@@ -39,7 +41,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'filter' => false,
             ],
             'name',
-            'rarity',
+            'type',
             'description',
             [
                 'attribute' => 'game_id',
@@ -61,10 +63,12 @@ $this->params['breadcrumbs'][] = $this->title;
                         ]);
                     },
                 ],
-                'urlCreator' => function ($action, Card $model, $key, $index, $column) {
+                'urlCreator' => function ($action, Product $model, $key, $index, $column) {
                     return Url::toRoute([$action, 'id' => $model->id]);
                 }
             ],
         ],
     ]); ?>
+
+
 </div>

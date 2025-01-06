@@ -88,7 +88,7 @@ $this->title = 'My Yii Application';
                 <div class="offer-text">
                     <h6 class="text-white text-uppercase">Browse our product</h6>
                     <h3 class="text-white mb-3">CATALOG!</h3>
-                    <a href="<?= Url::to(['/catalog/index?type=product'])?>" class="btn btn-primary">Shop Now</a>
+                    <a href="<?= Url::to(['/product/index'])?>" class="btn btn-primary">Browse</a>
                 </div>
             </div>
         </div>

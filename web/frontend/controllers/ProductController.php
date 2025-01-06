@@ -2,7 +2,9 @@
 
 namespace frontend\controllers;
 
+use common\models\CardSearch;
 use common\models\Product;
+use common\models\ProductSearch;
 use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -43,10 +45,16 @@ class ProductController extends Controller
      *
      * @return string
      */
-    /*public function actionIndex()
+    public function actionIndex()
     {
+        $searchModel = new ProductSearch();
+        $dataProvider = $searchModel->search($this->request->queryParams);
 
-    }*/
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
 
     public function actionView($id)
     {

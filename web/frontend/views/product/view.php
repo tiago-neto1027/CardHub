@@ -32,7 +32,7 @@ $this->title = $model->name;
 
             <div>
                 <?php
-                if (empty($model->stock)) {
+                if ($model->stock <= 0) {
                     ?>
                     <div class=" align-items-left">
                         <h5 class="text-secondary mb-4"><i class="text-primary bi bi-bag-x-fill me-2"></i>Not available
