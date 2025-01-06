@@ -6,6 +6,7 @@ use common\models\Card;
 use common\models\Listing;
 use Yii;
 use yii\data\ActiveDataProvider;
+use yii\filters\auth\HttpBasicAuth;
 use yii\rest\ActiveController;
 use yii\web\ForbiddenHttpException;
 use yii\web\Response;
