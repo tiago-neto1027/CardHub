@@ -7,6 +7,7 @@ use common\models\Listing;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\rest\ActiveController;
+use yii\web\ForbiddenHttpException;
 use yii\web\Response;
 
 class CardController extends BaseActiveController
@@ -42,6 +43,8 @@ class CardController extends BaseActiveController
     public function actions()
     {
         $actions = parent::actions();
+
+        unset($actions['create'], $actions['update'], $actions['delete']);
 
         $actions['index']['prepareDataProvider'] = [$this, 'prepareDataProvider'];
 

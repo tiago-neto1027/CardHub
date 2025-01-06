@@ -10,6 +10,9 @@ use Yii;
  * @property int $id
  * @property int $user_id
  * @property int $card_id
+ *
+ * @property Card $card
+ * @property User $user
  */
 class Favorite extends \yii\db\ActiveRecord
 {
@@ -27,7 +30,6 @@ class Favorite extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            // Assuming the table contains user_id and card_id, and both are required
             [['user_id', 'card_id'], 'required'],
             [['user_id', 'card_id'], 'integer'],
         ];
