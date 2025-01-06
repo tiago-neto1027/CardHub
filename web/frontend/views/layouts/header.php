@@ -160,7 +160,7 @@ use yii\helpers\Url;
                             <?php
                             foreach ($games as $game) {
                                 echo Html::a($game->name, Url::to(['/catalog/index',
-                                    'id' => $game->id, 'type' => 'listing']),
+                                    'game' => $game->name, 'type' => 'listing']),
                                     ['class' => 'dropdown-item']);
                             }
                             ?>
@@ -172,7 +172,7 @@ use yii\helpers\Url;
                             <?php
                             foreach ($games as $game) {
                                 echo Html::a($game->name, Url::to(['/catalog/index',
-                                    'id' => $game->id, 'type' => 'product']),
+                                    'game' => $game->name, 'type' => 'product']),
                                     ['class' => 'dropdown-item']);
                             }
                             ?>

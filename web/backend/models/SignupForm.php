@@ -62,6 +62,7 @@ class SignupForm extends Model
 
             $rolename = $this->role ?: 'buyer';
 
+
             if ($user->save()) {
                 $auth = Yii::$app->authManager;
 
@@ -71,7 +72,6 @@ class SignupForm extends Model
                 } else {
                     throw new \Exception('Error: Role not found.');
                 }
-
                 return $user;
             }
         }
