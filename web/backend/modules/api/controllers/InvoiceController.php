@@ -212,10 +212,10 @@ class InvoiceController extends BaseController{
                 'user_id' => $this->user->id,
                 'payment_method' => $paymentMethod,
                 //might seem odd but it just calculates the sum of the price * quantity
-                'total' => array_reduce($items, function ($sum, $item) {
+                'total' => round(array_reduce($items, function ($sum, $item) {
                     $itemDetails = $this->getItemDetails($item);
                     return $sum + ($itemDetails['price'] * ($item['type'] === 'listing' ? 1 : $item['quantity']));
-                }, 0),
+                }, 0), 2),
                 'status' => 'pending',
                 'date' => date('Y-m-d H:i:s'),
             ]);
