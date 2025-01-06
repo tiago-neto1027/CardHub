@@ -23,7 +23,10 @@
         "sendgrid/sendgrid": "^8.1",
         "kartik-v/yii2-widget-select2": "^2.2",
         "yiisoft/yii2-jui": "^2.0",
-        "mpdf/mpdf": "^8.2"
+        "mpdf/mpdf": "^8.2",
+        "bluerhinos/phpmqtt": "@dev",
+        "guzzlehttp/guzzle": "^7.9",
+      "ext-json": "*"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",

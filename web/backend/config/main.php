@@ -57,10 +57,17 @@ return [
             'rules' => [
                 ['class'=>'yii\rest\UrlRule', 'controller'=>'api/user'],
                 [
-                    'class'=>'yii\rest\UrlRule',
-                    'controller'=>'api/card',
-                    'extraPatterns'=>[
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'api/card',
+                    'extraPatterns' => [
                         'GET {id}/countlistings' => 'countlistings',
+                    ],
+                ],
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'api/listing',
+                    'extraPatterns' => [
+                        'POST {id}/publishnewlisting' => 'publishnewlisting',
                     ],
                 ],
                 ['class'=>'yii\rest\UrlRule', 'controller'=>'api/favorite'],
