@@ -14,31 +14,6 @@ class CardController extends BaseActiveController
 {
     public $modelClass = 'common\models\Card';
 
-    public function behaviors()
-    {
-        $behaviors = parent::behaviors();
-
-        // Enable authentication for all actions by default
-        $behaviors['authenticator'] = [
-            'class' => HttpBasicAuth::class,
-        ];
-
-        return $behaviors;
-    }
-
-    // This method will be used to allow access without authentication for 'countlistings' action
-    public function beforeAction($action)
-    {
-        // Skip authentication for the 'countlistings' action
-        if ($action->id === 'countlistings') {
-            return true;  // Allow access without authentication
-        }
-
-        // Otherwise, proceed with authentication for other actions
-        return parent::beforeAction($action);  // Default authentication behavior
-    }
-
-
     //Filter only active cards
     public function actions()
     {
@@ -56,10 +31,24 @@ class CardController extends BaseActiveController
         return new ActiveDataProvider(['query' => $query]);
     }
 
-    public function actionCountListings($id){
+    public function actionCountlistings($id){
         $count = Listing::find()->where(['card_id' => $id])->count();
         Yii::$app->response->format = Response::FORMAT_JSON;
         return ['listingCount' => $count];
     }
 
+    public function actionCreate()
+    {
+        throw new ForbiddenHttpException('Create action is disabled.');
+    }
+
+    public function actionUpdate($id)
+    {
+        throw new ForbiddenHttpException('Update action is disabled.');
+    }
+
+    public function actionDelete($id)
+    {
+        throw new ForbiddenHttpException('Delete action is disabled.');
+    }
 }

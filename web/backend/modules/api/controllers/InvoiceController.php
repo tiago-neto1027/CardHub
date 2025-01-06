@@ -83,6 +83,100 @@ class InvoiceController extends BaseController{
         $payment->status = $newStatus;
 
         if ($payment->save()) {
+            if ($newStatus === 'completed') {
+                foreach ($invoice->invoiceLines as $line) {
+                    if ($line->product_transaction_id) {
+                        $productTransaction = ProductTransaction::findOne($line->product_transaction_id);
+                        if ($productTransaction) {
+                            $product = Product::findOne($productTransaction->product_id);
+                            if ($product) {
+                                if ($product->stock < $line->quantity) {
+                                    return [
+                                        'success' => false,
+                                        'message' => 'The product doesn\'t have enough stock.',
+                                        'errors' => [
+                                            'product_id' => $product->id,
+                                            'available_stock' => $product->stock,
+                                            'required_quantity' => $line->quantity
+                                        ],
+                                    ];
+                                }
+
+                                $product->stock -= $line->quantity;
+                                if (!$product->save()) {
+                                    return [
+                                        'success' => false,
+                                        'message' => 'Error while updating product stock.',
+                                        'errors' => $product->errors,
+                                    ];
+                                }
+                            }
+                        }
+                    }
+
+                    if ($line->card_transaction_id) {
+                        $cardTransaction = CardTransaction::findOne($line->card_transaction_id);
+                        if ($cardTransaction) {
+                            $listing = Listing::findOne($cardTransaction->listing_id);
+                            if ($listing) {
+                                if ($listing->status != 'active')
+                                {
+                                    return[
+                                        'success' => false,
+                                        'message' => 'The chosen listing might be sold',
+                                        'errors' => $listing->errors,
+                                    ];
+                                }
+                                $listing->status = 'sold';
+                                
+                                if (!$listing->save()) {
+                                    return [
+                                        'success' => false,
+                                        'message' => 'Error while updating listing status to sold. Card might be already sold',
+                                        'errors' => $listing->errors,
+                                    ];
+                                }
+                            }
+                        }
+                    }
+                }
+
+                foreach ($invoice->invoiceLines as $line) {
+                    if ($line->product_transaction_id) {
+                        $productTransaction = ProductTransaction::findOne($line->product_transaction_id);
+                        if ($productTransaction) {
+                            $productTransaction->status = 'inactive';
+                            if (!$productTransaction->save()) {
+                                return [
+                                    'success' => false,
+                                    'message' => 'Error while updating product transaction status.',
+                                    'errors' => $productTransaction->errors,
+                                ];
+                            }
+                        }
+                    }
+
+                    if ($line->card_transaction_id) {
+                        $cardTransaction = CardTransaction::findOne($line->card_transaction_id);
+                        if ($cardTransaction) {
+                            $cardTransaction->status = 'inactive';
+                            if (!$cardTransaction->save()) {
+                                return [
+                                    'success' => false,
+                                    'message' => 'Error while updating card transaction status.',
+                                    'errors' => $cardTransaction->errors,
+                                ];
+                            }
+                        }
+                    }
+                }
+
+                return [
+                    'success' => true,
+                    'message' => 'Payment status updated, stock and listing updated successfully.',
+                ];
+            }
+
             return [
                 'success' => true,
                 'message' => 'Payment status updated successfully.',
@@ -118,6 +212,8 @@ class InvoiceController extends BaseController{
             ];
         }
 
+
+
         $transaction = Yii::$app->db->beginTransaction();
         try {
             //Creates payment
@@ -125,11 +221,11 @@ class InvoiceController extends BaseController{
                 'user_id' => $this->user->id,
                 'payment_method' => $paymentMethod,
                 //might seem odd but it just calculates the sum of the price * quantity
-                'total' => array_reduce($items, function ($sum, $item) {
+                'total' => round(array_reduce($items, function ($sum, $item) {
                     $itemDetails = $this->getItemDetails($item);
                     return $sum + ($itemDetails['price'] * ($item['type'] === 'listing' ? 1 : $item['quantity']));
-                }, 0),
-                'status' => 'inactive',
+                }, 0), 2),
+                'status' => 'pending',
                 'date' => date('Y-m-d H:i:s'),
             ]);
             if (!$payment->save()) {
@@ -151,23 +247,28 @@ class InvoiceController extends BaseController{
                 $transactionModel = null;
 
                 if ($item['type'] === 'product') {
+                    $product = Product::findOne($item['itemId']);
+                    if (!$product || $product->stock < $item['quantity']) {
+                        throw new \Exception('Insufficient stock for product: ' . $item['itemId']);
+                    }
+
                     $transactionModel = new ProductTransaction([
                         'buyer_id' => $this->user->id,
                         'product_id' => $item['itemId'],
                         'date' => date('Y-m-d H:i:s'),
-                        'status' => 'inactive',
+                        'status' => 'active',
                     ]);
                 } elseif ($item['type'] === 'listing') {
                     $listing = Listing::findOne($item['itemId']);
-                    if (!$listing) {
-                        throw new \Exception('Listing not found for item: ' . json_encode($item));
+                    if (!$listing || $listing->status !== 'active') {
+                        throw new \Exception('Listing is not active for item: ' . json_encode($item));
                     }
                     $transactionModel = new CardTransaction([
                         'seller_id' => $listing->seller_id,
                         'buyer_id' => $this->user->id,
                         'listing_id' => $item['itemId'],
                         'date' => date('Y-m-d H:i:s'),
-                        'status' => 'inactive',
+                        'status' => 'active',
                     ]);
                 }
 
