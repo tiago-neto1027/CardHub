@@ -69,7 +69,6 @@ class SignupForm extends Model
                 } else {
                     throw new \Exception('Error');
                 }
-
                 return $user;
             }
         }
