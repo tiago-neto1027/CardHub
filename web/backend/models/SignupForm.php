@@ -62,7 +62,6 @@ class SignupForm extends Model
 
             $rolename = $this->role ?: 'buyer';
 
-
             if ($user->save()) {
                 $auth = Yii::$app->authManager;
 
