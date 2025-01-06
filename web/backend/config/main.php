@@ -63,13 +63,6 @@ return [
                         'GET {id}/countlistings' => 'countlistings',
                     ],
                 ],
-                [
-                    'class' => 'yii\rest\UrlRule',
-                    'controller' => 'api/listing',
-                    'extraPatterns' => [
-                        'POST {id}/publishnewlisting' => 'publishnewlisting',
-                    ],
-                ],
                 ['class'=>'yii\rest\UrlRule', 'controller'=>'api/favorite'],
                 ['class'=>'yii\rest\UrlRule', 'controller'=>'api/game'],
                 ['class'=>'yii\rest\UrlRule', 'controller'=>'api/listing'],
