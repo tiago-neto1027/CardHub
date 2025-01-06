@@ -90,11 +90,23 @@ class InvoiceController extends BaseController{
                         if ($productTransaction) {
                             $product = Product::findOne($productTransaction->product_id);
                             if ($product) {
+                                if ($product->stock < $line->quantity) {
+                                    return [
+                                        'success' => false,
+                                        'message' => 'The product doesn\'t have enough stock.',
+                                        'errors' => [
+                                            'product_id' => $product->id,
+                                            'available_stock' => $product->stock,
+                                            'required_quantity' => $line->quantity
+                                        ],
+                                    ];
+                                }
+
                                 $product->stock -= $line->quantity;
                                 if (!$product->save()) {
                                     return [
                                         'success' => false,
-                                        'message' => 'The product doesn\'t have enough stock',
+                                        'message' => 'Error while updating product stock.',
                                         'errors' => $product->errors,
                                     ];
                                 }
@@ -102,7 +114,17 @@ class InvoiceController extends BaseController{
                         }
                     }
                 }
+
+                return [
+                    'success' => true,
+                    'message' => 'Payment status updated and stock updated successfully.',
+                ];
             }
+
+            return [
+                'success' => true,
+                'message' => 'Payment status updated successfully.',
+            ];
         }
 
         return [
