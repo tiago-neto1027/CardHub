@@ -6,6 +6,7 @@ use Bluerhinos\phpMQTT;
 use common\models\Favorite;
 use common\models\Listing;
 use common\models\User;
+use Exception;
 use Yii;
 use yii\rest\ActiveController;
 
@@ -30,6 +31,7 @@ class ListingController extends BaseActiveController
             ]);
         }
 
+        $successfullUsers = [];
         $failedUsers = [];
 
         foreach ($favorites as $favorite) {
@@ -42,8 +44,10 @@ class ListingController extends BaseActiveController
 
             try {
                 $this->publishNewListing($listing, $user->id);
+                    \Yii::info("Successfully notified user: {$user->username}", 'application');
+                    $successfullUsers[] = $user->username;
             } catch (\Exception $e) {
-                $failedUsers[] = $user->id;
+                $failedUsers[] = $user->username;
                 \Yii::error("Failed to notify user {$user->id}: {$e->getMessage()}", 'application');
             }
         }
@@ -51,13 +55,15 @@ class ListingController extends BaseActiveController
         return $this->asJson([
             'status' => 'success',
             'message' => 'Notifications sent.',
+            'successfullUsers' => $successfullUsers,
             'failedUsers' => $failedUsers,
         ]);
     }
 
     private function publishNewListing($listing, $user_id)
     {
-        $server = "localhost";
+
+        $server = "cardhub";
         $port = 1883;
         $username = "";
         $password = "";
@@ -66,21 +72,31 @@ class ListingController extends BaseActiveController
         $mqtt = new phpMQTT($server, $port, $client_id);
 
         if ($mqtt->connect(true, NULL, $username, $password)) {
-            $listing_data = [
-                'listing_id' => $listing->id,
-                'card_id' => $listing->card_id,
-                'name' => $listing->name,
-                'price' => $listing->price,
-            ];
+            \Yii::info("Successfully connected to MQTT broker.", 'application');
+            try {
+                \Yii::error("Attempting to publish message to topic new listing.", 'application');
 
-            $message = json_encode($listing_data);
+                $listing_data = [
+                    'listing_id' => $listing->id,
+                    'card_id' => $listing->card_id,
+                    'name' => $listing->card->name,
+                    'price' => $listing->price,
+                ];
 
-            $topic = "new_listing/{$user_id}";
-            $mqtt->publish($topic, $message, 0);
+                $message = json_encode($listing_data);
+                $topic = "new_listing";
+
+                $mqtt->publish($topic, $message, 0);
+                \Yii::info("Message published to topic {$topic}.", 'application');
+            } catch (\Exception $e) {
+                \Yii::error("Exception caught: " . $e->getMessage(), 'application');
+            }
 
             $mqtt->close();
         } else {
+            \Yii::error("Unable to connect to MQTT broker.", 'application');
             throw new \Exception("Unable to connect to MQTT broker.");
         }
     }
+
 }
