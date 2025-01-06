@@ -118,12 +118,12 @@ class InvoiceController extends BaseController{
                         $cardTransaction = CardTransaction::findOne($line->card_transaction_id);
                         if ($cardTransaction) {
                             $listing = Listing::findOne($cardTransaction->listing_id);
-                            if ($listing) {
+                            if ($listing && $listing->status !== 'active') {
                                 $listing->status = 'sold';
                                 if (!$listing->save()) {
                                     return [
                                         'success' => false,
-                                        'message' => 'Error while updating listing status to sold.',
+                                        'message' => 'Error while updating listing status to sold. Card might be already sold',
                                         'errors' => $listing->errors,
                                     ];
                                 }
@@ -203,6 +203,8 @@ class InvoiceController extends BaseController{
             ];
         }
 
+
+
         $transaction = Yii::$app->db->beginTransaction();
         try {
             //Creates payment
@@ -236,6 +238,11 @@ class InvoiceController extends BaseController{
                 $transactionModel = null;
 
                 if ($item['type'] === 'product') {
+                    $product = Product::findOne($item['itemId']);
+                    if (!$product || $product->stock < $item['quantity']) {
+                        throw new \Exception('Insufficient stock for product: ' . $item['itemId']);
+                    }
+
                     $transactionModel = new ProductTransaction([
                         'buyer_id' => $this->user->id,
                         'product_id' => $item['itemId'],
@@ -244,8 +251,8 @@ class InvoiceController extends BaseController{
                     ]);
                 } elseif ($item['type'] === 'listing') {
                     $listing = Listing::findOne($item['itemId']);
-                    if (!$listing) {
-                        throw new \Exception('Listing not found for item: ' . json_encode($item));
+                    if (!$listing || $listing->status !== 'active') {
+                        throw new \Exception('Listing is not active for item: ' . json_encode($item));
                     }
                     $transactionModel = new CardTransaction([
                         'seller_id' => $listing->seller_id,
