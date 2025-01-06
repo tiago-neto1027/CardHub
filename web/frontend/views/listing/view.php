@@ -24,6 +24,7 @@ $this->title = $model->card->name;
                     <h5 class="text-secondary"><?= nl2br(Html::encode($model->card->description)) ?></h5>
                 </div>
             <?php endif; ?>
+            <h3 class="text-primary mb-4">Card Condition: <?= $model->condition ?></h3>
             <h3 class="text-primary mb-4"><?= Yii::$app->formatter->asCurrency($model->price, 'EUR') ?></h3>
             <div>
                 <?php
