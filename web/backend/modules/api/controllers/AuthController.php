@@ -7,6 +7,7 @@ use Yii;
 use yii\filters\auth\HttpBasicAuth;
 use yii\rest\Controller;
 use yii\web\BadRequestHttpException;
+use yii\web\ConflictHttpException;
 use yii\web\UnauthorizedHttpException;
 
 class AuthController extends BaseController
@@ -17,7 +18,7 @@ class AuthController extends BaseController
 
         $behaviors['authenticator'] = [
             'class' => HttpBasicAuth::class,
-            'except' => ['login'],
+            'except' => ['login', 'signup'],
         ];
 
         return $behaviors;
@@ -63,5 +64,64 @@ class AuthController extends BaseController
             'status' => 200,
             'message' => 'Login successful',
         ];
+    }
+
+    public function actionSignup(){
+        $data = Yii::$app->request->post();
+
+        //Checks if there are missing parameters
+        if (empty($data['username']) || empty($data['password']) || empty($data['email'])) {
+            throw new BadRequestHttpException('Username, password, and email are required.');
+        }
+
+        //Checks if username or email are taken
+        if (User::findByUsername($data['username']) !== null) {
+            throw new ConflictHttpException('Username is already taken.');
+        }
+        if (User::findByEmail($data['email']) !== null) {
+            throw new ConflictHttpException('Email is already taken.');
+        }
+
+        //Creates the new user
+        $user = new User();
+        $user->username = $data['username'];
+        $user->email = $data['email'];
+        $user->setPassword($data['password']);
+        $user->generateAuthKey();
+        $user->status = User::STATUS_INACTIVE;
+        $user->generateEmailVerificationToken();
+
+        //Saves the user and sends email
+        if ($user->save()) {
+            if ($this->sendVerificationEmail($user)) {
+                return [
+                    'status' => 201,
+                    'message' => 'User created successfully. Please verify your email.',
+                ];
+            } else {
+                return [
+                    'status' => 500,
+                    'message' => 'User created, but failed to send verification email.',
+                ];
+            }
+        } else {
+            return [
+                'status' => 400,
+                'message' => 'Failed to create user.',
+                'errors' => $user->errors,
+            ];
+        }
+    }
+
+    private function sendVerificationEmail($user)
+    {
+        $verifyLink = Yii::$app->urlManager->createAbsoluteUrl(['site/verify', 'token' => $user->auth_key]);
+
+        return Yii::$app->mailer->compose()
+            ->setFrom('automail.cardhub@gmail.com')
+            ->setTo($user->email)
+            ->setSubject('Activate your account')
+            ->setTextBody("Click the link below to activate your account:\n" . $verifyLink)
+            ->send();
     }
 }

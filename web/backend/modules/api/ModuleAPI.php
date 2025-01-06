@@ -28,10 +28,12 @@ class ModuleAPI extends \yii\base\Module
     public function behaviors()
     {
         $behaviors = parent::behaviors();
-        $behaviors['authenticator'] = [
-            'class' => HttpBasicAuth::className(),
-            'auth' => [$this, 'auth']
-        ];
+        if (!in_array(\Yii::$app->controller->id, ['favorite', 'auth'/*, 'listing'*/])) {
+            $behaviors['authenticator'] = [
+                'class' => HttpBasicAuth::className(),
+                'auth' => [$this, 'auth']
+            ];
+        }
         return $behaviors;
     }
 
@@ -41,6 +43,6 @@ class ModuleAPI extends \yii\base\Module
         if ($user && $user->validatePassword($password)) {
             return $user;
         }
-        throw new \yii\web\ForbiddenHttpException('No authentication'); //403
+        throw new \yii\web\ForbiddenHttpException('No authentication');
     }
 }

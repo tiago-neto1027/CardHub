@@ -33,7 +33,7 @@ return [
         ],
         'authenticator' => [
             'class' => \yii\filters\auth\HttpBasicAuth::class,
-            'except' => ['auth/login'],
+            'except' => ['auth/login', 'auth/signup'],
         ],
         'session' => [
             // this is the name of the session cookie used for login on the backend
@@ -55,7 +55,6 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-                ['class'=>'yii\rest\UrlRule', 'controller'=>'api/user'],
                 [
                     'class'=>'yii\rest\UrlRule',
                     'controller'=>'api/card',
@@ -67,7 +66,7 @@ return [
                 ['class'=>'yii\rest\UrlRule', 'controller'=>'api/game'],
                 ['class'=>'yii\rest\UrlRule', 'controller'=>'api/listing'],
                 ['class'=>'yii\rest\UrlRule', 'controller'=>'api/product'],
-                ['class'=>'yii\rest\UrlRule', 'controller'=>'api/auth'],
+                ['class' => 'yii\rest\UrlRule', 'controller' => 'api/auth'],
             ],
         ],
         'view' => [
