@@ -39,15 +39,16 @@ class CatalogController extends \yii\web\Controller
         );
     }
 
-    public function actionIndex($id, $type)
+    public function actionIndex($game, $type)
     {
         $productQuery = Product::find();
         $cardQuery = Listing::find();
-        if ($id !== null) {
-            $productQuery->andWhere(['game_id' => $id])
+        $game_id = Game::findOne((['name'=>$game]));
+        if ($game !== null) {
+            $productQuery->andWhere(['game_id' => $game_id])
                 ->andWhere(['>  ', 'stock', 0]);
             $cardQuery->joinWith('card')
-                ->andWhere(['cards.game_id' => $id])
+                ->andWhere(['cards.game_id' => $game_id])
                 ->andWhere(['listings.status' => 'active']);
         }
 
