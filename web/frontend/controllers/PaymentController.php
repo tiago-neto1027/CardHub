@@ -155,7 +155,7 @@ class PaymentController extends \yii\web\Controller
                         $transactionModel->buyer_id = $userId;
                         $transactionModel->product_id = $item['itemId'];
                         $transactionModel->date = date('Y-m-d H:i:s');
-                        $transactionModel->status = 'pending';
+                        $transactionModel->status = 'inactive';
                     }
                     if ($item['type'] === 'listing') {
                         $product = Listing::findOne($item['itemId']);
@@ -164,7 +164,7 @@ class PaymentController extends \yii\web\Controller
                         $transactionModel->buyer_id = $userId;
                         $transactionModel->listing_id = $item['itemId'];
                         $transactionModel->date = date('Y-m-d H:i:s');
-                        $transactionModel->status = 'pending';
+                        $transactionModel->status = 'inactive';
                     }
 
                     if ($transactionModel) {
@@ -192,92 +192,6 @@ class PaymentController extends \yii\web\Controller
                 }
 
                 Cart::clearCart();
-                $transaction->commit();
-
-                return $this->redirect(['success', 'id' => $payment->id]);
-            } catch (\Exception $e) {
-                $transaction->rollBack();
-                Yii::$app->session->setFlash('error', $e->getMessage());
-                return $this->redirect(['cart/index']);
-            }
-
-
-
-
-            $cartKey = Cart::getCartKey();
-            $cartItems = Cart::getItems($cartKey) ?: [];
-            $totalCost = Cart::getTotalCost();
-
-                if (empty($cartItems)) {
-                    Yii::$app->session->setFlash('error', 'Your cart is empty.');
-                    return $this->redirect(['cart/index']);
-                }
-
-            $transaction = Yii::$app->db->beginTransaction();
-            try {
-                $payment = new Payment();
-                $payment->user_id = $userId;
-                $payment->payment_method = $model->payment_method;
-                $payment->total = $totalCost;
-                $payment->status = 'pending';
-                $payment->date = date('Y-m-d H:i:s');
-
-                if (!$payment->save()) {
-                    throw new \Exception('Failed to create payment.');
-                }
-
-                $invoice = new Invoice();
-                $invoice->payment_id = $payment->id;
-                $invoice->client_id = $userId;
-                $invoice->date = date('Y-m-d H:i:s');
-                if (!$invoice->save()) {
-                    throw new \Exception('Failed to create invoice.');
-                }
-
-                foreach ($cartItems as $item) {
-                    if ($item['type'] === 'product') {
-                        $transactionModel = new ProductTransaction();
-                        $transactionModel->buyer_id = $userId;
-                        $transactionModel->product_id = $item['itemId'];
-                        $transactionModel->date = date('Y-m-d H:i:s');
-                        $transactionModel->status = 'pending';
-                    }
-                    if ($item['type'] === 'listing') {
-                        $product = Listing::findOne($item['itemId']);
-                        $transactionModel = new CardTransaction();
-                        $transactionModel->seller_id = $product->seller_id;
-                        $transactionModel->buyer_id = $userId;
-                        $transactionModel->listing_id = $item['itemId'];
-                        $transactionModel->date = date('Y-m-d H:i:s');
-                        $transactionModel->status = 'pending';
-                    }
-
-                    if ($transactionModel) {
-                        if (!$transactionModel->save()) {
-                            throw new \Exception('Failed to create transaction for item ID: ' . $item['itemId']);
-                        }
-
-                        $invoiceLine = new InvoiceLine();
-                        $invoiceLine->invoice_id = $invoice->id;
-                        $invoiceLine->price = $item['price'] * $item['quantity'];
-                        $invoiceLine->quantity = $item['quantity'];
-                        $invoiceLine->product_name = $item['name'];
-                        if ($item['type'] === 'listing') {
-                            $invoiceLine->card_transaction_id = $transactionModel->id;
-                        } elseif ($item['type'] === 'product') {
-                            $invoiceLine->product_transaction_id = $transactionModel->id;
-                        }
-
-                        if (!$invoiceLine->save()) {
-                            throw new \Exception('Failed to create invoice line for transaction ID: ' . $transactionModel->id);
-                        }
-                    } else {
-                        throw new \Exception('Invalid item type or missing transaction model for item ID: ' . $item['itemId']);
-                    }
-                }
-
-                Cart::clearCart();
-
                 $transaction->commit();
 
                 return $this->redirect(['success', 'id' => $payment->id]);
