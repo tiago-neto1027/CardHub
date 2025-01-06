@@ -2,8 +2,11 @@
 
 namespace frontend\controllers;
 
+use Bluerhinos\phpMQTT;
+use common\models\Favorite;
 use common\models\Listing;
 use common\models\ListingSearch;
+use common\models\User;
 use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -127,13 +130,9 @@ class ListingController extends Controller
         $model->seller_id = \Yii::$app->user->identity->id;
         $model->status = 'active';
 
-        if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                $this->notifyBackendForNewListing($model);
-                return $this->redirect(['index']);
-            }
-        } else {
-            $model->loadDefaultValues();
+        if ($model->load($this->request->post()) && $model->save()) {
+            $this->newListing($model->id);
+            return $this->redirect(['index']);
         }
 
         return $this->render('create', [
@@ -141,34 +140,6 @@ class ListingController extends Controller
         ]);
     }
 
-    private function notifyBackendForNewListing($listing)
-    {
-        $url = "http://cardhub/backend/web/api/listing/publish-new-listing";
-        $data = [
-            'listing_id' => $listing->id,
-            'card_id' => $listing->card->id,
-            'name' => $listing->card->name,
-            'price' => $listing->price,
-        ];
-
-        $client = new Client();
-
-        $response = $client->post($url, [
-            'json' => $data,
-        ]);
-
-        if ($response->getStatusCode() === 200) {
-            $responseData = json_decode($response->getBody(), true);
-
-            if (isset($responseData)) {
-                $listingId = $responseData;
-            } else {
-                throw new \yii\web\BadRequestHttpException('Listing ID not found in response.');
-            }
-        } else {
-            throw new \yii\web\BadRequestHttpException('Failed to publish new listing: ' . $response->getReasonPhrase());
-        }
-    }
 
     public function actionCardList($term)
     {
@@ -231,5 +202,88 @@ class ListingController extends Controller
             'model' => $model,
             'type' => $type,
         ]);
+    }
+
+    private function newListing($id)
+    {
+        $listing = Listing::findOne($id);
+        if (!$listing) {
+            return $this->asJson([
+                'status' => 'error',
+                'message' => 'Listing not found.',
+            ]);
+        }
+        $favorites = Favorite::find()->where(['card_id' => $listing->card_id])->all();
+        if (empty($favorites)) {
+            return $this->asJson([
+                'status' => 'success',
+                'message' => 'No users found with this card in their favorites.',
+            ]);
+        }
+
+        $successfullUsers = [];
+        $failedUsers = [];
+
+        foreach ($favorites as $favorite) {
+            $user = User::findOne($favorite->user_id);
+
+            if (!$user) {
+                $failedUsers[] = $favorite->user_id;
+                continue;
+            }
+
+            try {
+                $this->publishNewListing($listing, $user->id);
+                \Yii::info("Successfully notified user: {$user->username}", 'application');
+                $successfullUsers[] = $user->username;
+            } catch (\Exception $e) {
+                $failedUsers[] = $user->username;
+                \Yii::error("Failed to notify user {$user->id}: {$e->getMessage()}", 'application');
+            }
+        }
+
+        /*return $this->asJson([
+            'status' => 'success',
+            'message' => 'Notifications sent.',
+            'successfullUsers' => $successfullUsers,
+            'failedUsers' => $failedUsers,
+        ]);*/
+    }
+
+    private function publishNewListing($listing)
+    {
+        $server = "13.39.156.210";
+        $port = 1883;
+        $username = "";
+        $password = "";
+        $client_id = "backend-client-" . uniqid();
+
+        $mqtt = new phpMQTT($server, $port, $client_id);
+
+        if ($mqtt->connect(true, NULL, $username, $password)) {
+            \Yii::info("Successfully connected to MQTT broker.", 'application');
+            try {
+
+                $listing_data = [
+                    'listing_id' => $listing->id,
+                    'card_id' => $listing->card_id,
+                    'name' => $listing->card->name,
+                    'price' => $listing->price,
+                ];
+
+                $message = json_encode($listing_data);
+                $topic = "new_listing";
+
+                $mqtt->publish($topic, $message, 0);
+                \Yii::info("Message published to topic {$topic}.", 'application');
+            } catch (\Exception $e) {
+                \Yii::error("Exception caught: " . $e->getMessage(), 'application');
+            }
+
+            $mqtt->close();
+        } else {
+            \Yii::error("Unable to connect to MQTT broker.", 'application');
+            throw new \Exception("Unable to connect to MQTT broker.");
+        }
     }
 }
