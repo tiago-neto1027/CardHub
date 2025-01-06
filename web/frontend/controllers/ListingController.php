@@ -206,48 +206,13 @@ class ListingController extends Controller
 
     private function newListing($id)
     {
+        //Verifies if the listing was found
         $listing = Listing::findOne($id);
         if (!$listing) {
-            return $this->asJson([
-                'status' => 'error',
-                'message' => 'Listing not found.',
-            ]);
-        }
-        $favorites = Favorite::find()->where(['card_id' => $listing->card_id])->all();
-        if (empty($favorites)) {
-            return $this->asJson([
-                'status' => 'success',
-                'message' => 'No users found with this card in their favorites.',
-            ]);
+            \Yii::error("Couldn't load listing.", 'application');
         }
 
-        $successfullUsers = [];
-        $failedUsers = [];
-
-        foreach ($favorites as $favorite) {
-            $user = User::findOne($favorite->user_id);
-
-            if (!$user) {
-                $failedUsers[] = $favorite->user_id;
-                continue;
-            }
-
-            try {
-                $this->publishNewListing($listing, $user->id);
-                \Yii::info("Successfully notified user: {$user->username}", 'application');
-                $successfullUsers[] = $user->username;
-            } catch (\Exception $e) {
-                $failedUsers[] = $user->username;
-                \Yii::error("Failed to notify user {$user->id}: {$e->getMessage()}", 'application');
-            }
-        }
-
-        /*return $this->asJson([
-            'status' => 'success',
-            'message' => 'Notifications sent.',
-            'successfullUsers' => $successfullUsers,
-            'failedUsers' => $failedUsers,
-        ]);*/
+        $this->publishNewListing($listing);
     }
 
     private function publishNewListing($listing)
@@ -272,7 +237,7 @@ class ListingController extends Controller
                 ];
 
                 $message = json_encode($listing_data);
-                $topic = "new_listing";
+                $topic = "new_listing_" . $listing->card->id;
 
                 $mqtt->publish($topic, $message, 0);
                 \Yii::info("Message published to topic {$topic}.", 'application');
