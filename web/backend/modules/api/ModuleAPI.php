@@ -28,7 +28,7 @@ class ModuleAPI extends \yii\base\Module
     public function behaviors()
     {
         $behaviors = parent::behaviors();
-        if (!in_array(\Yii::$app->controller->id, ['favorite', 'listing'])) {
+        if (!in_array(\Yii::$app->controller->id, ['favorite', 'auth'/*, 'listing'*/])) {
             $behaviors['authenticator'] = [
                 'class' => HttpBasicAuth::className(),
                 'auth' => [$this, 'auth']
