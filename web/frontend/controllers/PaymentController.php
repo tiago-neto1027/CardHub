@@ -155,7 +155,7 @@ class PaymentController extends \yii\web\Controller
                         $transactionModel->buyer_id = $userId;
                         $transactionModel->product_id = $item['itemId'];
                         $transactionModel->date = date('Y-m-d H:i:s');
-                        $transactionModel->status = 'inactive';
+                        $transactionModel->status = 'active';
                     }
                     if ($item['type'] === 'listing') {
                         $product = Listing::findOne($item['itemId']);
@@ -164,7 +164,7 @@ class PaymentController extends \yii\web\Controller
                         $transactionModel->buyer_id = $userId;
                         $transactionModel->listing_id = $item['itemId'];
                         $transactionModel->date = date('Y-m-d H:i:s');
-                        $transactionModel->status = 'inactive';
+                        $transactionModel->status = 'active';
                     }
 
                     if ($transactionModel) {
@@ -237,7 +237,7 @@ class PaymentController extends \yii\web\Controller
                         throw new \Exception('Card transaction not found for invoice line ID: ' . $invoiceLine->id);
                     }
 
-                    $transactionModel->status = 'active';
+                    $transactionModel->status = 'inactive';
                     if (!$transactionModel->save()) {
                         throw new \Exception('Failed to update CardTransaction status for transaction ID: ' . $transactionModel->id);
                     }
@@ -259,7 +259,7 @@ class PaymentController extends \yii\web\Controller
                         throw new \Exception('Product transaction not found for invoice line ID: ' . $invoiceLine->id);
                     }
 
-                    $transactionModel->status = 'active';
+                    $transactionModel->status = 'inactive';
                     if (!$transactionModel->save()) {
                         throw new \Exception('Failed to update ProductTransaction status for transaction ID: ' . $transactionModel->id);
                     }

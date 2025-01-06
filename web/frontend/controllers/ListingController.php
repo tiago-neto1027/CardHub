@@ -131,6 +131,7 @@ class ListingController extends Controller
         $model->status = 'active';
 
         if ($model->load($this->request->post()) && $model->save()) {
+            //Calls the function that will warn users about the new listing.
             $this->newListing($model->id);
             return $this->redirect(['index']);
         }
@@ -211,40 +212,46 @@ class ListingController extends Controller
         if (!$listing) {
             \Yii::error("Couldn't load listing.", 'application');
         }
-
+        //Calls the function that will use the mqtt
         $this->publishNewListing($listing);
     }
 
     private function publishNewListing($listing)
     {
+        // Define the mqtt brokers details
         $server = "13.39.156.210";
         $port = 1883;
         $username = "";
         $password = "";
         $client_id = "backend-client-" . uniqid();
 
+        // Initialize the mqtt client with the broker details
         $mqtt = new phpMQTT($server, $port, $client_id);
 
+        // Attempt to connect to the mqtt broker
         if ($mqtt->connect(true, NULL, $username, $password)) {
             \Yii::info("Successfully connected to MQTT broker.", 'application');
             try {
-
                 $listing_data = [
                     'listing_id' => $listing->id,
                     'card_id' => $listing->card_id,
                     'name' => $listing->card->name,
                     'price' => $listing->price,
                 ];
-
+                // Convert the listing data to JSON
                 $message = json_encode($listing_data);
+
+                // Define the mqtt topic using the card's ID
                 $topic = "new_listing_" . $listing->card->id;
 
+                // Publish the message to the mqtt topic
                 $mqtt->publish($topic, $message, 0);
                 \Yii::info("Message published to topic {$topic}.", 'application');
             } catch (\Exception $e) {
                 \Yii::error("Exception caught: " . $e->getMessage(), 'application');
             }
 
+            // Close the mqtt connection after the operation is complete
             $mqtt->close();
         } else {
             \Yii::error("Unable to connect to MQTT broker.", 'application');
