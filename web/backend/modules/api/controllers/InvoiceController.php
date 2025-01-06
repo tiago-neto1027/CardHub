@@ -118,8 +118,17 @@ class InvoiceController extends BaseController{
                         $cardTransaction = CardTransaction::findOne($line->card_transaction_id);
                         if ($cardTransaction) {
                             $listing = Listing::findOne($cardTransaction->listing_id);
-                            if ($listing && $listing->status !== 'active') {
+                            if ($listing) {
+                                if ($listing->status != 'active')
+                                {
+                                    return[
+                                        'success' => false,
+                                        'message' => 'The chosen listing might be sold',
+                                        'errors' => $listing->errors,
+                                    ];
+                                }
                                 $listing->status = 'sold';
+                                
                                 if (!$listing->save()) {
                                     return [
                                         'success' => false,
