@@ -90,11 +90,12 @@ class AuthController extends BaseController
         $user->generateAuthKey();
         $user->status = User::STATUS_INACTIVE;
         $user->generateEmailVerificationToken();
-         $auth = Yii::$app->authManager;
-    
+
+        $auth = Yii::$app->authManager;
         $role = $auth->getRole('buyer');
+
         if ($role) {
-            $auth->assign($role, $user->getId());
+            $auth->assign($role, $user->id);
         } else {
             throw new \Exception('Error: Role not found.');
         }
