@@ -21,6 +21,7 @@ return [
     ],
     'components' => [
         'request' => [
+            'enableCsrfValidation' => false,
             'class' => 'yii\web\Request',
             'parsers' => [
                 'application/json' => 'yii\web\JsonParser',
@@ -67,6 +68,11 @@ return [
                 ['class'=>'yii\rest\UrlRule', 'controller'=>'api/listing'],
                 ['class'=>'yii\rest\UrlRule', 'controller'=>'api/product'],
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'api/auth'],
+
+                'GET,HEAD api/invoices' => 'api/invoice/index',
+                'GET,HEAD api/invoices/<id:\d+>' => 'api/invoice/view',
+                'PUT,PATCH api/invoices/<id:\d+>/status' => 'api/invoice/update-status',
+                'POST api/invoices' => 'api/invoice/create',
             ],
         ],
         'view' => [
