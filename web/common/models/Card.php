@@ -126,6 +126,10 @@ class Card extends \yii\db\ActiveRecord
         return $this->getListings()->count();
     }
 
+    public function getActiveListingsCount(){
+        return $this->getListings()->where(['status' => "active"])->count();
+    }
+
     public function isFavorited()
     {
         return Favorite::find()

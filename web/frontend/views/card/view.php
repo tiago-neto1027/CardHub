@@ -29,6 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     </thead>
                     <tbody>
                     <?php foreach ($listings as $listing): ?>
+                        <?php if($listing->status === "active"): ?>
                         <tr>
                             <td>
                                 <a href="<?= Yii::$app->urlManager->createUrl(['listing/view', 'id' => $listing->id]) ?>" class="text-info">
@@ -39,6 +40,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= Html::encode($listing->condition) ?></td>
                             <td><?= number_format($listing->price, 2) ?>€</td>
                         </tr>
+                        <?php endif ?>
                     <?php endforeach; ?>
                     </tbody>
                 </table>

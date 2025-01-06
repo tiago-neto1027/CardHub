@@ -71,7 +71,7 @@ class CardController extends Controller
         if($model->status === 'inactive')
             throw new \yii\web\ForbiddenHttpException('This card is inactive and cannot be viewed.');
 
-        $availableListingsCount = $model->getListingsCount();
+        $availableListingsCount = $model->getActiveListingsCount();
         $listings = $model->listings;
 
         return $this->render('view', [
