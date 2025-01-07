@@ -75,8 +75,11 @@ use common\models\Product;
                     ['label' => 'Product Management', 'url' => ['product/index'], 'icon' => 'shopping-cart'],
 
                     //REVENUE MENUS
-                    ['label' => 'REVENUES', 'header' => true],
+                    ['label' => 'REVENUES', 'header' => true,],
+                    ['label' => 'Product Transactions', 'url' => ['transaction/products'], 'icon' => 'money-bill-wave'],
+                    ['label' => 'Card Transactions', 'url' => ['transaction/cards'], 'icon' => 'history'],
 
+                    //OTHERS MENUS
                     ['label' => 'OTHERS', 'header' => true],
                     [
                         'label' => 'TODO',
