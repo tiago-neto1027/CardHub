@@ -57,6 +57,38 @@ $this->params['breadcrumbs'] = [['label' => $this->title]];
                 'linkUrl' => Url::to(['product/low-stock']),
             ]) ?>
         </div>
+        <!-- No Stock Products -->
+        <?php if($noStockProducts > 0): ?>
+        <div class="col-md-4 col-sm-6 col-12">
+            <?= \hail812\adminlte\widgets\SmallBox::widget([
+                'title' => $noStockProducts,
+                'text' => 'Out of Stock Products',
+                'icon' => 'fas fa-shopping-cart',
+                'theme' => 'danger',
+                'linkText' => 'Check products',
+                'linkUrl' => Url::to(['product/no-stock']),
+            ]) ?>
+        </div>
+        <?php else: ?>
+            <div class="col-md-4 col-sm-6 col-12">
+                <?php $smallBox = \hail812\adminlte\widgets\SmallBox::begin([
+                    'title' => $noStockProducts,
+                    'text' => 'Out of Stock Products',
+                    'icon' => 'fas fa-shopping-cart',
+                    'linkText' => 'Check products',
+                    'linkUrl' => Url::to(['product/no-stock']),
+                ]) ?>
+                <?= \hail812\adminlte\widgets\Ribbon::widget([
+                    'id' => $smallBox->id.'-ribbon',
+                    'text' => 'No Products',
+                    'theme' => 'success',
+                    'size' => 'lg',
+                    'textSize' => 'sm'
+                ]) ?>
+                <?php \hail812\adminlte\widgets\SmallBox::end() ?>
+            </div>
+        <?php endif;?>
+        <!-- No Stock Products -->
     </div>
 
 

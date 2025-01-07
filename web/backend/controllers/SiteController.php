@@ -72,6 +72,7 @@ class SiteController extends Controller
         $revenueGenerated = Product::getTotalRevenue();
         $pendingCards = Card::getPendingCardCount();
         $lowStockProducts = Product::getLowStockCount();
+        $noStockProducts = Product::getNoStockCount();
 
         return $this->render('index', [
             'registeredUsers' => $registeredUsers,
@@ -80,6 +81,7 @@ class SiteController extends Controller
             'revenueGenerated' => $revenueGenerated,
             'pendingCards' => $pendingCards,
             'lowStockProducts' => $lowStockProducts,
+            'noStockProducts' => $noStockProducts,
         ]);
     }
 

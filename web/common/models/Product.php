@@ -124,5 +124,10 @@ class Product extends \yii\db\ActiveRecord
     {
         return self::find()->where(['<', 'stock', 10])->count();
     }
+
+    public static function getNoStockCount()
+    {
+        return self::find()->where(['stock' => 0])->count();
+    }
 }
 

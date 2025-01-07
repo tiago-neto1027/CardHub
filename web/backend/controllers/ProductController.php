@@ -152,4 +152,15 @@ class ProductController extends Controller
             'dataProvider' => $dataProvider,
         ]);
     }
+
+    public function actionNoStock()
+    {
+        $searchModel = new ProductSearch();
+        $dataProvider = $searchModel->search($this->request->queryParams, false, true);
+
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
 }
