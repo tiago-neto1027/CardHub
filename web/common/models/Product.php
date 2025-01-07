@@ -120,7 +120,7 @@ class Product extends \yii\db\ActiveRecord
         return Yii::$app->formatter->asCurrency($total, 'USD');
     }
 
-    public static function getLowStockProductsCount()
+    public static function getLowStockCount()
     {
         return self::find()->where(['<', 'stock', 10])->count();
     }

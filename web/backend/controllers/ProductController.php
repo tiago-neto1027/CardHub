@@ -141,4 +141,15 @@ class ProductController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+
+    public function actionLowStock()
+    {
+        $searchModel = new ProductSearch();
+        $dataProvider = $searchModel->search($this->request->queryParams, true);
+
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
 }

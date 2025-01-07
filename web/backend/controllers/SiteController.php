@@ -71,7 +71,7 @@ class SiteController extends Controller
         $soldListings = Listing::getSoldListingsCount();
         $revenueGenerated = Product::getTotalRevenue();
         $pendingCards = Card::getPendingCardCount();
-        $lowStockProducts = Product::getLowStockProductsCount();
+        $lowStockProducts = Product::getLowStockCount();
 
         return $this->render('index', [
             'registeredUsers' => $registeredUsers,

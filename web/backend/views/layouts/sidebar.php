@@ -1,6 +1,7 @@
 <?php
 
 use common\models\Card;
+use common\models\Product;
 
 ?>
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
@@ -37,6 +38,7 @@ use common\models\Card;
         <nav class="mt-2">
             <?php
             $pendingCount = Card::getPendingCardCount();
+            $lowStockCount = Product::getLowStockCount();
 
             echo \hail812\adminlte\widgets\Menu::widget([
                 'items' => [
@@ -58,6 +60,11 @@ use common\models\Card;
                         'url' => ['card/pending-approval'],
                         'icon' => 'bell',
                         'badge' => '<span class="right badge badge-danger">' . $pendingCount . '</span>',
+                    ],
+                    ['label' => 'Low Stock Products',
+                        'url' => ['product/low-stock'],
+                        'icon' => 'box',
+                        'badge' => '<span class="right badge badge-danger">' . $lowStockCount . '</span>',
                     ],
 
                     //CRUD MENUS
