@@ -2,7 +2,11 @@
 
 namespace backend\controllers;
 
+use common\models\Card;
+use common\models\Listing;
 use common\models\LoginForm;
+use common\models\Product;
+use common\models\User;
 use Yii;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
@@ -62,7 +66,21 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        $registeredUsers = User::getRegisteredUsersCount();
+        $soldProducts = Product::getSoldProductsCount();
+        $soldListings = Listing::getSoldListingsCount();
+        $revenueGenerated = Product::getTotalRevenue();
+        $pendingCards = Card::getPendingCardCount();
+        $lowStockProducts = Product::getLowStockProductsCount();
+
+        return $this->render('index', [
+            'registeredUsers' => $registeredUsers,
+            'soldProducts' => $soldProducts,
+            'soldListings' => $soldListings,
+            'revenueGenerated' => $revenueGenerated,
+            'pendingCards' => $pendingCards,
+            'lowStockProducts' => $lowStockProducts,
+        ]);
     }
 
     /**
