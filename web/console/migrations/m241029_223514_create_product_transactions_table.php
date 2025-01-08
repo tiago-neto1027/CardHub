@@ -21,7 +21,7 @@ class m241029_223514_create_product_transactions_table extends Migration
             'product_id' => $this->integer()->notNull(),
             'buyer_id' => $this->integer()->notNull(),
             'date' => $this->timestamp()->notNull()->defaultExpression('CURRENT_TIMESTAMP'),
-            'status' => "ENUM('active','inactive') NOT NULL DEFAULT 'pending'",
+            'status' => "ENUM('active','inactive') NOT NULL DEFAULT 'active'",
         ], 'ENGINE=InnoDB');
 
         // creates index for column `product_id`
