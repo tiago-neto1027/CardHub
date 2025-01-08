@@ -101,5 +101,33 @@ class Product extends \yii\db\ActiveRecord
                ->distinct()
                ->column();
     }
+
+    public static function getSoldProductsCount()
+    {
+        return (new \yii\db\Query())
+            ->from('invoice_lines')
+            ->where(['not', ['product_transaction_id' => null]])
+            ->sum('quantity');
+    }
+
+    public static function getTotalRevenue()
+    {
+        $total = (new \yii\db\Query())
+            ->from('invoice_lines')
+            ->where(['not', ['product_transaction_id' => null]])
+            ->sum('price');
+
+        return Yii::$app->formatter->asCurrency($total, 'USD');
+    }
+
+    public static function getLowStockCount()
+    {
+        return self::find()->where(['<', 'stock', 10])->count();
+    }
+
+    public static function getNoStockCount()
+    {
+        return self::find()->where(['stock' => 0])->count();
+    }
 }
 

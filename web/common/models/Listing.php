@@ -99,4 +99,9 @@ class Listing extends \yii\db\ActiveRecord
     {
         return $this->hasOne(User::class, ['id' => 'seller_id']);
     }
+
+    public static function getSoldListingsCount()
+    {
+        return self::find()->where(['status' => 'sold'])->count();
+    }
 }

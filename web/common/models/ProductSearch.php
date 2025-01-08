@@ -39,11 +39,18 @@ class ProductSearch extends Product
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search($params, $lowStock = false, $noStock = false)
     {
         $query = Product::find();
 
         // add conditions that should always apply here
+        if ($lowStock) {
+            $query->andWhere(['<', 'stock', 10]);
+        }
+        if ($noStock) {
+            $query->andWhere(['stock' => 0]);
+        }
+
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,

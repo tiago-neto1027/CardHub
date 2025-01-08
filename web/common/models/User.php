@@ -295,4 +295,9 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return $this->getFavorites()->count();  // Count the number of related favorite items for this user
     }
+
+    public static function getRegisteredUsersCount()
+    {
+        return self::find()->count();
+    }
 }

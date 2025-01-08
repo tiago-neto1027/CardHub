@@ -96,4 +96,24 @@ class InvoiceLine extends \yii\db\ActiveRecord
         return $this->hasOne(CardTransaction::class, ['id' => 'card_transaction_id']);
     }
 
+    public static function calculateMonthlyProfit($month, $year, $type) {
+        $query = \common\models\InvoiceLine::find()
+            ->alias('il')
+            ->joinWith($type === 'card' ? 'cardTransaction ct' : 'productTransaction pt')
+            ->andWhere(['IS NOT', $type === 'card' ? 'il.card_transaction_id' : 'il.product_transaction_id', null]);
+
+        if ($type === 'card') {
+            $query->andWhere([
+                'MONTH(ct.date)' => $month,
+                'YEAR(ct.date)' => $year,
+            ]);
+        } elseif ($type === 'product') {
+            $query->andWhere([
+                'MONTH(pt.date)' => $month,
+                'YEAR(pt.date)' => $year,
+            ]);
+        }
+
+        return $query->sum('il.price') ?? 0;
+    }
 }

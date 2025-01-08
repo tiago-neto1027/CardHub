@@ -2,7 +2,12 @@
 
 namespace backend\controllers;
 
+use common\models\Card;
+use common\models\InvoiceLine;
+use common\models\Listing;
 use common\models\LoginForm;
+use common\models\Product;
+use common\models\User;
 use Yii;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
@@ -62,7 +67,46 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        //Date Calculations
+        $currentDate = new \DateTime();
+        $previousMonth = (clone $currentDate)->modify('-1 month')->format('m');
+        $previousMonthName = (clone $currentDate)->modify('-1 month')->format('F');
+        $twoMonthsAgo = (clone $currentDate)->modify('-2 months')->format('m');
+        $twoMonthsAgoName = (clone $currentDate)->modify('-2 months')->format('F');
+        $oneMonthAgoYear = (clone $currentDate)->modify('-1 month')->format('Y');
+        $twoMonthsAgoYear = (clone $currentDate)->modify('-2 months')->format('Y');
+
+        //Profit Calculations
+        $cardProfitPreviousMonth = InvoiceLine::calculateMonthlyProfit($previousMonth, $oneMonthAgoYear, 'card');
+        $cardProfitTwoMonthsAgo = InvoiceLine::calculateMonthlyProfit($twoMonthsAgo, $twoMonthsAgoYear, 'card');
+
+        $productProfitPreviousMonth = InvoiceLine::calculateMonthlyProfit($previousMonth, $oneMonthAgoYear, 'product');
+        $productProfitTwoMonthsAgo = InvoiceLine::calculateMonthlyProfit($twoMonthsAgo, $twoMonthsAgoYear, 'product');
+
+        $registeredUsers = User::getRegisteredUsersCount();
+        $soldProducts = Product::getSoldProductsCount();
+        $soldListings = Listing::getSoldListingsCount();
+        $revenueGenerated = Product::getTotalRevenue();
+        $pendingCards = Card::getPendingCardCount();
+        $lowStockProducts = Product::getLowStockCount();
+        $noStockProducts = Product::getNoStockCount();
+
+        return $this->render('index', [
+            'previousMonthName' => $previousMonthName,
+            'twoMonthsAgoName' => $twoMonthsAgoName,
+            'cardProfitLastMonth' => $cardProfitPreviousMonth,
+            'productProfitLastMonth' => $productProfitPreviousMonth,
+            'cardProfitTwoMonthsAgo' => $cardProfitTwoMonthsAgo,
+            'productProfitTwoMonthsAgo' => $productProfitTwoMonthsAgo,
+
+            'registeredUsers' => $registeredUsers,
+            'soldProducts' => $soldProducts,
+            'soldListings' => $soldListings,
+            'revenueGenerated' => $revenueGenerated,
+            'pendingCards' => $pendingCards,
+            'lowStockProducts' => $lowStockProducts,
+            'noStockProducts' => $noStockProducts,
+        ]);
     }
 
     /**
