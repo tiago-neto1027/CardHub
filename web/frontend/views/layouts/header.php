@@ -51,11 +51,16 @@ use yii\helpers\Url;
                 <?php
                 if (Yii::$app->user->isGuest) {
                     echo Html::tag('div',
-                        Html::a('Login', ['/site/login'], ['class' => 'btn bg-primary text-dark btn-sm']),
+                        Html::a('Login', ['/site/login'],
+                            ['class' => 'btn bg-primary text-dark btn-sm',
+                            'data-method' => 'post',
+                            'id' => 'login-button',]),
                         ['class' => 'btn d-flex']
                     );
                     echo Html::tag('div',
-                        Html::a('Sign Up', ['/site/signup'], ['class' => 'btn bg-primary text-dark btn-sm']),
+                        Html::a('Sign Up', ['/site/signup'],
+                            ['class' => 'btn bg-primary text-dark btn-sm',
+                            'id' => 'signup-button',]),
                         ['class' => 'btn d-flex']
                     );
                 } else {
@@ -70,7 +75,9 @@ use yii\helpers\Url;
                         ['class' => 'btn d-flex']
                     );
                     echo Html::tag('div',
-                        Html::a('Logout', ['/site/logout'], ['data-method' => 'post', 'class' => 'btn bg-primary text-dark btn-sm']),
+                        Html::a('Logout', ['/site/logout'], ['data-method' => 'post',
+                            'class' => 'btn bg-primary text-dark btn-sm',
+                            'id' => 'logout-button',]),
                         ['class' => 'btn d-flex']
                     );
                 }

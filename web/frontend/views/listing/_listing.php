@@ -6,10 +6,15 @@ use yii\helpers\Html;
 ?>
 <div class="product-item bg-light mb-4">
     <div class="product-img position-relative overflow-hidden">
-        <?= Html::img($model->card->image_url, [
-            'alt' => html::encode($model->card->name),
-            'class' => 'img-fluid w-100 p-1',
-        ]); ?>
+        <?php if ($model->card !== null): ?>
+        <?php if ($model->card->image_url !== null): ?>
+            <?= Html::img($model->card->image_url, [
+                'alt' => Html::encode($model->card->name),
+                'class' => 'img-fluid w-100 p-1',
+            ]); ?>
+        <?php else: ?>
+            <p>Image not available</p>
+        <?php endif; ?>
         <div class="product-action">
             <?php //Shopping Cart // Trash
             if (yii::$app->user->isGuest|| $model->seller_id != Yii::$app->user->identity->id) {
@@ -47,5 +52,6 @@ use yii\helpers\Html;
             ['class' => 'h6 text-decoration-none text-truncate d-block px-3', 'title' => html::encode($model->card->name)])
         ?>
         <h5><?= Yii::$app->formatter->asCurrency($model->price, 'EUR') ?></h5>
+        <?php endif?>
     </div>
 </div>
