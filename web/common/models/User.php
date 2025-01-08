@@ -258,12 +258,37 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
 
-    public function getListings($id)
+    public function getListings()
     {
         return \common\models\Listing::find()
-            ->where(['seller_id' => $id])
+            ->where(['seller_id' => $this->id])
             ->andWhere(['status' => 'active'])
             ->count();
+    }
+
+    public function getListingsCount()
+    {
+        return \common\models\Listing::find()
+            ->where(['seller_id' => $this->id])
+            ->count();
+    }
+
+    public function getSoldListingsCount()
+    {
+        return \common\models\Listing::find()
+            ->where(['seller_id' => $this->id])
+            ->andWhere(['status' => 'inactive'])
+            ->count();
+    }
+
+    public function getRevenue()
+    {
+        $revenue = \common\models\Listing::find()
+            ->where(['seller_id' => $this->id])
+            ->andWhere(['status' => 'inactive'])
+            ->sum('price');
+
+        return $revenue !== null ? number_format($revenue, 2) : '0.00';
     }
 
     public function getCartItemCount()
@@ -293,7 +318,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function getFavoritesItemCount()
     {
-        return $this->getFavorites()->count();  // Count the number of related favorite items for this user
+        return $this->getFavorites()->count();
     }
 
     public static function getRegisteredUsersCount()

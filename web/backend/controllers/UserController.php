@@ -85,6 +85,16 @@ class UserController extends Controller
             'dataProvider' => $dataProvider,
         ]);
     }
+    public function actionSellers()
+    {
+        $searchModel = new UserSearch();
+        $dataProvider = $searchModel->search($this->request->queryParams, false, true);
+
+        return $this->render('sellers', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
 
     /**
      * Displays a single User model.

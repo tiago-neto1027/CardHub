@@ -12,14 +12,17 @@ use common\models\User;
 class UserSearch extends User
 {
     public $user_type;
+    public $listings;
+    public $sold_listings;
+    public $revenue;
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
         return [
-            [['id', 'status', 'created_at', 'updated_at'], 'integer'],
-            [['username', 'auth_key', 'password_hash', 'password_reset_token', 'email', 'verification_token', 'user_type'], 'safe'],
+            [['id', 'status', 'created_at', 'updated_at','listings','sold_listings'], 'integer'],
+            [['username', 'auth_key', 'password_hash', 'password_reset_token', 'email', 'verification_token', 'user_type', 'revenue'], 'safe'],
         ];
     }
 
@@ -39,7 +42,7 @@ class UserSearch extends User
      *
      * @return ActiveDataProvider
      */
-    public function search($params, $onlyDeleted = false)
+    public function search($params, $onlyDeleted = false, $onlySellers = false)
     {
         $query = User::find();
 
@@ -51,6 +54,11 @@ class UserSearch extends User
         } else {
             $query->andWhere(['!=', 'status', 'deleted']);
         }
+
+        if($onlySellers){
+            $query->andWhere(['auth_assignment.item_name' => 'seller']);
+        }
+
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
             'sort' => [
@@ -64,6 +72,21 @@ class UserSearch extends User
                     ],
                     'created_at',
                     'updated_at',
+                    'listings' => [
+                        'asc' => ['(SELECT COUNT(*) FROM listings WHERE listings.seller_id = user.id AND listings.status = "active")' => SORT_ASC],
+                        'desc' => ['(SELECT COUNT(*) FROM listings WHERE listings.seller_id = user.id AND listings.status = "active")' => SORT_DESC],
+                        'default' => SORT_DESC,
+                    ],
+                    'sold_listings' => [
+                        'asc' => ['(SELECT COUNT(*) FROM listings WHERE listings.seller_id = user.id AND listings.status = "inactive")' => SORT_ASC],
+                        'desc' => ['(SELECT COUNT(*) FROM listings WHERE listings.seller_id = user.id AND listings.status = "inactive")' => SORT_DESC],
+                        'default' => SORT_DESC,
+                    ],
+                    'revenue' => [
+                        'asc' => ['(SELECT SUM(price) FROM listings WHERE listings.seller_id = user.id AND listings.status = "inactive")' => SORT_ASC],
+                        'desc' => ['(SELECT SUM(price) FROM listings WHERE listings.seller_id = user.id AND listings.status = "inactive")' => SORT_DESC],
+                        'default' => SORT_DESC,
+                    ],
                 ],
             ],
         ]);
@@ -74,6 +97,18 @@ class UserSearch extends User
             // uncomment the following line if you do not want to return any records when validation fails
             $query->where('0=1');
             return $dataProvider;
+        }
+
+        if ($this->listings !== null) {
+            $query->andFilterHaving(['=', '(SELECT COUNT(*) FROM listings WHERE listings.seller_id = user.id)', $this->listings]);
+        }
+
+        if ($this->sold_listings !== null) {
+            $query->andFilterHaving(['=', '(SELECT COUNT(*) FROM listings WHERE listings.seller_id = user.id AND listings.status = "inactive")', $this->sold_listings]);
+        }
+
+        if ($this->revenue !== null) {
+            $query->andFilterHaving(['=', '(SELECT ROUND(SUM(price), 2) FROM listings WHERE listings.seller_id = user.id AND listings.status = "inactive")', $this->revenue]);
         }
 
         // grid filtering conditions
