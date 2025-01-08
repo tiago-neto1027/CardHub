@@ -30,7 +30,7 @@ use yii\helpers\Html;
 
             <?php // Favorite Button
             if (!$model->card->isFavorited()) {
-                echo Html::a('<i class="far fa-heart"></i>',
+                echo Html::a('<i class="far fa-heart" id="favorite-heart"></i>',
                     ['/favorite/create', 'id' => $model->card_id],
                     ['class' => 'btn btn-outline-dark btn-square']);
             } else {

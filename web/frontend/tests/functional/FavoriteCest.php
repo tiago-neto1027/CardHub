@@ -5,6 +5,7 @@ namespace frontend\tests\functional;
 use common\fixtures\CardFixture;
 use common\fixtures\GameFixture;
 use common\fixtures\UserFixture;
+use common\fixtures\ListingFixture;
 use common\models\User;
 use frontend\tests\FunctionalTester;
 use Yii;
@@ -26,25 +27,37 @@ class FavoriteCest
                 'class' => CardFixture::class,
                 'dataFile' => codecept_data_dir() . 'card.php',
             ],
+            'listing' => [
+                'class' => ListingFixture::class,
+                'dataFile' => codecept_data_dir() . 'listing.php',
+            ]
         ];
     }
 
     public function testAddToFavorites(FunctionalTester $I)
     {
+        //Log In
         $I->amOnPage('/site/login');
-        $I->fillField('LoginForm[username]', 'test.test');
-        $I->fillField('LoginForm[password]', 'Test1234');
-        $I->click('Login');
+        $I->see("Please fill out the following fields to login:");
+        $I->submitForm('#login-form', [
+            'LoginForm[username]' => 'user_seller',
+            'LoginForm[password]' => 'sellerpassword'
+        ]);
+        $I->dontSeeElement('#login-button');
+        $I->seeElement('#logout-button');
 
-        $I->amOnPage('/listing/index');
-        $I->seeInCurrentUrl('/listing/index');
+        //Click on the Listings dropdown and choose an option
+        $I->click('#listings-dropdown');
+        $I->click('a.dropdown-item');
+        $I->see('PRODUCT CATALOG');
+        $I->dontSee('No listings available at the moment');
 
-        $I->seeElement('a.btn.btn-outline-dark.btn-square i.far.fa-heart');
+        //Click on the heart icon to add to favorites
+        $I->seeElement('i#favorite-heart');
+        $I->click('i#favorite-heart');
 
-        $I->click('a.btn.btn-outline-dark.btn-square i.far.fa-heart');
-
-        $I->amOnPage('/listing/index');
-        $I->see('fas fa-heart-broken', );
+        //After adding to favorites, click the heart icon to navigate to the favorites page
+        $I->amOnPage('/favorite/index');
+        $I->seeInCurrentUrl('/favorite/index');
     }
-
 }

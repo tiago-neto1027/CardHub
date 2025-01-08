@@ -31,7 +31,7 @@ use yii\helpers\Url;
                                 ['remove', 'id' => $model->card->id],
                                 [
                                     'class' => 'btn border border-primary bg-light text-primary btn-sm', // Yellow button color
-                                    'title' => 'Remove from cart', // Tooltip text
+                                    'title' => 'Remove from favorites', // Tooltip text
                                     'data-toggle' => 'tooltip', // Enable Bootstrap tooltip
                                 ]
                             ) ?>

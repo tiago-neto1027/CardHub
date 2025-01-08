@@ -19,7 +19,7 @@ class LoginCest
         return [
             'user' => [
                 'class' => UserFixture::class,
-                'dataFile' => codecept_data_dir() . 'login_data.php',
+                'dataFile' => codecept_data_dir() . 'user.php',
             ],
         ];
     }
@@ -59,9 +59,10 @@ class LoginCest
     public function checkValidLogin(FunctionalTester $I)
     {
         $I->amOnPage('/site/login');
+        $I->see("Please fill out the following fields to login:");
         $I->submitForm('#login-form', [
-            'LoginForm[username]' => 'T3st Us3r',
-            'LoginForm[password]' => 'password_0'
+            'LoginForm[username]' => 'user_seller',
+            'LoginForm[password]' => 'sellerpassword'
         ]);
         $I->dontSeeElement('#login-button');
         $I->seeElement('#logout-button');

@@ -162,13 +162,14 @@ use yii\helpers\Url;
                     <a href="<?= Url::to(['/card/index'])?>" class="nav-item nav-link">Browse Cards</a>
                     <?php if ($games = \common\models\Game::getAllGames()): ?>
                     <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Listings <i class="fa fa-angle-down"></i></a>
+                        <a href="#" class="nav-link dropdown-toggle" id="listings-dropdown" data-toggle="dropdown">Listings <i class="fa fa-angle-down"></i></a>
                         <div class="dropdown-menu bg-dark rounded-0 border-0 m-0">
                             <?php
                             foreach ($games as $game) {
                                 echo Html::a($game->name, Url::to(['/catalog/index',
                                     'game' => $game->name, 'type' => 'listing']),
-                                    ['class' => 'dropdown-item']);
+                                    ['class' => 'dropdown-item']
+                                );
                             }
                             ?>
                         </div>
