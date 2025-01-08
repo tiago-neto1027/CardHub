@@ -32,18 +32,24 @@ class ListingCest
     public function testCreateCardWithValidData(FunctionalTester $I)
     {
         $I->amOnPage('/site/login');
-        $I->fillField('LoginForm[username]', 'seller_user');
-        $I->fillField('LoginForm[password]', 'password');
-        $I->click('Login');
+        $I->see("Please fill out the following fields to login:");
+        $I->submitForm('#login-form', [
+            'LoginForm[username]' => 'user_seller',
+            'LoginForm[password]' => 'sellerpassword'
+        ]);
+        $I->dontSeeElement('#login-button');
+        $I->seeElement('#logout-button');
 
+        $I->dontSee('Become a seller');
         $I->amOnPage('/listing/index');
         $I->seeInCurrentUrl('/listing/index');
         $I->seeElement('#create_listing');
 
         $I->amOnPage('/listing/create');
         $I->seeInCurrentUrl('/listing/create');
-        $I->see('#create_card');
+        $I->see('Create new Card');
         $I->click('#create_card');
+        $I->see('Suggest a new card');
 
         $I->fillField('Card[name]', 'Test Card');
         $I->fillField('Card[rarity]', 'Common');
@@ -54,7 +60,7 @@ class ListingCest
 
         $I->click('Save');
 
-        $I->see('Card created successfully');
+        $I->see('Card submitted');
         $I->amOnPage('/listing/index');
     }
 
