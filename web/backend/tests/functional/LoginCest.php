@@ -4,6 +4,7 @@ namespace backend\tests\functional;
 
 use backend\tests\FunctionalTester;
 use common\fixtures\UserFixture;
+use Yii;
 
 /**
  * Class LoginCest
@@ -26,19 +27,39 @@ class LoginCest
             ]
         ];
     }
-    
+
+
     /**
      * @param FunctionalTester $I
      */
-    public function loginUser(FunctionalTester $I)
+
+    public function loginWithValidCredentials(FunctionalTester $I)
     {
         $I->amOnRoute('/site/login');
-        $I->fillField('Username', 'erau');
-        $I->fillField('Password', 'password_0');
-        $I->click('login-button');
+        $I->seeElement('#login-button');
 
-        $I->see('Logout (erau)', 'form button[type=submit]');
-        $I->dontSeeLink('Login');
-        $I->dontSeeLink('Signup');
+        $I->fillField('LoginForm[username]', 'T3st Us3r');
+        $I->fillField('LoginForm[password]', 'password_0');
+        $I->click('#login-button');
+
+        $I->dontSeeElement('#login-button');
+
+        $I->seeElement('#logout-button');
     }
+
+    public function loginWithInvalidCredentials(FunctionalTester $I)
+    {
+        $I->amOnRoute('/site/login');
+
+        $I->seeElement('#login-button');
+
+        $I->fillField('LoginForm[username]', 'invalid_user');
+        $I->fillField('LoginForm[password]', 'wrong_password');
+        $I->click('#login-button');
+
+        $I->seeElement('#login-button');
+
+        $I->amOnRoute('/site/login');
+    }
+
 }

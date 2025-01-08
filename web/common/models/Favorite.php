@@ -32,6 +32,7 @@ class Favorite extends \yii\db\ActiveRecord
         return [
             [['user_id', 'card_id'], 'required'],
             [['user_id', 'card_id'], 'integer'],
+            [['user_id', 'card_id'], 'unique', 'targetAttribute' => ['user_id', 'card_id'], 'message' => 'You can only favorite the same card once.'],
         ];
     }
 

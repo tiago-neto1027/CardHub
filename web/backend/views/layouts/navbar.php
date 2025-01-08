@@ -40,8 +40,11 @@ $totalNotifications = $pendingCount + $lowStockCount;
         </li>
         <!-- Notifications Dropdown Menu -->
         <li class="nav-item">
-            <?= Html::a('<i class="fas fa-sign-out-alt"></i>', ['/site/logout'], ['data-method' => 'post', 'class' => 'nav-link']) ?>
-        </li>
+            <?= Html::a('<i class="fas fa-sign-out-alt"></i> Logout', ['/site/logout'], [
+                'data-method' => 'post',
+                'class' => 'nav-link',
+                'id' => 'logout-button',
+            ]) ?>        </li>
         <li class="nav-item">
             <a class="nav-link" data-widget="fullscreen" href="#" role="button">
                 <i class="fas fa-expand-arrows-alt"></i>

@@ -72,7 +72,9 @@ JS;
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success mr-3']) ?>
-        <?= Html::a('Create new Card', ['/card/create'], ['class' => 'btn btn-primary mr-3']) ?>
+        <?= Html::a('Create new Card', ['/card/create'],
+            ['class' => 'btn btn-primary mr-3',
+                'id' => 'create_card']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

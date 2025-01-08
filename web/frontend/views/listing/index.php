@@ -33,7 +33,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <div class="col-2 text-end d-flex flex-column">
         <p class="mb-5">
-            <?= Html::a('Sell other product', ['create'], ['class' => 'btn bg-primary text-dark w-75']) ?>
+            <?= Html::a('Sell other product', ['create'],
+                ['class' => 'btn bg-primary text-dark w-75',
+                    'id' => 'create_listing']) ?>
         </p>
         <p class="mb-5">
             <?= Html::a('Sold items', ['sold'], ['class' => 'btn bg-primary text-dark w-75']) ?>

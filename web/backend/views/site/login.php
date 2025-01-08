@@ -38,7 +38,8 @@ use yii\helpers\Html;
 
             <div class="row mb-3">
                 <div class="col-11 mb-2 text-center mt-5">
-                    <?= Html::submitButton('Sign In', ['class' => 'btn btn-primary btn-block row']) ?>
+                    <?= Html::submitButton('Sign In', ['class' => 'btn btn-primary btn-block row', '
+                    id' => 'login-button']) ?>
                 </div>
                 <div class="col-11 text-center mt-3">
                     <?= $form->field($model, 'rememberMe')->checkbox([

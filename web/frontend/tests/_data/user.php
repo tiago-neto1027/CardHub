@@ -42,4 +42,15 @@ return [
         'updated_at' => '1548675330',
         'verification_token' => 'already_used_token_1548675330',
     ],
+
+    [
+        'username' => 'user_seller',
+        'auth_key' => '4XXdVqi3rDpa_a6JH6zqVreFxUPcUPvJ',
+        'password_hash' => Yii::$app->security->generatePasswordHash('sellerpassword'),
+        'email' => 'test@gmail.com',
+        'status' => '10',
+        'created_at' => '1548675330',
+        'updated_at' => '1548675330',
+        'verification_token' => 'already_used_token_1548675330',
+    ],
 ];
