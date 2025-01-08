@@ -121,7 +121,14 @@ class SiteController extends Controller
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            if (Yii::$app->user->can('admin') || Yii::$app->user->can('manager')) {
+
+            //Verifies if the user has an active punishment
+            $user = Yii::$app->user->identity;
+            if ($user->hasActivePunishment()){
+                Yii::$app->user->logout();
+                $model->addError('username', 'Your account has been punished and you are not allowed to log in.');
+                //Verifies if the user is admin or manager
+            } elseif (Yii::$app->user->can('admin') || Yii::$app->user->can('manager')) {
                 Yii::$app->user->logout();
                 $model->addError('username', 'Log in with a frontend account.');
             }
