@@ -39,6 +39,7 @@ class Payment extends \yii\db\ActiveRecord
             [['payment_method', 'status'], 'string'],
             [['total'], 'number'],
             [['date'], 'safe'],
+            [['payment_method'], 'in', 'range' => [self::METHOD_PAYPAL, self::METHOD_MBWAY], 'message' => 'Invalid payment method.'],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
@@ -68,5 +69,10 @@ class Payment extends \yii\db\ActiveRecord
             self::METHOD_PAYPAL => 'PayPal',
             self::METHOD_MBWAY => 'MB WAY',
         ];
+    }
+
+    public function getUser()
+    {
+        return $this->hasOne(User::class, ['id' => 'user_id']);
     }
 }
