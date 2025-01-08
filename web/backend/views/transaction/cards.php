@@ -38,6 +38,35 @@ foreach ($dataProvider->getModels() as $model) {
             'product_name:ntext',
             'price',
             [
+                'label' => 'Buyer',
+                'value' => function ($model) {
+                    return $model->buyer->username;
+                }
+            ],
+            [
+                'label' => 'Seller',
+                'value' => function ($model) {
+                    return $model->seller->username;
+                }
+            ],
+            [
+                'attribute' => 'status',
+                'label' => 'Status',
+                'value' => function ($model) {
+                    $status = $model->cardTransaction->status;
+                    return $status === 'active' ? 'Pending' : ($status === 'inactive' ? 'Completed' : $status);
+                },
+                'filter' => Html::activeDropDownList(
+                    $searchModel,
+                    'status_filter',
+                    [
+                        'active' => 'Pending',
+                        'inactive' => 'Completed',
+                    ],
+                    ['class' => 'form-control', 'prompt' => 'Select Status']
+                ),
+            ],
+            [
                 'attribute' => 'date',
                 'label' => 'Transaction Date',
                 'value' => function ($model) {

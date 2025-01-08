@@ -95,6 +95,23 @@ class InvoiceLine extends \yii\db\ActiveRecord
     {
         return $this->hasOne(CardTransaction::class, ['id' => 'card_transaction_id']);
     }
+    public function getBuyer()
+    {
+        if ($this->card_transaction_id !== null){
+            return $this->hasOne(User::class, ['id' => 'buyer_id'])->via('cardTransaction');
+        } elseif ($this->product_transaction_id !== null) {
+            return $this->hasOne(User::class, ['id' => 'buyer_id'])->via('productTransaction');
+        }
+        return null;
+    }
+
+    public function getSeller()
+    {
+        if ($this->card_transaction_id !== null){
+            return $this->hasOne(User::class, ['id' => 'seller_id'])->via('cardTransaction');
+        }
+        return null;
+    }
 
     public static function calculateMonthlyProfit($month, $year, $type) {
         $query = \common\models\InvoiceLine::find()
