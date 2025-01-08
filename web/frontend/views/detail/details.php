@@ -81,7 +81,7 @@ $this->title = 'MyAccount';
                                         'role' => 'button'
                                     ]) ?>
                                     <?php if ($invoice->status === 'Pending'): ?>
-                                        <?= Html::a('Pay', ['/payment/view', 'id' => $invoice->id], [
+                                        <?= Html::a('Pay', ['/payment/view', 'source' => 'detail','id' => $invoice->id], [
                                             'class' => 'btn btn-success btn-sm rounded mx-1',
                                             'role' => 'button'
                                         ]) ?>

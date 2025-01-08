@@ -39,20 +39,17 @@ class PaymentController extends \yii\web\Controller
         );
     }
 
-    public function actionView($id = null)
+    public function actionView($source, $id)
     {
-        $referrer = Yii::$app->request->referrer;
-
         $totalCost = 0;
 
-        if ($referrer) {
-            $referrerUrl = parse_url($referrer, PHP_URL_PATH);
-            if($id !== null){
+        if ($source === 'detail') {
+            if ($id !== 'cart') {
                 $invoice = Invoice::findOne($id);
-                $invoice_id = $id;
+                $invoice_id = $invoice->id;
                 if (empty($invoice)) {
                     Yii::$app->session->setFlash('error', 'Cant load the items.');
-                    return $this->redirect([$referrer]);
+                    return $this->redirect(['/cart/view']);
                 }
                 $totalCost = $invoice->getTotal();
                 $invoiceLines = $invoice->getInvoiceLines()->all();
@@ -70,18 +67,18 @@ class PaymentController extends \yii\web\Controller
                     }
                 }
             }
-            elseif (strpos($referrerUrl, '/cart/index')){
+        }
+
+        if ($source == 'cart'){
                 $cartKey = Cart::getCartKey();
                 $items = Cart::getItems($cartKey) ?: [];
                 $totalCost = Cart::getTotalCost();
                 $invoice_id = null;
             }
-        }
+
 
             $model = new PaymentForm();
-            if ($totalCost <= 0) {
-                return $this->redirect(\yii\helpers\Url::home());
-            }
+
             return $this->render('view', [
                 'invoice_id' => $invoice_id,
                 'items' => $items,
@@ -106,7 +103,7 @@ class PaymentController extends \yii\web\Controller
                         Yii::$app->session->setFlash('error', 'Failed to update payment.');
                         return $this->redirect(['site/index']);
                     }
-                    return $this->redirect(['success', 'id' => $payment->id]);
+                    return $this->redirect(['success', 'id' => $payment->id, 'paymentType' => $payment->payment_method]);
                 } else {
                     Yii::$app->session->setFlash('error', 'Payment record not found.');
                     return $this->redirect(['site/index']);
@@ -189,7 +186,7 @@ class PaymentController extends \yii\web\Controller
                 Cart::clearCart();
                 $transaction->commit();
 
-                return $this->redirect(['success', 'id' => $payment->id]);
+                return $this->redirect(['success', 'id' => $payment->id ,'paymentType' => $model->payment_method]);
             } catch (\Exception $e) {
                 $transaction->rollBack();
                 Yii::$app->session->setFlash('error', $e->getMessage());
@@ -200,7 +197,7 @@ class PaymentController extends \yii\web\Controller
     }
 
 
-    public function actionSuccess($id)
+    public function actionSuccess($id, $paymentType)
     {
         $payment = Payment::findOne($id);
 
@@ -210,10 +207,10 @@ class PaymentController extends \yii\web\Controller
 
         $transaction = Yii::$app->db->beginTransaction();
         try {
+
             $payment->status = 'completed';
-            if (!$payment->save()) {
-                throw new \Exception('Failed to update payment status.');
-            }
+            $payment->payment_method = $paymentType;
+            $payment->save();
 
             $invoice = Invoice::findOne(['payment_id' => $payment->id]);
             if (!$invoice) {

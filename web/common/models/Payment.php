@@ -66,8 +66,8 @@ class Payment extends \yii\db\ActiveRecord
     public static function getPaymentMethods()
     {
         return [
-            self::METHOD_PAYPAL => 'PayPal',
-            self::METHOD_MBWAY => 'MB WAY',
+            self::METHOD_PAYPAL => 'paypal',
+            self::METHOD_MBWAY => 'mbway',
         ];
     }
 
