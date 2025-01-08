@@ -64,5 +64,35 @@ class ListingCest
         $I->amOnPage('/listing/index');
     }
 
+    public function testCreateListing(FunctionalTester $I)
+    {
+        $I->amOnPage('/site/login');
+        $I->see("Please fill out the following fields to login:");
+        $I->submitForm('#login-form', [
+            'LoginForm[username]' => 'user_seller',
+            'LoginForm[password]' => 'sellerpassword'
+        ]);
+        $I->dontSeeElement('#login-button');
+        $I->seeElement('#logout-button');
+
+        $I->dontSee('Become a seller');
+        $I->amOnPage('/listing/index');
+        $I->seeInCurrentUrl('/listing/index');
+        $I->seeElement('#create_listing');
+
+        $I->amOnPage('/listing/create');
+        $I->seeInCurrentUrl('/listing/create');
+        $I->see('Create new Card');
+
+        $I->fillField('#listing-card_id', 1);
+        $I->fillField('#listing-price', '4.80');
+        $I->selectOption('#listing-condition', 'Brand new');
+        $I->click('Save');
+
+        $I->seeInCurrentUrl('/listing/index');
+        $I->see('TestCard');
+        $I->see('4.80');
+    }
+
 
 }

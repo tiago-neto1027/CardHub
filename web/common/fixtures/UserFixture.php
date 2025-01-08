@@ -38,13 +38,28 @@ class UserFixture extends ActiveFixture
             $user = User::findOne($data['id']);
 
             if ($user) {
+                $auth = Yii::$app->authManager;
+
                 if ($user->username === 'user_seller') {
-                    $user->setRole($user->id, 'seller');
+                    if (!$auth->getAssignment('seller', $user->id)) {
+                        $user->setRole($user->id, 'seller');
+                    }
+                } elseif($user->username === 'T3st Us3r') {
+                    if (!$auth->getAssignment('admin', $user->id)) {
+                        $user->setRole($user->id, 'admin');
+                    }
                 } else {
-                    $user->setRole($user->id, 'buyer');
+                    if (!$auth->getAssignment('buyer', $user->id)) {
+                        $user->setRole($user->id, 'buyer');
+                    }
                 }
             }
         }
+    }
+
+    public function _before()
+    {
+        Yii::$app->db->createCommand('TRUNCATE TABLE auth_assignment')->execute();
     }
 }
 

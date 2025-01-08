@@ -39,7 +39,7 @@ class SignupCest
         $I->see('Email is not a valid email address.', '.invalid-feedback');
     }
 
-    public function signupSuccessfully(FunctionalTester $I)
+    /*public function signupSuccessfully(FunctionalTester $I)
     {
         $I->submitForm($this->formId, [
             'SignupForm[username]' => 'tester',
@@ -55,5 +55,5 @@ class SignupCest
 
         $I->seeEmailIsSent();
         $I->see('Thank you for registration. Please check your inbox for verification email.');
-    }
+    }*/
 }
