@@ -12,8 +12,26 @@ use yii\grid\GridView;
 
 $this->title = 'Product Transactions';
 $this->params['breadcrumbs'][] = $this->title;
+
+$totalTransactions = $dataProvider->getCount();
+$totalMoneyMoved = 0;
+$totalQuantitySold = 0;
+
+foreach ($dataProvider->getModels() as $model) {
+    $totalMoneyMoved += $model->price;
+    $totalQuantitySold += $model->quantity;
+}
 ?>
 <div class="invoice-line-index">
+    <!-- Summary -->
+    <div class="summary-section" style="margin-bottom: 20px;">
+        <h3 class="text-primary">Summary</h3>
+        <p><strong>Total transactions:</strong> <?= $totalTransactions ?></p>
+        <p><strong>Total money moved:</strong> <?= Yii::$app->formatter->asCurrency($totalMoneyMoved) ?></p>
+        <p><strong>Total products sold:</strong> <?= $totalQuantitySold ?></p>
+    </div>
+    <!-- Transactions -->
+    <h3 class="text-primary">Transactions</h3>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,

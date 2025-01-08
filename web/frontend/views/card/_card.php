@@ -10,7 +10,7 @@ use yii\helpers\Url;
         <div class="product-item bg-light mb-4">
             <div class="row g-0">
                 <!-- Image column (will fill the full height) -->
-                <div class="col-md-4 d-flex align-items-stretch p-0">
+                <div class="col-md-4 column d-flex align-items-stretch p-0">
                     <?= Html::img($model->card->image_url, [
                         'alt' => $model->card->name,
                         'class' => 'img-fluid card-img w-100 object-cover',
@@ -18,7 +18,7 @@ use yii\helpers\Url;
                 </div>
 
                 <!-- Text column with card title and description -->
-                <div class="col-md-8 d-flex">
+                <div class="col-md-8 column d-flex">
                     <div class="card-body d-flex flex-column justify-content-between h-100">
                         <h5 class="card-title"><?= Html::encode($model->card->name) ?></h5>
                         <p class="card-text"><?= nl2br(Html::encode($model->card->description)) ?></p>
@@ -53,25 +53,13 @@ use yii\helpers\Url;
 
 
 <style>
-
-
     .row.g-0 {
         display: flex;
         height: 100%;
     }
 
-    .col-md-4, .col-md-8 {
+    .column {
         display: flex;
         height: 100%;
     }
-
-    .product-item {
-        height: 200px;
-        display: flex;
-        flex-direction: column;
-    }
-
-
-
-
 </style>
