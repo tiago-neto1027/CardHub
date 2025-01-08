@@ -30,18 +30,13 @@ class PaymentController extends \yii\web\Controller
                     'rules' => [
                         [
                             'allow' => true,
-                            'actions' => ['index','view'],
+                            'actions' => ['view', 'success'],
                             'roles' => ['seller','buyer'],
                         ]
                     ],
                 ],
             ]
         );
-    }
-    public function actionIndex()
-    {
-        $model = new PaymentForm();
-        return $this->render('index', ['model' => $model]);
     }
 
     public function actionView($id = null)

@@ -13,6 +13,7 @@ class InvoiceLineSearch extends InvoiceLine
 {
     public $start_date;
     public $end_date;
+    public $status_filter;
     /**
      * {@inheritdoc}
      */
@@ -21,7 +22,7 @@ class InvoiceLineSearch extends InvoiceLine
         return [
             [['id', 'invoice_id', 'quantity', 'card_transaction_id', 'product_transaction_id'], 'integer'],
             [['price'], 'number'],
-            [['product_name', 'start_date', 'end_date'], 'safe'],
+            [['product_name', 'start_date', 'end_date', 'status_filter'], 'safe'],
         ];
     }
 
@@ -53,6 +54,7 @@ class InvoiceLineSearch extends InvoiceLine
                     'price',
                     'quantity',
                     'date',
+                    'status',
                 ]
             ]
         ]);
@@ -81,6 +83,9 @@ class InvoiceLineSearch extends InvoiceLine
         if ($type === 'cards') {
             $query->joinWith('cardTransaction');
             $query->andWhere(['IS NOT', 'card_transaction_id', null]);
+            if ($this->status_filter) {
+                $query->andWhere(['card_transactions.status' => $this->status_filter]);
+            }
             if ($this->start_date && $this->end_date) {
                 $query->andWhere(['between', 'card_transactions.date', $this->start_date, $this->end_date . ' 23:59:59']);
             } elseif ($this->start_date) {
@@ -91,6 +96,9 @@ class InvoiceLineSearch extends InvoiceLine
         } elseif ($type === 'products') {
             $query->joinWith('productTransaction');
             $query->andWhere(['IS NOT', 'product_transaction_id', null]);
+            if ($this->status_filter) {
+                $query->andWhere(['product_transactions.status' => $this->status_filter]);
+            }
             if ($this->start_date && $this->end_date) {
                 $query->andWhere(['between', 'product_transactions.date', $this->start_date, $this->end_date . ' 23:59:59']);
             } elseif ($this->start_date) {

@@ -72,4 +72,64 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]) ?>
 
+    <?php if ($model->getRole() === 'seller'): ?>
+        <h3>Seller Summary</h3>
+        <table class="table table-bordered">
+            <tr>
+                <th>Total Listings</th>
+                <td><?= $model->getListingsCount() ?></td>
+            </tr>
+            <tr>
+                <th>Active Listings</th>
+                <td><?= $model->getListings() ?></td>
+            </tr>
+            <tr>
+                <th>Inactive Listings</th>
+                <td><?= $model->getSoldListingsCount() ?></td>
+            </tr>
+            <tr>
+                <th>Total Revenue</th>
+                <td><?= $model->getRevenue() ?>€</td>
+            </tr>
+        </table>
+
+        <h3>Seller Listings</h3>
+        <div class="row">
+            <div class="col-md-6">
+                <h4>Active Listings</h4>
+                <?php
+                $activeListings = \common\models\Listing::find()
+                    ->where(['seller_id' => $model->id, 'status' => 'active'])
+                    ->all();
+
+                if (!empty($activeListings)): ?>
+                    <ul>
+                        <?php foreach ($activeListings as $listing): ?>
+                            <li><?= Html::encode($listing->card->name) ?> - <?= number_format($listing->price, 2) ?>€</li>
+                        <?php endforeach; ?>
+                    </ul>
+                <?php else: ?>
+                    <p>No active listings.</p>
+                <?php endif; ?>
+            </div>
+            <div class="col-md-6">
+                <h4>Inactive Listings</h4>
+                <?php
+                $inactiveListings = \common\models\Listing::find()
+                    ->where(['seller_id' => $model->id, 'status' => 'inactive'])
+                    ->all();
+
+                if (!empty($inactiveListings)): ?>
+                    <ul>
+                        <?php foreach ($inactiveListings as $listing): ?>
+                            <li><?= Html::encode($listing->card->name) ?> - <?= number_format($listing->price, 2) ?>€</li>
+                        <?php endforeach; ?>
+                    </ul>
+                <?php else: ?>
+                    <p>No inactive listings.</p>
+                <?php endif; ?>
+            </div>
+        </div>
+    <?php endif; ?>
+
 </div>

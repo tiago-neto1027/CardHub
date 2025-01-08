@@ -102,6 +102,6 @@ class Listing extends \yii\db\ActiveRecord
 
     public static function getSoldListingsCount()
     {
-        return self::find()->where(['status' => 'sold'])->count();
+        return self::find()->where(['status' => 'inactive'])->count();
     }
 }

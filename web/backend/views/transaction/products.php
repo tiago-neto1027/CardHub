@@ -41,7 +41,29 @@ foreach ($dataProvider->getModels() as $model) {
             'product_name:ntext',
             'price',
             'quantity',
-
+            [
+                'label' => 'Buyer',
+                'value' => function ($model) {
+                    return $model->buyer->username;
+                },
+            ],
+            [
+                'attribute' => 'status',
+                'label' => 'Status',
+                'value' => function ($model) {
+                    $status = $model->productTransaction->status;
+                    return $status === 'active' ? 'Pending' : ($status === 'inactive' ? 'Completed' : $status);
+                },
+                'filter' => Html::activeDropDownList(
+                    $searchModel,
+                    'status_filter',
+                    [
+                        'active' => 'Pending',
+                        'inactive' => 'Completed',
+                    ],
+                    ['class' => 'form-control', 'prompt' => 'Select Status']
+                ),
+            ],
             [
                 'attribute' => 'date',
                 'label' => 'Transaction Date',
