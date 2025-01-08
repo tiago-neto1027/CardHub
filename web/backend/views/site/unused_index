@@ -34,7 +34,7 @@
             <?= \hail812\adminlte\widgets\InfoBox::widget([
                 'text' => 'Bookmarks',
                 'number' => '410',
-                 'theme' => 'success',
+                'theme' => 'success',
                 'icon' => 'far fa-flag',
             ]) ?>
         </div>
