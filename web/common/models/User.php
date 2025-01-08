@@ -277,7 +277,7 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return \common\models\Listing::find()
             ->where(['seller_id' => $this->id])
-            ->andWhere(['status' => 'inactive'])
+            ->andWhere(['status' => 'sold'])
             ->count();
     }
 
@@ -285,7 +285,7 @@ class User extends ActiveRecord implements IdentityInterface
     {
         $revenue = \common\models\Listing::find()
             ->where(['seller_id' => $this->id])
-            ->andWhere(['status' => 'inactive'])
+            ->andWhere(['status' => 'sold'])
             ->sum('price');
 
         return $revenue !== null ? number_format($revenue, 2) : '0.00';
