@@ -81,7 +81,7 @@ $this->title = "Invoice #{$invoice->id}";
 
             <?php if ($invoice->status === 'Pending'): ?>
                 <div class="text-end">
-                    <?= Html::a('Pay Now', ['/payment/view', 'id' => $invoice->id], [
+                    <?= Html::a('Pay Now', ['/payment/view', 'source'=>'detail','id' => $invoice->id], [
                         'class' => 'btn btn-success rounded mt-4 text-black',
                         'role' => 'button'
                     ]); ?>

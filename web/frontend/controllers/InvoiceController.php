@@ -99,7 +99,7 @@ class InvoiceController extends Controller
     public function actionCancel($id)
     {
         $invoice = Invoice::findOne($id);
-
+    
         if (!$invoice) {
             Yii::$app->session->setFlash('error', 'Invoice not found.');
             return $this->redirect(['detail/details' , 'id' => $id]);

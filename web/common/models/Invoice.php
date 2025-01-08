@@ -67,7 +67,7 @@ class Invoice extends \yii\db\ActiveRecord
 
     public function getTotal()
     {
-        return $this->payment ? $this->payment->total : null;
+        return $this->payment->total;
     }
 
     public function getInvoiceLines()
