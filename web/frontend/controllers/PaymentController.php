@@ -44,7 +44,7 @@ class PaymentController extends \yii\web\Controller
         $totalCost = 0;
 
         if ($source === 'detail') {
-            if ($id !== null) {
+            if ($id !== 'cart') {
                 $invoice = Invoice::findOne($id);
                 $invoice_id = $invoice->id;
                 if (empty($invoice)) {
