@@ -73,6 +73,7 @@ use common\models\Product;
                     ['label' => 'Game Management', 'url' => ['game/index'], 'icon' => 'gamepad'],
                     ['label' => 'Card Management', 'url' => ['card/index'], 'icon' => 'dragon'],
                     ['label' => 'Product Management', 'url' => ['product/index'], 'icon' => 'shopping-cart'],
+                    ['label' => 'User Punishments', 'url' => ['punishment/index'], 'icon' => 'gavel'],
 
                     //REVENUE MENUS
                     ['label' => 'REVENUES', 'header' => true,],

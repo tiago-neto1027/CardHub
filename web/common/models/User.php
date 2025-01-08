@@ -325,4 +325,12 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return self::find()->count();
     }
+
+    public function hasActivePunishment()
+    {
+        return Punishment::find()
+            ->where(['user_id' => $this->id])
+            ->andWhere(['or', ['end_date' => null], ['>', 'end_date', date('Y-m-d H:i:s')]])
+            ->exists();
+    }
 }

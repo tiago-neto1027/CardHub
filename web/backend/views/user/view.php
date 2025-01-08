@@ -14,15 +14,23 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="user-view">
 
     <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary mx-2']) ?>
         <?php
+            //Delete Button
             if($model->status != 0){
                 echo Html::a('Delete', ['delete', 'id' => $model->id], [
-                    'class' => 'btn btn-danger',
+                    'class' => 'btn btn-danger mx-2',
                     'data' => [
                         'confirm' => 'Are you sure you want to delete this item?',
                         'method' => 'post',
                     ],
+                ]);
+            }
+
+            //Punishment Button
+            if($model->getRole()!== 'admin'){
+                echo Html::a('Punish', ['punishment/create', 'user_id' => $model->id], [
+                    'class' => 'btn btn-danger mx-2',
                 ]);
             }
         ?>
