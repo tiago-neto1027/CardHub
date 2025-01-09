@@ -104,10 +104,12 @@ class Product extends \yii\db\ActiveRecord
 
     public static function getSoldProductsCount()
     {
-        return (new \yii\db\Query())
+        $quantity = (new \yii\db\Query())
             ->from('invoice_lines')
             ->where(['not', ['product_transaction_id' => null]])
             ->sum('quantity');
+
+        return $quantity ?: 0;
     }
 
     public static function getTotalRevenue()
@@ -116,6 +118,8 @@ class Product extends \yii\db\ActiveRecord
             ->from('invoice_lines')
             ->where(['not', ['product_transaction_id' => null]])
             ->sum('price');
+
+        $total = $total ?: 0;
 
         return Yii::$app->formatter->asCurrency($total, 'USD');
     }
