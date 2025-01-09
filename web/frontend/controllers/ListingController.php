@@ -212,8 +212,12 @@ class ListingController extends Controller
         if (!$listing) {
             \Yii::error("Couldn't load listing.", 'application');
         }
-        //Calls the function that will use the mqtt
-        $this->publishNewListing($listing);
+        try{
+            //Calls the function that will use the mqtt
+            $this->publishNewListing($listing);
+        }catch (\Exception $e){
+            \Yii::error($e->getMessage(), 'application');
+        }
     }
 
     private function publishNewListing($listing)
