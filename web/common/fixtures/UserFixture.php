@@ -9,7 +9,7 @@ use Yii;
 class UserFixture extends ActiveFixture
 {
     public $modelClass = 'common\models\User';
-    public $dataFile = '@frontend/tests/_data/users.php';
+    public $dataFile = '@frontend/tests/_data/user.php';
 
     public function init()
     {

@@ -7,3 +7,4 @@ modules:
             browser: chrome
         - Yii2:
             part: init
+            configFile: config/test.php

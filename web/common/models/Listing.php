@@ -104,4 +104,10 @@ class Listing extends \yii\db\ActiveRecord
     {
         return self::find()->where(['status' => 'sold'])->count();
     }
+
+    public function delete()
+    {
+        $this->status = 'inactive';
+        return $this->save(false, ['status', 'updated_at']);
+    }
 }
