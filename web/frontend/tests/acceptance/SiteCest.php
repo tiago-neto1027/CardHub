@@ -2,6 +2,8 @@
 
 namespace frontend\tests\acceptance;
 
+use frontend\tests\AcceptanceTester;
+
 class SiteCest
 {
     public function testFullSite(AcceptanceTester $I)
