@@ -2,10 +2,21 @@
 
 namespace frontend\tests\acceptance;
 
+use common\fixtures\UserFixture;
 use frontend\tests\AcceptanceTester;
 
 class SiteCest
 {
+    public function _fixtures()
+    {
+        return [
+            'user' => [
+                'class' => UserFixture::class,
+                'dataFile' => codecept_data_dir() . 'user.php',
+            ],
+        ];
+    }
+
     public function testFullSite(AcceptanceTester $I)
     {
         $I->amOnPage('/site/login');
