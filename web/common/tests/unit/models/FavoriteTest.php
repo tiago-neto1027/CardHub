@@ -4,6 +4,7 @@ namespace common\tests\unit\models;
 
 use common\models\Favorite;
 use common\models\Card;
+use common\models\Game;
 use common\models\User;
 use Codeception\Test\Unit;
 
@@ -13,9 +14,20 @@ class FavoriteTest extends Unit
     private $card;
     private $favorite;
 
+    protected $game;
+
     // Set up the necessary data for the tests
     protected function _before()
     {
+        //Creating Game for tests
+        $this->game = Game::find()->one();
+        if (!$this->game) {
+            $this->game = new Game();
+            $this->game->name = 'Sample Game';
+            $this->game->logo_url = 'http://teste.com';
+            $this->game->save();
+        }
+
         // Create a user and a card to associate with the favorite
         $this->user = new User();
         $this->user->username = 'userexample';
@@ -24,7 +36,7 @@ class FavoriteTest extends Unit
         $this->user->save();
 
         $this->card = new Card();
-        $this->card->game_id = 1;
+        $this->card->game_id = $this->game->id;
         $this->card->name = "Test Card";
         $this->card->rarity = "Rare";
         $this->card->image_url = "http://example.com/test.jpg";

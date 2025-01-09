@@ -15,16 +15,18 @@ class CardTest extends Unit
 {
     protected $tester;
 
+    protected $game;
+
     protected function _before()
     {
         //Creating Game for tests
-        $game = Game::find()->one();
-        if (!$game) {
-            $game = new Game();
-            $game->name = 'Sample Game';
-            $game->save();
+        $this->game = Game::find()->one();
+        if (!$this->game) {
+            $this->game = new Game();
+            $this->game->name = 'Sample Game';
+            $this->game->logo_url = 'http://teste.com';
+            $this->game->save();
         }
-
         //Creating User for tests
         $user = User::find()->one();
         if (!$user) {
@@ -37,13 +39,14 @@ class CardTest extends Unit
 
         //Creating Card for tests
         $this->card = new Card();
-        $this->card->game_id = $game->id;
-        $this->card->name = "Test Card";
+        $this->card->game_id = $this->game->id;
+        $this->card->name = "Test Card2";
         $this->card->rarity = "Rare";
         $this->card->image_url = "http://example.com/image.jpg";
         $this->card->status = "active";
         $this->card->user_id = $user->id;
         $this->card->save();
+        var_dump($this->card);
     }
 
     protected function _after()
@@ -56,11 +59,14 @@ class CardTest extends Unit
 
         $this->assertFalse($card->validate());
 
-        $card->game_id = 1;
+
+        $card->game_id = $this->game->id;
         $card->name = "Card Name";
         $card->rarity = "Rare";
         $card->image_url = "http://example.com/image.jpg";
         $card->status = "active";
+        $card->description = 'teste';
+        $card->user_id = null;
 
         $this->assertTrue($card->validate());
     }
@@ -126,14 +132,14 @@ class CardTest extends Unit
     public function testTimestampBehavior()
     {
         $card = new Card();
-        $card->game_id = 1;
+        $card->game_id = $this->game->id;
         $card->name = "New Card";
         $card->rarity = "Epic";
         $card->image_url = "http://example.com/epic-card.jpg";
         $card->status = "active";
 
         $card->save();
-
+        echo('>>>>>>>>>>>>>>>>>>>>>>>>>>'.$card->name);
         $this->assertNotNull($card->created_at);
         $this->assertNotNull($card->updated_at);
     }

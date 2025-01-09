@@ -3,6 +3,7 @@
 namespace common\tests\unit\models;
 
 use common\models\Card;
+use common\models\Game;
 use common\models\Listing;
 use common\models\User;
 use Yii;
@@ -12,10 +13,20 @@ class ListingTest extends Unit
 {
     protected $tester;
     protected $listing;
+    protected $game;
 
     // This method is called before each test
     protected function _before()
     {
+        //Creating Game for tests
+        $this->game = Game::find()->one();
+        if (!$this->game) {
+            $this->game = new Game();
+            $this->game->name = 'Sample Game';
+            $this->game->logo_url = 'http://teste.com';
+            $this->game->save();
+        }
+
         // Create a new User if one doesn't exist
         $user = User::find()->one();
         if (!$user) {
@@ -30,7 +41,7 @@ class ListingTest extends Unit
         $card = Card::find()->one();
         if (!$card) {
             $card = new Card();
-            $card->game_id = 1; // Use a valid game_id
+            $card->game_id = $this->game->id; // Use a valid game_id
             $card->name = 'Test Card';
             $card->rarity = 'Rare';
             $card->image_url = 'http://example.com/image.jpg';
