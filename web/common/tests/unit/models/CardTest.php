@@ -139,7 +139,7 @@ class CardTest extends Unit
         $card->status = "active";
 
         $card->save();
-        echo('>>>>>>>>>>>>>>>>>>>>>>>>>>'.$card->name);
+
         $this->assertNotNull($card->created_at);
         $this->assertNotNull($card->updated_at);
     }

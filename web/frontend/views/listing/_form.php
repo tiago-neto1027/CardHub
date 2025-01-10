@@ -11,7 +11,7 @@ use yii\jui\AutoComplete;
 
 <div class="listing-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin(['id' => 'listing-form']); ?>
 
     <!-- The code below creates a label with auto complete for the cards so that the user can ----
     ---- search trough the cards and select it by typing the name. When the user selects a card --
