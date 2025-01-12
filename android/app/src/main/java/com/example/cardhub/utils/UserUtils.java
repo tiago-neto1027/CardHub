@@ -69,8 +69,6 @@ public class UserUtils {
             editor.remove(USERNAME_KEY);
             editor.remove(PASSWORD_KEY);
             editor.apply();
-
-            Toast.makeText(context, "Logged out", Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
             e.printStackTrace();
         }

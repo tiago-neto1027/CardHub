@@ -1,8 +1,6 @@
 package models;
 
 import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.util.Base64;
 import android.util.Log;
 import android.widget.Toast;
@@ -12,17 +10,23 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.cardhub.CardsFragment;
 import com.example.cardhub.R;
+import com.example.cardhub.adapters.CardAdapter;
+import com.example.cardhub.listeners.CardsListener;
 import com.example.cardhub.utils.Endpoints;
 import com.example.cardhub.utils.NetworkUtils;
 import com.example.cardhub.utils.UserUtils;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,6 +36,8 @@ public class RestAPIClient {
     private static RequestQueue requestQueue;
 
     private static Context context;
+
+    private CardsListener cardsListener;
 
     UserUtils userUtils = new UserUtils();
 
@@ -52,63 +58,91 @@ public class RestAPIClient {
         return instance;
     }
 
-    //Login API doesnt implement a getRequest() because it uses the direct username and password that are passed to it
-    public void loginAPI(final String username, final String password, final APIResponseCallback callback) {
+    //region Listeners
+    public void setCardsListener(CardsListener cardsListener){
+        this.cardsListener = cardsListener;
+    }
+
+    //endregion Listeners
+
+    //region Public API Methods
+    public void loginAPI(final APIResponseCallback callback){
 
         if(!NetworkUtils.hasInternet(context)) {
             Toast.makeText(context, R.string.no_internet, Toast.LENGTH_SHORT).show();
             return;
         }
 
-        String url = Endpoints.getBaseUrl(context) + Endpoints.LOGIN_ENDPOINT;
-
-        StringRequest loginRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try{
-                            JSONObject jsonResponse = new JSONObject(response);
-                            int statusCode = jsonResponse.optInt("status", 0);
-
-                            if (statusCode == 200) {
-                                userUtils.saveCredentials(context, username, password);
-                                callback.onSuccess(jsonResponse);
-                            } else {
-                                callback.onError("Invalid status code: " + statusCode);
-                            }
-                        } catch (JSONException e) {
-                            callback.onError("Error parsing response");
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        callback.onError("Wrong credentials or network error.");
-                    }
-                }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> headers = new HashMap<>();
-                String credentials = username + ":" + password;
-                String auth = "Basic " + Base64.encodeToString(credentials.getBytes(), Base64.NO_WRAP);
-                headers.put("Authorization", auth);
-                return headers;
-            }
-        };
-
-        requestQueue.add(loginRequest);
+        getRequest(Endpoints.LOGIN_ENDPOINT, callback);
     }
+
+    public void getCards(){
+
+        if(!NetworkUtils.hasInternet(context)) {
+            Toast.makeText(context, R.string.no_internet, Toast.LENGTH_SHORT).show();
+            //TODO: Get the cards from the local database
+            return;
+        }
+
+       getRequest(Endpoints.CARD_ENDPOINT, new APIResponseCallback() {
+           @Override
+           public void onSuccess(JSONObject response) {
+               try {
+                   JSONArray cardsArray = response.getJSONArray("cards");
+                   ArrayList<Card> cardsList = new ArrayList<>();
+
+                   for (int i = 0; i < cardsArray.length(); i++) {
+                       JSONObject cardJson = cardsArray.getJSONObject(i);
+
+                       Card card = new Card(
+                               cardJson.getInt("id"),
+                               cardJson.getInt("game_id"),
+                               cardJson.getString("name"),
+                               cardJson.getString("rarity"),
+                               cardJson.getString("image_url"),
+                               cardJson.getString("status"),
+                               cardJson.isNull("description") ? null : cardJson.optString("description"),
+                               cardJson.getInt("created_at"),
+                               cardJson.getInt("updated_at"),
+                               cardJson.isNull("user_id") ? null : cardJson.optInt("user_id")
+                       );
+
+                       cardsList.add(card);
+                   }
+
+                   if (cardsListener != null) {
+                       cardsListener.onRefreshCardsList(cardsList);
+                   }
+
+               } catch (JSONException e) {
+                   Log.d("RestAPIClient", "cards on Catch: " + e.toString());
+                   Toast.makeText(context, "Error parsing cards data", Toast.LENGTH_SHORT).show();
+               }
+           }
+
+           @Override
+           public void onError(String error) {
+               Log.d("RestAPIClient", "Cards onError: " + error);
+               Toast.makeText(context, error, Toast.LENGTH_SHORT).show();
+           }
+       });
+    }
+
+    //endregion Public API Methods
 
     //region Private Base Methods
     private void getRequest(String endpoint, final APIResponseCallback callback) {
         String url = Endpoints.getBaseUrl(context) + endpoint;
-        JsonObjectRequest jsonRequest = new JsonObjectRequest(
+        JsonArrayRequest jsonRequest = new JsonArrayRequest(
                 Request.Method.GET, url, null,
-                new Response.Listener<JSONObject>() {
+                new Response.Listener<JSONArray>() {
                     @Override
-                    public void onResponse(JSONObject response) {
-                        callback.onSuccess(response);
+                    public void onResponse(JSONArray response) {
+                        try {
+                            callback.onSuccess(new JSONObject().put("cards", response));
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
                     }
                 },
                 new Response.ErrorListener() {
