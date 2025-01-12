@@ -70,8 +70,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void navigateToMainScreen() {
-        Intent intent = new Intent(LoginActivity.this, CardActivity.class);
-        //intent.putExtra(AppMainActivity.USERNAME, etUsername.getText().toString());
+        Intent intent = new Intent(LoginActivity.this, AppMainActivity.class);
+        intent.putExtra(AppMainActivity.USERNAME, etUsername.getText().toString());
         startActivity(intent);
         finish();
     }

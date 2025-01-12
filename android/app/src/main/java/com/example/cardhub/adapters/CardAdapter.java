@@ -1,8 +1,10 @@
 package com.example.cardhub.adapters;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -10,64 +12,74 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.cardhub.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder> {
-    private List<Card> cardList;
+import models.Card;
 
-    public static class Card {
-        public int id;
-        public int gameId;
-        public String name;
-        public String rarity;
-        public String imageUrl;
-        public String status;
-        public String description;
-        public int createdAt;
-        public int updatedAt;
-        public int userId;
-    }
+public class CardAdapter extends BaseAdapter {
 
-    public CardAdapter(List<Card> cardList) {
+    private Context context;
+    private LayoutInflater layoutInflater;
+    private ArrayList<Card> cardList;
+
+    public CardAdapter(ArrayList<Card> cardList, Context context){
         this.cardList = cardList;
-    }
-
-    @NonNull
-    @Override
-    public CardViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_card, parent, false);
-        return new CardViewHolder(view);
+        this.context = context;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CardViewHolder holder, int position) {
-        Card card = cardList.get(position);
-        holder.tvCardName.setText(card.name);
-        holder.tvCardRarity.setText(card.rarity);
-        holder.tvCardDescription.setText(card.description != null ? card.description : "No Description Available");
-        Glide.with(holder.itemView.getContext())
-                .load(card.imageUrl)
-                .placeholder(R.drawable.default_card)
-                .into(holder.ivCardImage);
-    }
+    public int getCount() { return cardList.size(); }
 
     @Override
-    public int getItemCount() {
-        return cardList.size();
+    public Object getItem(int i) { return cardList.get(i); }
+
+    @Override
+    public long getItemId(int i) { return cardList.get(i).getId(); }
+
+    @Override
+    public View getView(int i, View view, ViewGroup viewGroup) {
+
+        if(layoutInflater == null){
+            layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        }
+
+        if(view == null){
+            view = layoutInflater.inflate(R.layout.item_card, null);
+        }
+
+        CardViewHolder cardViewHolder = (CardViewHolder) view.getTag();
+        if(cardViewHolder == null){
+            cardViewHolder = new CardViewHolder(view);
+            view.setTag(cardViewHolder);
+        }
+
+        cardViewHolder.update(cardList.get(i));
+        return view;
     }
 
-    public static class CardViewHolder extends RecyclerView.ViewHolder {
+    private class CardViewHolder{
         ImageView ivCardImage;
-        TextView tvCardName, tvCardRarity, tvCardDescription;
+        TextView tvCardName, tvCardRarity;
 
-        public CardViewHolder(@NonNull View itemView) {
-            super(itemView);
-            tvCardName = itemView.findViewById(R.id.tvCardName);
-            tvCardRarity = itemView.findViewById(R.id.tvCardRarity);
-            tvCardDescription = itemView.findViewById(R.id.tvCardDescription);
-            ivCardImage = itemView.findViewById(R.id.ivCardImage);
+        public CardViewHolder(View view){
+            tvCardName = view.findViewById(R.id.tvCardName);
+            tvCardRarity = view.findViewById(R.id.tvCardRarity);
+            ivCardImage = view.findViewById(R.id.ivCardImage);
+        }
+
+        public void update(Card card){
+            tvCardName.setText(card.getName());
+            tvCardRarity.setText(card.getRarity());
+
+            Glide.with(context)
+                    .load(card.getImageUrl())
+                    .placeholder(R.drawable.default_card)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(ivCardImage);
         }
     }
 }

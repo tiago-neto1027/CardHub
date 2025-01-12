@@ -38,20 +38,6 @@
                 android:gravity="center_vertical"
                 android:hint="Rarity" />
 
-            <TextView
-                android:id="@+id/holderCardDescription"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:gravity="center_vertical"
-                android:hint="Rules" />
-
-            <TextView
-                android:id="@+id/holderCardListings"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:gravity="center_vertical"
-                android:hint="Listings" />
-
         </LinearLayout>
 
         <LinearLayout
@@ -73,20 +59,6 @@
                 android:layout_height="50dp"
                 android:gravity="center_vertical"
                 android:text="InputRarity" />
-
-            <TextView
-                android:id="@+id/tvCardDescription"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:gravity="fill_vertical"
-                android:text="InputDescription" />
-
-            <TextView
-                android:id="@+id/tvCardListings"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:gravity="center_vertical"
-                android:hint="InputListings" />
 
         </LinearLayout>
 
