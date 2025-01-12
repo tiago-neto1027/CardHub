@@ -62,22 +62,23 @@ public class RestAPIClient {
 
         String url = Endpoints.getBaseUrl(context) + Endpoints.LOGIN_ENDPOINT;
 
-        StringRequest loginRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
+        JsonObjectRequest loginRequest = new JsonObjectRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONObject>() {
                     @Override
-                    public void onResponse(String response) {
-                        try{
-                            JSONObject jsonResponse = new JSONObject(response);
-                            int statusCode = jsonResponse.optInt("status", 0);
+                    public void onResponse(JSONObject response) {
+                        int statusCode = 0;
 
-                            if (statusCode == 200) {
-                                userUtils.saveCredentials(context, username, password);
-                                callback.onSuccess(jsonResponse);
-                            } else {
-                                callback.onError("Invalid status code: " + statusCode);
-                            }
+                        try {
+                            statusCode = response.getInt("status");
                         } catch (JSONException e) {
-                            callback.onError("Error parsing response");
+                            throw new RuntimeException(e);
+                        }
+
+                        if (statusCode == 200) {
+                            userUtils.saveCredentials(context, username, password);
+                            callback.onSuccess(response);
+                        } else {
+                            callback.onError("Invalid status code: " + statusCode);
                         }
                     }
                 },
@@ -98,6 +99,16 @@ public class RestAPIClient {
         };
 
         requestQueue.add(loginRequest);
+    }
+
+    public void getCards(final APIResponseCallback callback){
+
+        if(!NetworkUtils.hasInternet(context)) {
+            Toast.makeText(context, R.string.no_internet, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        getRequest(Endpoints.CARD_ENDPOINT, callback);
     }
 
     //region Private Base Methods
