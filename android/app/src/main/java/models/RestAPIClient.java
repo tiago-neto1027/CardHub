@@ -2,6 +2,7 @@ package models;
 
 import android.content.Context;
 import android.util.Base64;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -9,6 +10,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
@@ -94,33 +96,33 @@ public class RestAPIClient {
 
                        Card card = new Card(
                                cardJson.getInt("id"),
-                               cardJson.getInt("gameId"),
+                               cardJson.getInt("game_id"),
                                cardJson.getString("name"),
                                cardJson.getString("rarity"),
-                               cardJson.getString("imageUrl"),
+                               cardJson.getString("image_url"),
                                cardJson.getString("status"),
-                               cardJson.getString("description"),
-                               cardJson.getInt("createdAt"),
-                               cardJson.getInt("updatedAt"),
-                               cardJson.getInt("userId")
+                               cardJson.isNull("description") ? null : cardJson.optString("description"),
+                               cardJson.getInt("created_at"),
+                               cardJson.getInt("updated_at"),
+                               cardJson.isNull("user_id") ? null : cardJson.optInt("user_id")
                        );
 
                        cardsList.add(card);
                    }
-
-                   //TODO: Add the cards to the local database
 
                    if (cardsListener != null) {
                        cardsListener.onRefreshCardsList(cardsList);
                    }
 
                } catch (JSONException e) {
+                   Log.d("RestAPIClient", "cards on Catch: " + e.toString());
                    Toast.makeText(context, "Error parsing cards data", Toast.LENGTH_SHORT).show();
                }
            }
 
            @Override
            public void onError(String error) {
+               Log.d("RestAPIClient", "Cards onError: " + error);
                Toast.makeText(context, error, Toast.LENGTH_SHORT).show();
            }
        });
@@ -131,12 +133,16 @@ public class RestAPIClient {
     //region Private Base Methods
     private void getRequest(String endpoint, final APIResponseCallback callback) {
         String url = Endpoints.getBaseUrl(context) + endpoint;
-        JsonObjectRequest jsonRequest = new JsonObjectRequest(
+        JsonArrayRequest jsonRequest = new JsonArrayRequest(
                 Request.Method.GET, url, null,
-                new Response.Listener<JSONObject>() {
+                new Response.Listener<JSONArray>() {
                     @Override
-                    public void onResponse(JSONObject response) {
-                        callback.onSuccess(response);
+                    public void onResponse(JSONArray response) {
+                        try {
+                            callback.onSuccess(new JSONObject().put("cards", response));
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
                     }
                 },
                 new Response.ErrorListener() {

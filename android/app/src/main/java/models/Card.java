@@ -10,9 +10,9 @@ public class Card {
     private String description;
     private int createdAt;
     private int updatedAt;
-    private int userId;
+    private Integer userId;
 
-    public Card(int id, int gameId, String name, String rarity, String imageUrl, String status, String description, int createdAt, int updatedAt, int userId) {
+    public Card(int id, int gameId, String name, String rarity, String imageUrl, String status, String description, int createdAt, int updatedAt, Integer userId) {
         this.id = id;
         this.gameId = gameId;
         this.name = name;
@@ -53,5 +53,5 @@ public class Card {
     public void setUpdatedAt(int updatedAt) { this.updatedAt = updatedAt; }
 
     public int getUserId() { return userId; }
-    public void setUserId(int userId) { this.userId = userId; }
+    public void setUserId(Integer userId) { this.userId = userId; }
 }
