@@ -67,14 +67,13 @@ public class CardActivity extends AppCompatActivity {
 
                     cardAdapter.notifyDataSetChanged();
                 } catch (JSONException e) {
-                    e.printStackTrace();
                     Toast.makeText(CardActivity.this, "Error parsing cards data", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onError(String error) {
-                Toast.makeText(CardActivity.this, "Error fetching cards: " + error, Toast.LENGTH_SHORT).show();
+                Toast.makeText(CardActivity.this, "The endpoint might be wrong.", Toast.LENGTH_SHORT).show();
             }
         });
     }

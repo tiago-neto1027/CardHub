@@ -19,7 +19,6 @@ public class AppMainActivity extends AppCompatActivity implements
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
         super.onCreate(savedInstanceState, persistentState);
-        navigateToCards(); //Isto é para remover, está aqui meramente para testar
     }
 
     @Override

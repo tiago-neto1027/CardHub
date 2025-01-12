@@ -2,6 +2,7 @@ package com.example.cardhub;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -12,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.cardhub.utils.UserUtils;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import models.RestAPIClient;
@@ -35,8 +37,6 @@ public class LoginActivity extends AppCompatActivity {
         Button btnSignup = findViewById(R.id.btnSignUp);
         ImageButton ibtnSettings = findViewById(R.id.ibtnSettings);
 
-        apiClient = RestAPIClient.getInstance(this);
-
         // Check if the user is already logged in
         if (userUtils.isLoggedIn(getApplicationContext())) {
             navigateToMainScreen();
@@ -56,24 +56,7 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-        apiClient.loginAPI(username, password, new RestAPIClient.APIResponseCallback() {
-            @Override
-            public void onSuccess(JSONObject response) {
-                navigateToMainScreen();
-            }
-
-            @Override
-            public void onError(String error) {
-                Toast.makeText(LoginActivity.this, error, Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    private void navigateToMainScreen() {
-        Intent intent = new Intent(LoginActivity.this, AppMainActivity.class);
-        intent.putExtra(AppMainActivity.USERNAME, etUsername.getText().toString());
-        startActivity(intent);
-        finish();
+        loginAPI();
     }
 
     public void onClickSignup(View view) {
@@ -84,5 +67,42 @@ public class LoginActivity extends AppCompatActivity {
     public void onClickSettings(View view) {
         Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);
+    }
+
+    private void navigateToMainScreen() {
+        Intent intent = new Intent(LoginActivity.this, CardActivity.class);
+        //intent.putExtra(AppMainActivity.USERNAME, etUsername.getText().toString());
+        startActivity(intent);
+        finish();
+    }
+
+    private void loginAPI() {
+        //Saves credentials to log in, if login doesn't work then it removes it
+        userUtils.saveCredentials(getApplicationContext(), etUsername.getText().toString(), etPassword.getText().toString());
+
+        RestAPIClient.getInstance(this).loginAPI(new RestAPIClient.APIResponseCallback() {
+            @Override
+            public void onSuccess(JSONObject response) {
+                try {
+                    int statusCode = response.getInt("status");
+
+                    if(statusCode == 200)
+                        navigateToMainScreen();
+                    else {
+                        Toast.makeText(LoginActivity.this, "Invalid Status code: " + statusCode, Toast.LENGTH_SHORT).show();
+                        userUtils.logout(getApplicationContext());
+                    }
+
+                } catch (JSONException e) {
+                    Toast.makeText(LoginActivity.this, "Error parsing server response", Toast.LENGTH_SHORT).show();
+                    userUtils.logout(getApplicationContext());
+                }
+            }
+            @Override
+            public void onError(String error){
+                Toast.makeText(LoginActivity.this, "The endpoint might be wrong.", Toast.LENGTH_SHORT).show();
+                userUtils.logout(getApplicationContext());
+            }
+        });
     }
 }

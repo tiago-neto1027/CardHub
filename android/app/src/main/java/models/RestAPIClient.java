@@ -52,53 +52,14 @@ public class RestAPIClient {
         return instance;
     }
 
-    //Login API doesnt implement a getRequest() because it uses the direct username and password that are passed to it
-    public void loginAPI(final String username, final String password, final APIResponseCallback callback) {
+    public void loginAPI(final APIResponseCallback callback){
 
         if(!NetworkUtils.hasInternet(context)) {
             Toast.makeText(context, R.string.no_internet, Toast.LENGTH_SHORT).show();
             return;
         }
 
-        String url = Endpoints.getBaseUrl(context) + Endpoints.LOGIN_ENDPOINT;
-
-        JsonObjectRequest loginRequest = new JsonObjectRequest(Request.Method.GET, url, null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        int statusCode = 0;
-
-                        try {
-                            statusCode = response.getInt("status");
-                        } catch (JSONException e) {
-                            throw new RuntimeException(e);
-                        }
-
-                        if (statusCode == 200) {
-                            userUtils.saveCredentials(context, username, password);
-                            callback.onSuccess(response);
-                        } else {
-                            callback.onError("Invalid status code: " + statusCode);
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        callback.onError("Wrong credentials or network error.");
-                    }
-                }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> headers = new HashMap<>();
-                String credentials = username + ":" + password;
-                String auth = "Basic " + Base64.encodeToString(credentials.getBytes(), Base64.NO_WRAP);
-                headers.put("Authorization", auth);
-                return headers;
-            }
-        };
-
-        requestQueue.add(loginRequest);
+        getRequest(Endpoints.LOGIN_ENDPOINT, callback);
     }
 
     public void getCards(final APIResponseCallback callback){
