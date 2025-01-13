@@ -22,12 +22,6 @@
             android:theme="?attr/actionBarTheme"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
-        <ImageView
-            android:id="@+id/imageView2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/card_logo" />
-
     </com.google.android.material.appbar.AppBarLayout>
 
     <FrameLayout

@@ -101,6 +101,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onError(String error){
                 Toast.makeText(LoginActivity.this, "The endpoint might be wrong.", Toast.LENGTH_SHORT).show();
+                Log.d("RestAPIClient", "Login on Error: " + error);
                 userUtils.logout(getApplicationContext());
             }
         });

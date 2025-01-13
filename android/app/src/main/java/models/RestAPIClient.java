@@ -73,7 +73,7 @@ public class RestAPIClient {
             return;
         }
 
-        getRequest(Endpoints.LOGIN_ENDPOINT, callback);
+        getRequestObject(Endpoints.LOGIN_ENDPOINT, callback);
     }
 
     public void getCards(){
@@ -143,6 +143,34 @@ public class RestAPIClient {
                         } catch (JSONException e) {
                             throw new RuntimeException(e);
                         }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        callback.onError(error.toString());
+                    }
+                }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<>();
+                String credentials = userUtils.getUsername(context) + ":" + userUtils.getPassword(context);
+                String auth = "Basic " + Base64.encodeToString(credentials.getBytes(), Base64.NO_WRAP);
+                headers.put("Authorization", auth);
+                return headers;
+            }
+        };
+        requestQueue.add(jsonRequest);
+    }
+
+    private void getRequestObject(String endpoint, final APIResponseCallback callback) {
+        String url = Endpoints.getBaseUrl(context) + endpoint;
+        JsonObjectRequest jsonRequest = new JsonObjectRequest(
+                Request.Method.GET, url, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        callback.onSuccess(response);
                     }
                 },
                 new Response.ErrorListener() {

@@ -8,7 +8,9 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-public class CardDetailsActivity extends AppCompatActivity {
+import com.example.cardhub.listeners.CardSingleListener;
+
+public class CardDetailsActivity extends AppCompatActivity implements CardSingleListener {
 
     public static final String CARD_ID = "CARD_ID";
     @Override
@@ -21,5 +23,10 @@ public class CardDetailsActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+    }
+
+    @Override
+    public void onRefreshCard(int op) {
+
     }
 }
