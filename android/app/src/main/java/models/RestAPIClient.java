@@ -14,9 +14,7 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.cardhub.CardsFragment;
 import com.example.cardhub.R;
-import com.example.cardhub.adapters.CardAdapter;
 import com.example.cardhub.listeners.CardsListener;
 import com.example.cardhub.utils.Endpoints;
 import com.example.cardhub.utils.NetworkUtils;
@@ -89,6 +87,23 @@ public class RestAPIClient {
                 cardJson.getInt("updated_at"),
                 cardJson.isNull("user_id") ? null : cardJson.optInt("user_id")
         );
+    }
+
+    public void getSingleCard(int id, final APIResponseCallback callback){
+        String endpoint = Endpoints.CARD_ENDPOINT + "/" + id;
+
+        getRequestObject(endpoint, new APIResponseCallback() {
+            @Override
+            public void onSuccess(JSONObject response) {
+                callback.onSuccess(response);
+            }
+
+            @Override
+            public void onError(String error) {
+                Log.d("RestAPIClient", "SingleCard onError: " + error);
+                Toast.makeText(context, error, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     public void getCards(){
