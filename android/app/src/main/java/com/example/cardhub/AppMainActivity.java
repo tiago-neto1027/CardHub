@@ -3,6 +3,7 @@ package com.example.cardhub;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,6 +15,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import com.example.cardhub.utils.UserUtils;
 import com.google.android.material.navigation.NavigationView;
 
 public class AppMainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -23,6 +25,8 @@ public class AppMainActivity extends AppCompatActivity implements NavigationView
     private FragmentManager fragmentManager;
     private DrawerLayout drawer;
     private NavigationView navigationView;
+
+    public String username;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
