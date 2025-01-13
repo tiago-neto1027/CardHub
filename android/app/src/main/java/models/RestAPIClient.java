@@ -76,6 +76,21 @@ public class RestAPIClient {
         getRequestObject(Endpoints.LOGIN_ENDPOINT, callback);
     }
 
+    public Card parseCard(JSONObject cardJson) throws JSONException {
+        return new Card(
+                cardJson.getInt("id"),
+                cardJson.getInt("game_id"),
+                cardJson.getString("name"),
+                cardJson.getString("rarity"),
+                cardJson.getString("image_url"),
+                cardJson.getString("status"),
+                cardJson.isNull("description") ? null : cardJson.optString("description"),
+                cardJson.getInt("created_at"),
+                cardJson.getInt("updated_at"),
+                cardJson.isNull("user_id") ? null : cardJson.optInt("user_id")
+        );
+    }
+
     public void getCards(){
 
         if(!NetworkUtils.hasInternet(context)) {
@@ -93,19 +108,7 @@ public class RestAPIClient {
 
                    for (int i = 0; i < cardsArray.length(); i++) {
                        JSONObject cardJson = cardsArray.getJSONObject(i);
-
-                       Card card = new Card(
-                               cardJson.getInt("id"),
-                               cardJson.getInt("game_id"),
-                               cardJson.getString("name"),
-                               cardJson.getString("rarity"),
-                               cardJson.getString("image_url"),
-                               cardJson.getString("status"),
-                               cardJson.isNull("description") ? null : cardJson.optString("description"),
-                               cardJson.getInt("created_at"),
-                               cardJson.getInt("updated_at"),
-                               cardJson.isNull("user_id") ? null : cardJson.optInt("user_id")
-                       );
+                       Card card = parseCard(cardJson);
 
                        cardsList.add(card);
                    }
