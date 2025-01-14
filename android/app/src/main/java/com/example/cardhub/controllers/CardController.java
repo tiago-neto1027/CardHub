@@ -114,10 +114,17 @@ public class CardController {
         });
     }
 
-    //Fetches the count of Listings for a single Card
+    /*
+    Fetches the count of Listings for a single Card
+
+    This checks the internet connection, if the user has internet, it grabs the countlistings from the api
+    If the user doesn't have internet then it loads them from the local database
+    This happens in order to keep the user up to date in the amount of listings for a card
+    */
     public void fetchCountListings(int cardId, final RestAPIClient.APIResponseCallback callback) {
         if (!NetworkUtils.hasInternet(context)) {
             Toast.makeText(context, "No internet connection available.", Toast.LENGTH_SHORT).show();
+            // TODO: Load countlistings from local database instead
             return;
         }
 
