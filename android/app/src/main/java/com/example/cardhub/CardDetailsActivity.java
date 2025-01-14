@@ -85,6 +85,7 @@ public class CardDetailsActivity extends AppCompatActivity{
             public void onSuccess(JSONObject response) {
                 try {
                     int countListings = response.getInt("listingCount");
+                    card.setCountListings(countListings);
 
                     //Update CountListings TextView
                     String rarityText = "CountListings: " + countListings;
