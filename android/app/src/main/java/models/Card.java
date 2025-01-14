@@ -53,7 +53,7 @@ public class Card {
     public int getUpdatedAt() { return updatedAt; }
     public void setUpdatedAt(int updatedAt) { this.updatedAt = updatedAt; }
 
-    public int getUserId() { return userId; }
+    public Integer getUserId() { return userId; }
     public void setUserId(Integer userId) { this.userId = userId; }
 
     public Integer getCountListings() { return countListings; }

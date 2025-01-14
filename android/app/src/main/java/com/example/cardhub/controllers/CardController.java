@@ -15,15 +15,22 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import models.Card;
+import models.CardHubDBHelper;
 import models.RestAPIClient;
 
 public class CardController {
     private final Context context;
     private CardsListener cardsListener;
+    private ArrayList<Card> localCards;
+
+    private CardHubDBHelper cardHubDBHelper = null;
 
     public CardController(Context context){
         this.context = context;
+        cardHubDBHelper = new CardHubDBHelper(context);
+        localCards = new ArrayList<>();
     }
+
     public void setCardsListener(CardsListener listener) {
         this.cardsListener = listener;
     }
@@ -52,7 +59,10 @@ public class CardController {
     public void fetchCards() {
         if (!NetworkUtils.hasInternet(context)) {
             Toast.makeText(context, "No internet connection available.", Toast.LENGTH_SHORT).show();
-            // TODO: Load cards from local database instead
+
+            if (cardsListener != null) {
+                cardsListener.onRefreshCardsList(cardHubDBHelper.getAllCards());
+            }
             return;
         }
 
@@ -63,10 +73,13 @@ public class CardController {
                     JSONArray cardsArray = response.getJSONArray("object");
                     ArrayList<Card> cardsList = new ArrayList<>();
 
+                    cardHubDBHelper.removeAllCards();
+
                     for (int i = 0; i < cardsArray.length(); i++) {
                         JSONObject cardJson = cardsArray.getJSONObject(i);
                         Card card = parseCard(cardJson);
                         cardsList.add(card);
+                        cardHubDBHelper.insertCard(card);
                     }
 
                     if (cardsListener != null) {
