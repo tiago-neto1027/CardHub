@@ -98,4 +98,8 @@ public class ListingsController {
             }
         });
     }
+
+    public ArrayList<Listing> fetchListingsDB() {
+        return cardHubDBHelper.getAllListings();
+    }
 }
