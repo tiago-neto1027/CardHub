@@ -24,6 +24,7 @@ import com.example.cardhub.listeners.CardsListener;
 import java.util.ArrayList;
 
 import models.Card;
+import models.CardHubDBHelper;
 import models.RestAPIClient;
 
 
@@ -78,12 +79,13 @@ public class CardsFragment extends Fragment implements SwipeRefreshLayout.OnRefr
             public boolean onQueryTextChange(String s) {
                 ArrayList<Card> tempCards = new ArrayList<>();
 
-                //TODO: Get the cards from the database getCardsDB()
-                /*for(Card card: RestAPIClient.getInstance(getContext()).getCardsDB()){
-                    if(card.getName().toLowerCase().contains(s.toLowerCase())){
-                        tempCards.add(card);
+                try (CardHubDBHelper dbHelper = new CardHubDBHelper(getContext())) {
+                    for (Card card : dbHelper.getAllCards()) {
+                        if (card.getName().toLowerCase().contains(s.toLowerCase())) {
+                            tempCards.add(card);
+                        }
                     }
-                }*/
+                }
 
                 lvCards.setAdapter(new CardAdapter(tempCards, getContext()));
                 return true;
@@ -92,7 +94,6 @@ public class CardsFragment extends Fragment implements SwipeRefreshLayout.OnRefr
 
         super.onCreateOptionsMenu(menu, inflater);
     }
-
     
 
     @Override
