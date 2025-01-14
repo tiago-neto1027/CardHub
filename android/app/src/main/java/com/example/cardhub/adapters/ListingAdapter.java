@@ -78,7 +78,7 @@ public class ListingAdapter extends BaseAdapter {
         public void update(Listing listing){
             tvCardName.setText(listing.getCardName());
             tvSellerUsername.setText(listing.getSellerUsername());
-            tvListingPrice.setText(String.format("$%.2f", listing.getPrice()));
+            tvListingPrice.setText(String.format("%.2f€", listing.getPrice()));
             tvListingCondition.setText(listing.getCondition());
 
             Glide.with(context)

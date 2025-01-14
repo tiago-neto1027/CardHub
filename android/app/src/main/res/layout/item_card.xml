@@ -29,14 +29,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:gravity="center_vertical"
-                android:hint="Name" />
+                android:hint="Name: " />
 
             <TextView
                 android:id="@+id/holderCardRarity"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:gravity="center_vertical"
-                android:hint="Rarity" />
+                android:hint="Rarity: " />
 
         </LinearLayout>
 
