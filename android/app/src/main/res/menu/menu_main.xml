@@ -9,5 +9,10 @@
             android:id="@+id/cardsList"
             android:title="@string/browse_cards"
             android:icon="@drawable/ic_menu_cards"/>
+
+        <item
+            android:id="@+id/listingsList"
+            android:title="Browse Listings"
+            android:icon="@drawable/ic_menu_listings"/>
     </group>
 </menu>
