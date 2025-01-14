@@ -18,6 +18,7 @@ import android.widget.ListView;
 import android.widget.SearchView;
 
 import com.example.cardhub.adapters.CardAdapter;
+import com.example.cardhub.controllers.CardController;
 import com.example.cardhub.listeners.CardsListener;
 
 import java.util.ArrayList;
@@ -31,6 +32,7 @@ public class CardsFragment extends Fragment implements SwipeRefreshLayout.OnRefr
     private ListView lvCards;
     private SearchView searchView;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private CardController cardController;
 
     public CardsFragment() {
         // Required empty public constructor
@@ -55,8 +57,9 @@ public class CardsFragment extends Fragment implements SwipeRefreshLayout.OnRefr
         swipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout);
         swipeRefreshLayout.setOnRefreshListener(this);
 
-        RestAPIClient.getInstance(getContext()).setCardsListener(this);
-        RestAPIClient.getInstance(getContext()).getCards();
+        cardController = new CardController(getContext());
+        cardController.setCardsListener(this);
+        cardController.fetchCards();
 
         return view;
     }
@@ -94,7 +97,7 @@ public class CardsFragment extends Fragment implements SwipeRefreshLayout.OnRefr
 
     @Override
     public void onRefresh() {
-        RestAPIClient.getInstance(getContext()).getCards();
+        cardController.fetchCards();
         swipeRefreshLayout.setRefreshing(false);
     }
 

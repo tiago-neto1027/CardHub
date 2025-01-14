@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.cardhub.controllers.AuthController;
 import com.example.cardhub.utils.UserUtils;
 
 import org.json.JSONException;
@@ -20,15 +21,16 @@ import models.RestAPIClient;
 
 public class LoginActivity extends AppCompatActivity {
 
-    UserUtils userUtils = new UserUtils();
+    private AuthController authController;
 
     private EditText etUsername, etPassword;
-    private RestAPIClient apiClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        authController = new AuthController(this);
 
         etUsername = findViewById(R.id.etUsername);
         etPassword = findViewById(R.id.etPassword);
@@ -38,6 +40,7 @@ public class LoginActivity extends AppCompatActivity {
         ImageButton ibtnSettings = findViewById(R.id.ibtnSettings);
 
         // Check if the user is already logged in
+        UserUtils userUtils = new UserUtils();
         if (userUtils.isLoggedIn(getApplicationContext())) {
             navigateToMainScreen();
         }
@@ -56,11 +59,21 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-        loginAPI();
+        authController.login(username, password, new AuthController.AuthCallback() {
+            @Override
+            public void onSuccess() {
+                navigateToMainScreen();
+            }
+
+            @Override
+            public void onFailure(String errorMessage) {
+                Toast.makeText(LoginActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     public void onClickSignup(View view) {
-        // Navigate to the signup page (if needed)
+        //TODO: Navigate to the signup page (if needed)
         Toast.makeText(this, "Navigate to signup", Toast.LENGTH_SHORT).show();
     }
 
@@ -74,36 +87,5 @@ public class LoginActivity extends AppCompatActivity {
         intent.putExtra(AppMainActivity.USERNAME, etUsername.getText().toString());
         startActivity(intent);
         finish();
-    }
-
-    private void loginAPI() {
-        //Saves credentials to log in, if login doesn't work then it removes it
-        userUtils.saveCredentials(getApplicationContext(), etUsername.getText().toString(), etPassword.getText().toString());
-
-        RestAPIClient.getInstance(this).loginAPI(new RestAPIClient.APIResponseCallback() {
-            @Override
-            public void onSuccess(JSONObject response) {
-                try {
-                    int statusCode = response.getInt("status");
-
-                    if(statusCode == 200)
-                        navigateToMainScreen();
-                    else {
-                        Toast.makeText(LoginActivity.this, "Invalid Status code: " + statusCode, Toast.LENGTH_SHORT).show();
-                        userUtils.logout(getApplicationContext());
-                    }
-
-                } catch (JSONException e) {
-                    Toast.makeText(LoginActivity.this, "Error parsing server response", Toast.LENGTH_SHORT).show();
-                    userUtils.logout(getApplicationContext());
-                }
-            }
-            @Override
-            public void onError(String error){
-                Toast.makeText(LoginActivity.this, "The endpoint might be wrong.", Toast.LENGTH_SHORT).show();
-                Log.d("RestAPIClient", "Login on Error: " + error);
-                userUtils.logout(getApplicationContext());
-            }
-        });
     }
 }

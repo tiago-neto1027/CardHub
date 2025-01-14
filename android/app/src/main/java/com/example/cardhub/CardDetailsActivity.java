@@ -14,6 +14,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.example.cardhub.controllers.CardController;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -26,6 +27,7 @@ public class CardDetailsActivity extends AppCompatActivity{
     //TODO: Create a button to show the listings for the card
     public static final String CARD_ID = "CARD_ID";
     private Card card;
+    private CardController cardController;
 
     private TextView tvName, tvRarity, tvDescription;
     private ImageView cardImage;
@@ -46,18 +48,18 @@ public class CardDetailsActivity extends AppCompatActivity{
         tvDescription = findViewById(R.id.tvDetailCardDescription);
         cardImage = findViewById(R.id.cardImage);
 
-        getCard();
+        cardController = new CardController(this);
+        fetchCardDetails();
     }
 
-    public void getCard(){
-        int id = getIntent().getIntExtra(CARD_ID, 0);
+    public void fetchCardDetails(){
+        int cardId = getIntent().getIntExtra(CARD_ID, 0);
 
-        //TODO: Get it from the database, if it doesnt exist then, get it from here
-        RestAPIClient.getInstance(this).getSingleCard(id, new RestAPIClient.APIResponseCallback() {
+        cardController.fetchSingleCard(cardId, new RestAPIClient.APIResponseCallback() {
             @Override
             public void onSuccess(JSONObject response) {
                 try{
-                    card = RestAPIClient.getInstance(CardDetailsActivity.this).parseCard(response);
+                    card = cardController.parseCard(response);
 
                     if (card != null)
                         loadCard();
@@ -66,7 +68,6 @@ public class CardDetailsActivity extends AppCompatActivity{
                     Toast.makeText(CardDetailsActivity.this, "Error parsing card data", Toast.LENGTH_SHORT).show();
                 }
             }
-
             @Override
             public void onError(String error) {
                 Log.d("RestAPIClient", "SingleCard onError: " + error);
