@@ -2,6 +2,7 @@ package com.example.cardhub.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 import android.widget.Toast;
 import androidx.security.crypto.EncryptedSharedPreferences;
 import androidx.security.crypto.MasterKeys;
@@ -69,6 +70,9 @@ public class UserUtils {
             editor.remove(USERNAME_KEY);
             editor.remove(PASSWORD_KEY);
             editor.apply();
+
+            this.username = null;
+            this.password = null;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -79,16 +83,12 @@ public class UserUtils {
     }
 
     public String getUsername(Context context) {
-        if (username == null) {
-            loadCredentialsFromCache(context);
-        }
+        loadCredentialsFromCache(context);
         return username;
     }
 
     public String getPassword(Context context) {
-        if (password == null) {
-            loadCredentialsFromCache(context);
-        }
+        loadCredentialsFromCache(context);
         return password;
     }
 }

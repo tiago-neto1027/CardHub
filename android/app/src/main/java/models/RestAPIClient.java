@@ -34,10 +34,7 @@ public class RestAPIClient {
     private static RequestQueue requestQueue;
 
     private static Context context;
-
-    private CardsListener cardsListener;
-
-    UserUtils userUtils = new UserUtils();
+    UserUtils userUtils;
 
     public interface APIResponseCallback {
         void onSuccess(JSONObject response);
@@ -47,6 +44,7 @@ public class RestAPIClient {
     private RestAPIClient(Context ctx) {
         context = ctx.getApplicationContext();
         requestQueue = Volley.newRequestQueue(context);
+        userUtils = new UserUtils();
     }
 
     public static RestAPIClient getInstance(Context ctx) {
@@ -56,100 +54,8 @@ public class RestAPIClient {
         return instance;
     }
 
-    //region Listeners
-    public void setCardsListener(CardsListener cardsListener){
-        this.cardsListener = cardsListener;
-    }
-
-    //endregion Listeners
-
-    //region Public API Methods
-    public void loginAPI(final APIResponseCallback callback){
-
-        if(!NetworkUtils.hasInternet(context)) {
-            Toast.makeText(context, R.string.no_internet, Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        getRequestObject(Endpoints.LOGIN_ENDPOINT, callback);
-    }
-
-    public Card parseCard(JSONObject cardJson) throws JSONException {
-        return new Card(
-                cardJson.getInt("id"),
-                cardJson.getInt("game_id"),
-                cardJson.getString("name"),
-                cardJson.getString("rarity"),
-                cardJson.getString("image_url"),
-                cardJson.getString("status"),
-                cardJson.isNull("description") ? null : cardJson.optString("description"),
-                cardJson.getInt("created_at"),
-                cardJson.getInt("updated_at"),
-                cardJson.isNull("user_id") ? null : cardJson.optInt("user_id")
-        );
-    }
-
-    public void getSingleCard(int id, final APIResponseCallback callback){
-        String endpoint = Endpoints.CARD_ENDPOINT + "/" + id;
-
-        getRequestObject(endpoint, new APIResponseCallback() {
-            @Override
-            public void onSuccess(JSONObject response) {
-                callback.onSuccess(response);
-            }
-
-            @Override
-            public void onError(String error) {
-                Log.d("RestAPIClient", "SingleCard onError: " + error);
-                Toast.makeText(context, error, Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    public void getCards(){
-
-        if(!NetworkUtils.hasInternet(context)) {
-            Toast.makeText(context, R.string.no_internet, Toast.LENGTH_SHORT).show();
-            //TODO: Get the cards from the local database
-            return;
-        }
-
-       getRequest(Endpoints.CARD_ENDPOINT, new APIResponseCallback() {
-           @Override
-           public void onSuccess(JSONObject response) {
-               try {
-                   JSONArray cardsArray = response.getJSONArray("cards");
-                   ArrayList<Card> cardsList = new ArrayList<>();
-
-                   for (int i = 0; i < cardsArray.length(); i++) {
-                       JSONObject cardJson = cardsArray.getJSONObject(i);
-                       Card card = parseCard(cardJson);
-
-                       cardsList.add(card);
-                   }
-
-                   if (cardsListener != null) {
-                       cardsListener.onRefreshCardsList(cardsList);
-                   }
-
-               } catch (JSONException e) {
-                   Log.d("RestAPIClient", "cards on Catch: " + e.toString());
-                   Toast.makeText(context, "Error parsing cards data", Toast.LENGTH_SHORT).show();
-               }
-           }
-
-           @Override
-           public void onError(String error) {
-               Log.d("RestAPIClient", "Cards onError: " + error);
-               Toast.makeText(context, error, Toast.LENGTH_SHORT).show();
-           }
-       });
-    }
-
-    //endregion Public API Methods
-
-    //region Private Base Methods
-    private void getRequest(String endpoint, final APIResponseCallback callback) {
+    //region Base Methods
+    public void getRequest(String endpoint, final APIResponseCallback callback) {
         String url = Endpoints.getBaseUrl(context) + endpoint;
         JsonArrayRequest jsonRequest = new JsonArrayRequest(
                 Request.Method.GET, url, null,
@@ -157,7 +63,7 @@ public class RestAPIClient {
                     @Override
                     public void onResponse(JSONArray response) {
                         try {
-                            callback.onSuccess(new JSONObject().put("cards", response));
+                            callback.onSuccess(new JSONObject().put("object", response));
                         } catch (JSONException e) {
                             throw new RuntimeException(e);
                         }
@@ -181,7 +87,7 @@ public class RestAPIClient {
         requestQueue.add(jsonRequest);
     }
 
-    private void getRequestObject(String endpoint, final APIResponseCallback callback) {
+    public void getRequestObject(String endpoint, final APIResponseCallback callback) {
         String url = Endpoints.getBaseUrl(context) + endpoint;
         JsonObjectRequest jsonRequest = new JsonObjectRequest(
                 Request.Method.GET, url, null,
@@ -209,7 +115,7 @@ public class RestAPIClient {
         requestQueue.add(jsonRequest);
     }
 
-    private void postRequest(String endpoint, JSONObject postData, final APIResponseCallback callback) {
+    public void postRequest(String endpoint, JSONObject postData, final APIResponseCallback callback) {
         String url = Endpoints.getBaseUrl(context) + endpoint;
         JsonObjectRequest jsonRequest = new JsonObjectRequest(
                 Request.Method.POST, url, postData,
@@ -239,7 +145,7 @@ public class RestAPIClient {
         requestQueue.add(jsonRequest);
     }
 
-    private void putRequest(String endpoint, JSONObject putData, final APIResponseCallback callback) {
+    public void putRequest(String endpoint, JSONObject putData, final APIResponseCallback callback) {
         String url = Endpoints.getBaseUrl(context) + endpoint;
         JsonObjectRequest jsonRequest = new JsonObjectRequest(
                 Request.Method.PUT, url, putData,
@@ -269,7 +175,7 @@ public class RestAPIClient {
         requestQueue.add(jsonRequest);
     }
 
-    private void deleteRequest(String endpoint, final APIResponseCallback callback) {
+    public void deleteRequest(String endpoint, final APIResponseCallback callback) {
         String url = Endpoints.getBaseUrl(context) + endpoint;
         StringRequest stringRequest = new StringRequest(
                 Request.Method.DELETE, url,
