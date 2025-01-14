@@ -99,13 +99,34 @@ public class CardController {
     }
 
     /*
-    Fetches a single card By it's ID
+    Fetches a single card
 
-    It tries to fetch the card in the local database first,
-    If it doesn't exist in the local database it requests it to the API
+    This method tries to fetch a single card from the local database and sends it back as a json
+    If it isn't able to find the card in the database then
+    It checks the internet connection, and if it exists, asks the API for the card
      */
-    public void fetchSingleCard(int cardId, final RestAPIClient.APIResponseCallback callback){
-        // TODO: Load card from local database if available
+    public void fetchSingleCard(int cardId, final RestAPIClient.APIResponseCallback callback) {
+        Card localCard = cardHubDBHelper.getCardById(cardId);
+        if (localCard != null) {
+            try {
+                JSONObject localCardJson = new JSONObject();
+                localCardJson.put("id", localCard.getId());
+                localCardJson.put("game_id", localCard.getGameId());
+                localCardJson.put("name", localCard.getName());
+                localCardJson.put("rarity", localCard.getRarity());
+                localCardJson.put("image_url", localCard.getImageUrl());
+                localCardJson.put("status", localCard.getStatus());
+                localCardJson.put("description", localCard.getDescription());
+                localCardJson.put("created_at", localCard.getCreatedAt());
+                localCardJson.put("updated_at", localCard.getUpdatedAt());
+                localCardJson.put("user_id", localCard.getUserId());
+
+                callback.onSuccess(localCardJson);
+                return;
+            } catch (JSONException e) {
+                Log.e("CardController", "Error converting local card to JSON", e);
+            }
+        }
 
         if (!NetworkUtils.hasInternet(context)) {
             Toast.makeText(context, "No internet connection available.", Toast.LENGTH_SHORT).show();
@@ -113,18 +134,7 @@ public class CardController {
         }
 
         String endpoint = Endpoints.CARD_ENDPOINT + "/" + cardId;
-        RestAPIClient.getInstance(context).getRequestObject(endpoint, new RestAPIClient.APIResponseCallback() {
-            @Override
-            public void onSuccess(JSONObject response) {
-                callback.onSuccess(response);
-            }
-
-            @Override
-            public void onError(String error) {
-                Log.d("CardController", "SingleCard onError: " + error);
-                Toast.makeText(context, error, Toast.LENGTH_SHORT).show();
-            }
-        });
+        RestAPIClient.getInstance(context).getRequestObject(endpoint, callback);
     }
 
     /*
