@@ -91,7 +91,7 @@ public class CardController {
     It tries to fetch the card in the local database first,
     If it doesn't exist in the local database it requests it to the API
      */
-    public void fetchSingleCard(int id, final RestAPIClient.APIResponseCallback callback){
+    public void fetchSingleCard(int cardId, final RestAPIClient.APIResponseCallback callback){
         // TODO: Load card from local database if available
 
         if (!NetworkUtils.hasInternet(context)) {
@@ -99,7 +99,7 @@ public class CardController {
             return;
         }
 
-        String endpoint = Endpoints.CARD_ENDPOINT + "/" + id;
+        String endpoint = Endpoints.CARD_ENDPOINT + "/" + cardId;
         RestAPIClient.getInstance(context).getRequestObject(endpoint, new RestAPIClient.APIResponseCallback() {
             @Override
             public void onSuccess(JSONObject response) {
@@ -109,6 +109,28 @@ public class CardController {
             @Override
             public void onError(String error) {
                 Log.d("CardController", "SingleCard onError: " + error);
+                Toast.makeText(context, error, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    //Fetches the count of Listings for a single Card
+    public void fetchCountListings(int cardId, final RestAPIClient.APIResponseCallback callback) {
+        if (!NetworkUtils.hasInternet(context)) {
+            Toast.makeText(context, "No internet connection available.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String endpoint = Endpoints.CARD_ENDPOINT + "/" + cardId + "/countlistings";
+        RestAPIClient.getInstance(context).getRequestObject(endpoint, new RestAPIClient.APIResponseCallback() {
+            @Override
+            public void onSuccess(JSONObject response) {
+                callback.onSuccess(response);
+            }
+
+            @Override
+            public void onError(String error) {
+                Log.d("CardController", "Fetch CountListings onError: " + error);
                 Toast.makeText(context, error, Toast.LENGTH_SHORT).show();
             }
         });

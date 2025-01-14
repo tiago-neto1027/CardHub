@@ -11,6 +11,7 @@ public class Card {
     private int createdAt;
     private int updatedAt;
     private Integer userId;
+    private int countListings;
 
     public Card(int id, int gameId, String name, String rarity, String imageUrl, String status, String description, int createdAt, int updatedAt, Integer userId) {
         this.id = id;
@@ -54,4 +55,7 @@ public class Card {
 
     public int getUserId() { return userId; }
     public void setUserId(Integer userId) { this.userId = userId; }
+
+    public int getCountListings() { return countListings; }
+    public void setCountListings(int countListings) { this.countListings = countListings; }
 }

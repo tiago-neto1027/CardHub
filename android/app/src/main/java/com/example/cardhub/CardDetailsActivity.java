@@ -29,7 +29,7 @@ public class CardDetailsActivity extends AppCompatActivity{
     private Card card;
     private CardController cardController;
 
-    private TextView tvName, tvRarity, tvDescription;
+    private TextView tvName, tvRarity, tvDescription, tvCountListings;
     private ImageView cardImage;
 
     @Override
@@ -45,6 +45,7 @@ public class CardDetailsActivity extends AppCompatActivity{
 
         tvName = findViewById(R.id.tvDetailCardName);
         tvRarity = findViewById(R.id.tvDetailCardRarity);
+        tvCountListings = findViewById(R.id.tvDetailCardCountListings);
         tvDescription = findViewById(R.id.tvDetailCardDescription);
         cardImage = findViewById(R.id.cardImage);
 
@@ -61,8 +62,10 @@ public class CardDetailsActivity extends AppCompatActivity{
                 try{
                     card = cardController.parseCard(response);
 
-                    if (card != null)
+                    if (card != null){
                         loadCard();
+                        fetchCountListings(cardId);
+                    }
 
                 } catch (JSONException e){
                     Toast.makeText(CardDetailsActivity.this, "Error parsing card data", Toast.LENGTH_SHORT).show();
@@ -76,8 +79,34 @@ public class CardDetailsActivity extends AppCompatActivity{
         });
     }
 
+    public void fetchCountListings(int cardId) {
+        cardController.fetchCountListings(cardId, new RestAPIClient.APIResponseCallback() {
+            @Override
+            public void onSuccess(JSONObject response) {
+                try {
+                    int countListings = response.getInt("listingCount");
+                    card.setCountListings(countListings);
+
+                    //Update CountListings TextView
+                    String rarityText = "CountListings: " + countListings;
+                    SpannableString spannableRarity = new SpannableString(rarityText);
+                    spannableRarity.setSpan(new StyleSpan(Typeface.BOLD), 0, 15, 0);
+                    tvCountListings.setText(spannableRarity);
+                } catch (JSONException e) {
+                    Log.e("CardDetailsActivity", "Error parsing countListings data", e);
+                    Toast.makeText(CardDetailsActivity.this, "Error fetching listings count", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onError(String error) {
+                Log.e("CardDetailsActivity", "Error fetching countListings: " + error);
+                Toast.makeText(CardDetailsActivity.this, error, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
     public void loadCard(){
-        //TODO: Show the listing count for the card
         //Sets the Activity Title
         setTitle("Details: " + card.getName());
 
