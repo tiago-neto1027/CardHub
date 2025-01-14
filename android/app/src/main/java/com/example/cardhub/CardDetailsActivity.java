@@ -88,10 +88,10 @@ public class CardDetailsActivity extends AppCompatActivity{
                     card.setCountListings(countListings);
 
                     //Update CountListings TextView
-                    String rarityText = "CountListings: " + countListings;
-                    SpannableString spannableRarity = new SpannableString(rarityText);
-                    spannableRarity.setSpan(new StyleSpan(Typeface.BOLD), 0, 15, 0);
-                    tvCountListings.setText(spannableRarity);
+                    String countListingsText = "CountListings: " + countListings;
+                    SpannableString spannableCountListings = new SpannableString(countListingsText);
+                    spannableCountListings.setSpan(new StyleSpan(Typeface.BOLD), 0, 15, 0);
+                    tvCountListings.setText(spannableCountListings);
                 } catch (JSONException e) {
                     Log.e("CardDetailsActivity", "Error parsing countListings data", e);
                     Toast.makeText(CardDetailsActivity.this, "Error fetching listings count", Toast.LENGTH_SHORT).show();

@@ -140,14 +140,27 @@ public class CardController {
     /*
     Fetches the count of Listings for a single Card
 
-    This checks the internet connection, if the user has internet, it grabs the countlistings from the api
-    If the user doesn't have internet then it loads them from the local database
-    This happens in order to keep the user up to date in the amount of listings for a card
+    If the countListings exists in the local database, it grabs and returns it instantly
+    Afterwards, this checks the internet connection and fetches the countListings from the api, sending it back again
+
+    This way, the countListings is immediately loaded to the user if it exists
+    But it can be updated if the API has a different listingCount
     */
     public void fetchCountListings(int cardId, final RestAPIClient.APIResponseCallback callback) {
+        Card localCard = cardHubDBHelper.getCardById(cardId);
+        if (localCard != null && localCard.getCountListings() != null) {
+            try {
+                JSONObject countListingsJson = new JSONObject();
+                countListingsJson.put("listingCount", localCard.getCountListings());
+
+                callback.onSuccess(countListingsJson);
+            } catch (JSONException e) {
+                Log.e("CardController", "Error converting countListings to JSON", e);
+            }
+        }
+
         if (!NetworkUtils.hasInternet(context)) {
-            Toast.makeText(context, "No internet connection available.", Toast.LENGTH_SHORT).show();
-            // TODO: Load countlistings from local database instead
+            Toast.makeText(context, "No internet connection available.\nUnable to get latest listings", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -155,13 +168,25 @@ public class CardController {
         RestAPIClient.getInstance(context).getRequestObject(endpoint, new RestAPIClient.APIResponseCallback() {
             @Override
             public void onSuccess(JSONObject response) {
-                callback.onSuccess(response);
+                try {
+                    int countListings = response.getInt("listingCount");
+
+                    Card updatedCard = cardHubDBHelper.getCardById(cardId);
+                    if (updatedCard != null) {
+                        updatedCard.setCountListings(countListings);
+                        cardHubDBHelper.updateCard(updatedCard);
+                    }
+
+                    callback.onSuccess(response);
+                } catch (JSONException e) {
+                    Log.e("CardController", "Error parsing countListings from API", e);
+                    callback.onError("Error parsing API response");
+                }
             }
 
             @Override
             public void onError(String error) {
-                Log.d("CardController", "Fetch CountListings onError: " + error);
-                Toast.makeText(context, error, Toast.LENGTH_SHORT).show();
+                callback.onError(error);
             }
         });
     }
