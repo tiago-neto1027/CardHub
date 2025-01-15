@@ -22,12 +22,11 @@ public class CardController {
     private final Context context;
     private CardsListener cardsListener;
     private ArrayList<Card> localCards;
-
     private CardHubDBHelper cardHubDBHelper = null;
 
     public CardController(Context context){
         this.context = context;
-        cardHubDBHelper = new CardHubDBHelper(context);
+        cardHubDBHelper = CardHubDBHelper.getInstance(context);
         localCards = new ArrayList<>();
     }
 

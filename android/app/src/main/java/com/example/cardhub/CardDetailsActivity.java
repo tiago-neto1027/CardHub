@@ -25,6 +25,7 @@ import models.RestAPIClient;
 public class CardDetailsActivity extends AppCompatActivity{
 
     //TODO: Create a button to show the listings for the card
+    //TODO: Create a button to add the card to the favorites
     public static final String CARD_ID = "CARD_ID";
     private Card card;
     private CardController cardController;
@@ -88,9 +89,9 @@ public class CardDetailsActivity extends AppCompatActivity{
                     card.setCountListings(countListings);
 
                     //Update CountListings TextView
-                    String countListingsText = "CountListings: " + countListings;
+                    String countListingsText = "Available Listings: " + countListings;
                     SpannableString spannableCountListings = new SpannableString(countListingsText);
-                    spannableCountListings.setSpan(new StyleSpan(Typeface.BOLD), 0, 15, 0);
+                    spannableCountListings.setSpan(new StyleSpan(Typeface.BOLD), 0, 19, 0);
                     tvCountListings.setText(spannableCountListings);
                 } catch (JSONException e) {
                     Log.e("CardDetailsActivity", "Error parsing countListings data", e);

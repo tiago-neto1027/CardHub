@@ -11,4 +11,6 @@
     <string name="browse_cards">Browse Cards</string>
     <string name="open">open</string>
     <string name="close">close</string>
+    <string name="sort">Sort</string>
+    <string name="sort_by_price">Sort by Price</string>
 </resources>

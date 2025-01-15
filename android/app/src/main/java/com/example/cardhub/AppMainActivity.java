@@ -55,6 +55,10 @@ public class AppMainActivity extends AppCompatActivity implements NavigationView
             fragment = new CardsFragment();
             setTitle(item.getTitle());
         }
+        if(item.getItemId() == R.id.listingsList) {
+            fragment = new ListingsFragment();
+            setTitle(item.getTitle());
+        }
         //TODO: Add new fragments here
 
         if(fragment != null)
