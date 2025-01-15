@@ -13,11 +13,11 @@ import androidx.annotation.Nullable;
 import java.util.ArrayList;
 
 public class CardHubDBHelper extends SQLiteOpenHelper {
-    private static final String DATABASE_NAME = "cardhub.db";
-    private static final int DATABASE_VERSION = 1;
     private static CardHubDBHelper instance;
+    private static final String DATABASE_NAME = "cardhub.db";
+    private static final int DATABASE_VERSION = 2;
 
-    //Cards
+    //Table Cards
     private static final String TABLE_CARDS = "cards";
     private static final String ID = "id";
     private static final String GAME_ID = "game_id";
@@ -31,7 +31,7 @@ public class CardHubDBHelper extends SQLiteOpenHelper {
     private static final String USER_ID = "user_id";
     private static final String COUNT_LISTINGS = "count_listings";
 
-    // Products
+    //Table Products
     private static final String TABLE_PRODUCTS = "products";
     private static final String PRODUCT_ID = "id";
     private static final String PRODUCT_GAME_ID = "game_id";
@@ -45,6 +45,20 @@ public class CardHubDBHelper extends SQLiteOpenHelper {
     private static final String PRODUCT_CREATED_AT = "created_at";
     private static final String PRODUCT_UPDATED_AT = "updated_at";
 
+    //Table Listings
+    private static final String TABLE_LISTINGS = "listings";
+    private static final String SELLER_ID = "seller_id";
+    private static final String SELLER_USERNAME = "seller_username";
+    private static final String CARD_ID = "card_id";
+    private static final String CARD_NAME = "card_name";
+    private static final String CARD_IMAGE_URL = "card_image_url";
+    private static final String PRICE = "price";
+    private static final String CONDITION = "condition";
+
+    public CardHubDBHelper(@Nullable Context context) {
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+    }
+
     public static synchronized CardHubDBHelper getInstance(Context context) {
         if (instance == null) {
             instance = new CardHubDBHelper(context.getApplicationContext());
@@ -52,14 +66,10 @@ public class CardHubDBHelper extends SQLiteOpenHelper {
         return instance;
     }
 
-    public CardHubDBHelper(@Nullable Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
-    }
-
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         //Cards
-        String createTableQuery = "CREATE TABLE " + TABLE_CARDS + " (" +
+        String createTableCards = "CREATE TABLE " + TABLE_CARDS + " (" +
                 ID + " INTEGER PRIMARY KEY, " +
                 GAME_ID + " INTEGER, " +
                 NAME + " TEXT, " +
@@ -71,10 +81,10 @@ public class CardHubDBHelper extends SQLiteOpenHelper {
                 UPDATED_AT + " INTEGER, " +
                 COUNT_LISTINGS + " INTEGER, " +
                 USER_ID + " INTEGER)";
-        sqLiteDatabase.execSQL(createTableQuery);
+      sqLiteDatabase.execSQL(createTableCards);
 
         //Products
-        String createProductTableQuery = "CREATE TABLE " + TABLE_PRODUCTS + " (" +
+        String createProductProducts = "CREATE TABLE " + TABLE_PRODUCTS + " (" +
                 PRODUCT_ID + " INTEGER PRIMARY KEY, " +
                 PRODUCT_GAME_ID + " INTEGER, " +
                 PRODUCT_NAME + " TEXT, " +
@@ -86,13 +96,29 @@ public class CardHubDBHelper extends SQLiteOpenHelper {
                 PRODUCT_DESCRIPTION + " TEXT, " +
                 PRODUCT_CREATED_AT + " INTEGER, " +
                 PRODUCT_UPDATED_AT + " INTEGER)";
-        sqLiteDatabase.execSQL(createProductTableQuery);
+        sqLiteDatabase.execSQL(createProductProducts);
 
+        
+
+        String createTableListings = "CREATE TABLE " + TABLE_LISTINGS + " (" +
+                ID + " INTEGER PRIMARY KEY, " +
+                SELLER_ID + " INTEGER, " +
+                SELLER_USERNAME + " TEXT, " +
+                CARD_ID + " INTEGER, " +
+                CARD_NAME + " TEXT, " +
+                CARD_IMAGE_URL + " TEXT, " +
+                PRICE + " REAL, " +
+                CONDITION + " TEXT, " +
+                STATUS + " TEXT, " +
+                CREATED_AT + " INTEGER, " +
+                UPDATED_AT + " INTEGER)";
+        sqLiteDatabase.execSQL(createTableListings);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_CARDS);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_LISTINGS);
         onCreate(sqLiteDatabase);
     }
 
@@ -330,6 +356,122 @@ public class CardHubDBHelper extends SQLiteOpenHelper {
             return db.delete(TABLE_PRODUCTS, PRODUCT_ID + "=?", new String[]{String.valueOf(productId)}) > 0;
         } catch (SQLException e) {
             Log.e("ProductHubDBHelper", "Error deleting product: " + e.getMessage());
+            return false;
+        }
+    }
+    //endregion
+    // region Listings
+    public void insertListing(Listing listing) {
+        try (SQLiteDatabase db = getWritableDatabase()) {
+            ContentValues values = new ContentValues();
+            values.put(ID, listing.getId());
+            values.put(SELLER_ID, listing.getSellerId());
+            values.put(SELLER_USERNAME, listing.getSellerUsername());
+            values.put(CARD_ID, listing.getCardId());
+            values.put(CARD_NAME, listing.getCardName());
+            values.put(CARD_IMAGE_URL, listing.getCardImageUrl());
+            values.put(PRICE, listing.getPrice());
+            values.put(CONDITION, listing.getCondition());
+            values.put(STATUS, listing.getStatus());
+            values.put(CREATED_AT, listing.getCreatedAt());
+            values.put(UPDATED_AT, listing.getUpdatedAt());
+
+            db.insert(TABLE_LISTINGS, null, values);
+        } catch (SQLException e) {
+            Log.e("CardHubDBHelper", "Error inserting listing: " + e.getMessage());
+        }
+    }
+
+
+    public ArrayList<Listing> getAllListings() {
+        ArrayList<Listing> listingsList = new ArrayList<>();
+
+        try (SQLiteDatabase db = getReadableDatabase(); Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_LISTINGS, null)) {
+            if (cursor.moveToFirst()) {
+                do {
+                    Listing listing = new Listing(
+                            cursor.getInt(cursor.getColumnIndexOrThrow(ID)),
+                            cursor.getInt(cursor.getColumnIndexOrThrow(SELLER_ID)),
+                            cursor.getString(cursor.getColumnIndexOrThrow(SELLER_USERNAME)),
+                            cursor.getInt(cursor.getColumnIndexOrThrow(CARD_ID)),
+                            cursor.getString(cursor.getColumnIndexOrThrow(CARD_NAME)),
+                            cursor.getString(cursor.getColumnIndexOrThrow(CARD_IMAGE_URL)),
+                            cursor.getDouble(cursor.getColumnIndexOrThrow(PRICE)),
+                            cursor.getString(cursor.getColumnIndexOrThrow(CONDITION)),
+                            cursor.getString(cursor.getColumnIndexOrThrow(STATUS)),
+                            cursor.getInt(cursor.getColumnIndexOrThrow(CREATED_AT)),
+                            cursor.getInt(cursor.getColumnIndexOrThrow(UPDATED_AT))
+                    );
+
+                    listingsList.add(listing);
+                } while (cursor.moveToNext());
+            }
+        } catch (SQLException e) {
+            Log.e("CardHubDBHelper", "Error fetching listings: " + e.getMessage());
+        }
+        return listingsList;
+    }
+
+    public Listing getListingById(int listingId) {
+        try (SQLiteDatabase db = getReadableDatabase();
+             Cursor cursor = db.query(TABLE_LISTINGS, null, ID + "=?", new String[]{String.valueOf(listingId)}, null, null, null)) {
+
+            if (cursor != null && cursor.moveToFirst()) {
+                return new Listing(
+                        cursor.getInt(cursor.getColumnIndexOrThrow(ID)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(SELLER_ID)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(SELLER_USERNAME)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(CARD_ID)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(CARD_NAME)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(CARD_IMAGE_URL)),
+                        cursor.getDouble(cursor.getColumnIndexOrThrow(PRICE)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(CONDITION)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(STATUS)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(CREATED_AT)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(UPDATED_AT))
+                );
+            }
+        } catch (SQLException e) {
+            Log.e("CardHubDBHelper", "Error fetching listing by ID: " + e.getMessage());
+        }
+        return null;
+    }
+  
+    public boolean updateListing(Listing listing) {
+        try (SQLiteDatabase db = getWritableDatabase()) {
+            ContentValues values = new ContentValues();
+            values.put(ID, listing.getId());
+            values.put(SELLER_ID, listing.getSellerId());
+            values.put(SELLER_USERNAME, listing.getSellerUsername());
+            values.put(CARD_ID, listing.getCardId());
+            values.put(CARD_NAME, listing.getCardName());
+            values.put(CARD_IMAGE_URL, listing.getCardImageUrl());
+            values.put(PRICE, listing.getPrice());
+            values.put(CONDITION, listing.getCondition());
+            values.put(STATUS, listing.getStatus());
+            values.put(CREATED_AT, listing.getCreatedAt());
+            values.put(UPDATED_AT, listing.getUpdatedAt());
+
+            return db.update(TABLE_LISTINGS, values, ID + "=?", new String[]{String.valueOf(listing.getId())}) > 0;
+        } catch (SQLException e) {
+            Log.e("CardHubDBHelper", "Error updating listing: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public void removeAllListings() {
+        try (SQLiteDatabase db = getWritableDatabase()) {
+            db.delete(TABLE_LISTINGS, null, null);
+        } catch (SQLException e) {
+            Log.e("CardHubDBHelper", "Error removing all listings: " + e.getMessage());
+        }
+    }
+
+    public boolean removeListingById(int listingId) {
+        try (SQLiteDatabase db = getWritableDatabase()) {
+            return db.delete(TABLE_LISTINGS, ID + " = ?", new String[]{String.valueOf(listingId)}) == 1;
+        } catch (SQLException e) {
+            Log.e("CardHubDBHelper", "Error deleting listing: " + e.getMessage());
             return false;
         }
     }

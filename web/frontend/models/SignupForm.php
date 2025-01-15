@@ -52,13 +52,14 @@ class SignupForm extends Model
             $user->setPassword($this->password);
             $user->generateAuthKey();
             $user->status = 9;
+            $user->generateEmailVerificationToken();
 
             if ($user->save()) {
                 $auth = Yii::$app->authManager;
-
                 $buyerRole = $auth->getRole('buyer');
+
                 if ($buyerRole) {
-                    $auth->assign($buyerRole, $user->getId());
+                    $auth->assign($buyerRole, $user->id);
                 }
 
                 $this->sendVerificationEmail($user);
@@ -72,32 +73,13 @@ class SignupForm extends Model
 
     private function sendVerificationEmail($user)
     {
-        $verifyLink = Yii::$app->urlManager->createAbsoluteUrl(['site/verify', 'token' => $user->auth_key]);
+        $verifyLink = Yii::$app->urlManager->createAbsoluteUrl(['site/verify', 'token' => $user->verification_token]);
 
         return Yii::$app->mailer->compose()
             ->setFrom('automail.cardhub@gmail.com')
             ->setTo($user->email)
             ->setSubject('Activate your account')
             ->setTextBody("Click the link below to activate your account:\n" . $verifyLink)
-            ->send();
-    }
-
-    /**
-     * Sends confirmation email to user
-     * @param User $user user model to with email should be send
-     * @return bool whether the email was sent
-     */
-    protected function sendEmail($user)
-    {
-        return Yii::$app
-            ->mailer
-            ->compose(
-                ['html' => 'emailVerify-html', 'text' => 'emailVerify-text'],
-                ['user' => $user]
-            )
-            ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->name . ' robot'])
-            ->setTo($this->email)
-            ->setSubject('Account registration at ' . Yii::$app->name)
             ->send();
     }
 }

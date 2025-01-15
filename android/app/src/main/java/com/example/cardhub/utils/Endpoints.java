@@ -10,6 +10,7 @@ public class Endpoints {
     private static final String DEFAULT_BASE_URL = "http://13.39.156.210:8080/api";
 
     public static final String LOGIN_ENDPOINT = "/auth/login";
+    public static final String SIGNUP_ENDPOINT = "/auth/signup";
 
 
     public static final String CARD_ENDPOINT = "/cards";

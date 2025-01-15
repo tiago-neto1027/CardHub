@@ -32,7 +32,7 @@ class CardController extends BaseActiveController
     }
 
     public function actionCountlistings($id){
-        $count = Listing::find()->where(['card_id' => $id])->count();
+        $count = Listing::find()->where(['card_id' => $id])->andWhere(['status' => 'active'])->count();
         Yii::$app->response->format = Response::FORMAT_JSON;
         return ['listingCount' => $count];
     }

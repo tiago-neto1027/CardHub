@@ -3,7 +3,6 @@ package com.example.cardhub;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,18 +14,20 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
-import com.example.cardhub.utils.UserUtils;
+import com.example.cardhub.controllers.CardController;
 import com.google.android.material.navigation.NavigationView;
+
+import models.Card;
 
 public class AppMainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    public static final String USERNAME = "USERNAME";
+    public static final String CARD_ID = "CARD_ID";
+
+    private CardController cardController;
 
     private FragmentManager fragmentManager;
     private DrawerLayout drawer;
     private NavigationView navigationView;
-
-    public String username;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -43,8 +44,15 @@ public class AppMainActivity extends AppCompatActivity implements NavigationView
         drawer.addDrawerListener(toggle);
         navigationView.setNavigationItemSelectedListener(this);
 
+        cardController = new CardController(this);
         fragmentManager = getSupportFragmentManager();
-        loadInitialFragment();
+
+        int cardId = getIntent().getIntExtra(CARD_ID, -1);
+        if (cardId != -1) {
+            showListingsFragment(cardId);
+        } else{
+            loadInitialFragment();
+        }
     }
 
     @Override
@@ -57,6 +65,10 @@ public class AppMainActivity extends AppCompatActivity implements NavigationView
         }
         if(item.getItemId() == R.id.productList) {
             fragment = new ProductsFragment();
+            setTitle(item.getTitle());
+        }
+        if(item.getItemId() == R.id.listingsList) {
+            fragment = new ListingsFragment();
             setTitle(item.getTitle());
         }
         //TODO: Add new fragments here
@@ -72,6 +84,20 @@ public class AppMainActivity extends AppCompatActivity implements NavigationView
         MenuItem item = menu.getItem(0);
         item.setCheckable(true);
         return onNavigationItemSelected(item);
+    }
+
+    private void showListingsFragment(int cardId) {
+        ListingsFragment listingsFragment = new ListingsFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt(ListingsFragment.CARD_ID, cardId);
+        listingsFragment.setArguments(bundle);
+
+        Card tempCard = cardController.fetchCardDB(cardId);
+        setTitle(tempCard.getName());
+
+        fragmentManager.beginTransaction()
+                .replace(R.id.contentFragment, listingsFragment)
+                .commit();
     }
 
     @Override

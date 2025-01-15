@@ -71,15 +71,24 @@ class AuthController extends BaseController
 
         //Checks if there are missing parameters
         if (empty($data['username']) || empty($data['password']) || empty($data['email'])) {
-            throw new BadRequestHttpException('Username, password, and email are required.');
+            return [
+                'status' => 'fail',
+                'message' => 'Username, password, and email are required.'
+            ];
         }
 
         //Checks if username or email are taken
-        if (User::findByUsername($data['username']) !== null) {
-            throw new ConflictHttpException('Username is already taken.');
+        if (User::findByUsernameAll($data['username']) !== null) {
+            return [
+                'status' => 'fail',
+                'message' => 'Username is already taken.'
+            ];
         }
-        if (User::findByEmail($data['email']) !== null) {
-            throw new ConflictHttpException('Email is already taken.');
+        if (User::findByEmailAll($data['email']) !== null) {
+            return [
+                'status' => 'fail',
+                'message' => 'Email is already taken.'
+            ];
         }
 
         //Creates the new user
@@ -99,23 +108,26 @@ class AuthController extends BaseController
             if ($role) {
                 $auth->assign($role, $user->id);
             } else {
-                throw new \Exception('Error: Role not found.');
+                return [
+                    'status' => 'fail',
+                    'message' => 'Error: Role not found.'
+                ];
             }
 
             if ($this->sendVerificationEmail($user)) {
                 return [
-                    'status' => 201,
+                    'status' => 'success',
                     'message' => 'User created successfully. Please verify your email.',
                 ];
             } else {
                 return [
-                    'status' => 500,
+                    'status' => 'fail',
                     'message' => 'User created, but failed to send verification email.',
                 ];
             }
         } else {
             return [
-                'status' => 400,
+                'status' => 'fail',
                 'message' => 'Failed to create user.',
                 'errors' => $user->errors,
             ];
@@ -124,7 +136,8 @@ class AuthController extends BaseController
 
     private function sendVerificationEmail($user)
     {
-        $verifyLink = Yii::$app->urlManager->createAbsoluteUrl(['site/verify', 'token' => $user->auth_key]);
+        $frontendUrl = 'http://13.39.156.210/';
+        $verifyLink = $frontendUrl . Yii::$app->urlManager->createUrl(['site/verify', 'token' => $user->verification_token]);
 
         return Yii::$app->mailer->compose()
             ->setFrom('automail.cardhub@gmail.com')
