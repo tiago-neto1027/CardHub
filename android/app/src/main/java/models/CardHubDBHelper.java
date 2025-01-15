@@ -99,7 +99,7 @@ public class CardHubDBHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(createProductProducts);
 
         
-
+        //Listings
         String createTableListings = "CREATE TABLE " + TABLE_LISTINGS + " (" +
                 ID + " INTEGER PRIMARY KEY, " +
                 SELLER_ID + " INTEGER, " +
@@ -248,6 +248,7 @@ public class CardHubDBHelper extends SQLiteOpenHelper {
         }
     }
     //endregion
+
     //Region Products
     public void insertProduct(Product product) {
         try (SQLiteDatabase db = getWritableDatabase()) {
@@ -360,6 +361,7 @@ public class CardHubDBHelper extends SQLiteOpenHelper {
         }
     }
     //endregion
+
     // region Listings
     public void insertListing(Listing listing) {
         try (SQLiteDatabase db = getWritableDatabase()) {
