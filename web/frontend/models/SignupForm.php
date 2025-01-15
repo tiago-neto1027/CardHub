@@ -73,23 +73,6 @@ class SignupForm extends Model
 
     private function sendVerificationEmail($user)
     {
-        $verifyLink = Yii::$app->urlManager->createAbsoluteUrl(['site/verify', 'token' => $user->auth_key]);
-
-        return Yii::$app->mailer->compose()
-            ->setFrom('automail.cardhub@gmail.com')
-            ->setTo($user->email)
-            ->setSubject('Activate your account')
-            ->setTextBody("Click the link below to activate your account:\n" . $verifyLink)
-            ->send();
-    }
-
-    /**
-     * Sends confirmation email to user
-     * @param User $user user model to with email should be send
-     * @return bool whether the email was sent
-     */
-    protected function sendEmail($user)
-    {
         $verifyLink = Yii::$app->urlManager->createAbsoluteUrl(['site/verify', 'token' => $user->verification_token]);
 
         return Yii::$app->mailer->compose()

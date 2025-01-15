@@ -209,7 +209,7 @@ class SiteController extends Controller
     
     public function actionVerify($token)
     {
-        $user = User::find()->where(['auth_key' => $token])->one();
+        $user = User::find()->where(['verification_token' => $token])->one();
 
         if ($user) {
             $user->status = 10;
