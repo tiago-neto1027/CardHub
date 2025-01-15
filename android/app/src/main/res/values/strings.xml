@@ -13,6 +13,7 @@
     <string name="browse_cards">Browse Cards</string>
     <string name="open">open</string>
     <string name="close">close</string>
+    <string name="browse_products">browse_products</string>
     <string name="sort">Sort</string>
     <string name="sort_by_price">Sort by Price</string>
     <string name="view_listings">View Listings</string>
