@@ -1,10 +1,15 @@
 package com.example.cardhub;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+
+import com.example.cardhub.utils.UserUtils;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -13,7 +18,10 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        if (savedInstanceState == null) {
+        UserUtils userUtils = new UserUtils();
+        if (userUtils.isLoggedIn(getApplicationContext())) {
+            navigateToAppMainActivity();
+        } else if (savedInstanceState == null) {
             loadFragment(new LoginFragment());
         }
     }
@@ -24,5 +32,16 @@ public class LoginActivity extends AppCompatActivity {
                 .replace(R.id.fragment_container, fragment)
                 .addToBackStack(null)
                 .commit();
+    }
+
+    public void navigateToAppMainActivity() {
+        Intent intent = new Intent(LoginActivity.this, AppMainActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    public void navigateToSettings(View view) {
+        Intent intent = new Intent(LoginActivity.this, SettingsActivity.class);
+        startActivity(intent);
     }
 }

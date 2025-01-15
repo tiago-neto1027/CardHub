@@ -14,7 +14,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import models.Card;
 import models.CardHubDBHelper;
 import models.Listing;
 import models.RestAPIClient;
@@ -141,18 +140,63 @@ public class ListingController {
         return cardHubDBHelper.getAllListings();
     }
 
-    public ArrayList<Listing> fetchListingsForCardDB(int cardId) {
+    public ArrayList<Listing> fetchListingsForCard(int cardId) {
         ArrayList<Listing> filteredListings = new ArrayList<>();
 
+        //Fetches every listing for the card in the local database
         for (Listing listing : fetchListingsDB()) {
             if (listing.getCardId() == cardId) {
                 filteredListings.add(listing);
             }
         }
 
-        if (listingsListener != null) {
-            listingsListener.onRefreshListingsList(filteredListings);
+        //If there were cards then, calls the listener and returns
+        if (!filteredListings.isEmpty()) {
+            if (listingsListener != null) {
+                listingsListener.onRefreshListingsList(filteredListings);
+            }
+            return filteredListings;
         }
+
+        //Otherwise, checks the internet connection and fetches it with the API
+        if (!NetworkUtils.hasInternet(context)) {
+            Toast.makeText(context, "No internet connection available.", Toast.LENGTH_SHORT).show();
+            return filteredListings;
+        }
+
+        RestAPIClient.getInstance(context).getRequest(Endpoints.LISTING_ENDPOINT, new RestAPIClient.APIResponseCallback() {
+            @Override
+            public void onSuccess(JSONObject response) {
+                try {
+                    JSONArray listingsArray = response.getJSONArray("object");
+                    ArrayList<Listing> apiFilteredListings = new ArrayList<>();
+
+                    //Filters the listings related to the card
+                    for (int i = 0; i < listingsArray.length(); i++) {
+                        JSONObject listingJson = listingsArray.getJSONObject(i);
+                        Listing listing = parseListing(listingJson);
+
+                        if (listing.getCardId() == cardId) {
+                            apiFilteredListings.add(listing);
+                            cardHubDBHelper.insertListing(listing);
+                        }
+                    }
+
+                    if (listingsListener != null) {
+                        listingsListener.onRefreshListingsList(apiFilteredListings);
+                    }
+                } catch (JSONException e) {
+                    Log.e("ListingController", "Error parsing listings data", e);
+                    Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onError(String error) {
+                Log.e("ListingController", "Error fetching listings from API: " + error);
+                Toast.makeText(context, error, Toast.LENGTH_SHORT).show();
+            }
+        });
 
         return filteredListings;
     }

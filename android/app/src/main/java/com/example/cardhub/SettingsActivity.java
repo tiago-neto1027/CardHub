@@ -15,7 +15,6 @@ import com.example.cardhub.utils.Endpoints;
 public class SettingsActivity extends AppCompatActivity {
 
     private EditText etURL;
-    private Button btnSave;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,7 +23,6 @@ public class SettingsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_settings);
 
         etURL = findViewById(R.id.etURL);
-        btnSave = findViewById(R.id.btnSave);
 
         etURL.setText(Endpoints.getBaseUrl(getApplicationContext()));
     }
