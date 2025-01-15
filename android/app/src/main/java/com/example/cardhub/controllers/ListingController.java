@@ -19,13 +19,13 @@ import models.CardHubDBHelper;
 import models.Listing;
 import models.RestAPIClient;
 
-public class ListingsController {
+public class ListingController {
     private final Context context;
     private ListingsListener listingsListener;
     private ArrayList<Listing> localListings;
     private CardHubDBHelper cardHubDBHelper = null;
 
-    public ListingsController(Context context){
+    public ListingController(Context context){
         this.context = context;
         cardHubDBHelper = CardHubDBHelper.getInstance(context);
         localListings = new ArrayList<>();
@@ -97,6 +97,46 @@ public class ListingsController {
                 Toast.makeText(context, error, Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    /*
+    Fetches a single listing
+
+    This method tries to fetch a single listing from the local database and sends it back as a json
+    If it isn't able to find the listing in the database then
+    It checks the internet connection, and if it exists, asks the API for the listing
+     */
+    public void fetchSingleListing(int listingId, final RestAPIClient.APIResponseCallback callback) {
+        Listing localListing = cardHubDBHelper.getListingById(listingId);
+        if (localListing != null) {
+            try {
+                JSONObject localListingJson = new JSONObject();
+                localListingJson.put("id", localListing.getId());
+                localListingJson.put("seller_id", localListing.getSellerId());
+                localListingJson.put("seller_username", localListing.getSellerUsername());
+                localListingJson.put("card_id", localListing.getCardId());
+                localListingJson.put("card_name", localListing.getCardName());
+                localListingJson.put("card_image_url", localListing.getCardImageUrl());
+                localListingJson.put("status", localListing.getStatus());
+                localListingJson.put("price", localListing.getPrice());
+                localListingJson.put("created_at", localListing.getCreatedAt());
+                localListingJson.put("updated_at", localListing.getUpdatedAt());
+                localListingJson.put("condition", localListing.getCondition());
+
+                callback.onSuccess(localListingJson);
+                return;
+            } catch (JSONException e) {
+                Log.e("ListingController", "Error converting local listing to JSON", e);
+            }
+        }
+
+        if (!NetworkUtils.hasInternet(context)) {
+            Toast.makeText(context, "No internet connection available.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String endpoint = Endpoints.LISTING_ENDPOINT + "/" + listingId;
+        RestAPIClient.getInstance(context).getRequestObject(endpoint, callback);
     }
 
     public ArrayList<Listing> fetchListingsDB() {

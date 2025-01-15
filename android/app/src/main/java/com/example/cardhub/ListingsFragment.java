@@ -2,7 +2,6 @@ package com.example.cardhub;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,14 +17,13 @@ import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.cardhub.adapters.ListingAdapter;
-import com.example.cardhub.controllers.ListingsController;
+import com.example.cardhub.controllers.ListingController;
 import com.example.cardhub.listeners.ListingsListener;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-import models.CardHubDBHelper;
 import models.Listing;
 
 public class ListingsFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, ListingsListener {
@@ -33,7 +31,7 @@ public class ListingsFragment extends Fragment implements SwipeRefreshLayout.OnR
     private ListView lvListings;
     private SearchView searchView;
     private SwipeRefreshLayout swipeRefreshLayout;
-    private ListingsController listingsController;
+    private ListingController listingsController;
 
     private boolean isSortAscending = true;
 
@@ -59,7 +57,7 @@ public class ListingsFragment extends Fragment implements SwipeRefreshLayout.OnR
         swipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout);
         swipeRefreshLayout.setOnRefreshListener(this);
 
-        listingsController = new ListingsController(getContext());
+        listingsController = new ListingController(getContext());
         listingsController.setListingsListener(this);
         listingsController.fetchListings();
 
