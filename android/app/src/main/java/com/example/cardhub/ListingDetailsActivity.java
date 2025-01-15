@@ -81,7 +81,7 @@ public class ListingDetailsActivity extends AppCompatActivity {
 
     public void loadListing(){
         //Sets the Activity Title
-        setTitle("Details: " + listing.getCardName() + " " + listing.getStatus());
+        setTitle("Details: " + listing.getCardName() + " " + listing.getCondition());
 
         //Card Name
         String cardNameText = "Card Name: " + listing.getCardName();

@@ -21,13 +21,11 @@ import models.RestAPIClient;
 public class CardController {
     private final Context context;
     private CardsListener cardsListener;
-    private ArrayList<Card> localCards;
     private CardHubDBHelper cardHubDBHelper = null;
 
     public CardController(Context context){
         this.context = context;
         cardHubDBHelper = CardHubDBHelper.getInstance(context);
-        localCards = new ArrayList<>();
     }
 
     public void setCardsListener(CardsListener listener) {
@@ -188,5 +186,9 @@ public class CardController {
                 callback.onError(error);
             }
         });
+    }
+
+    public Card fetchCardDB(int cardId){
+        return cardHubDBHelper.getCardById(cardId);
     }
 }

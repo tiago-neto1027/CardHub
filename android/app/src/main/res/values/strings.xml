@@ -13,4 +13,5 @@
     <string name="close">close</string>
     <string name="sort">Sort</string>
     <string name="sort_by_price">Sort by Price</string>
+    <string name="view_listings">View Listings</string>
 </resources>

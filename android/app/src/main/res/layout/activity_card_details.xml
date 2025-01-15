@@ -42,6 +42,13 @@
                 android:layout_marginBottom="16dp"
                 tools:ignore="ContentDescription,MissingConstraints" />
 
+            <Button
+                android:id="@+id/btnViewListings"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/view_listings" />
+
             <TextView
                 android:id="@+id/tvDetailCardName"
                 android:layout_width="match_parent"
@@ -69,6 +76,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="18sp"
                 android:layout_marginBottom="8dp" />
+
         </LinearLayout>
     </ScrollView>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

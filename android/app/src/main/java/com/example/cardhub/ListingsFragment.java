@@ -28,12 +28,15 @@ import models.Listing;
 
 public class ListingsFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, ListingsListener {
 
+    public static final String CARD_ID = "CARD_ID";
+
     private ListView lvListings;
     private SearchView searchView;
     private SwipeRefreshLayout swipeRefreshLayout;
     private ListingController listingsController;
 
     private boolean isSortAscending = true;
+    private int cardId;
 
     public ListingsFragment(){
         //Required empty public constructor
@@ -43,6 +46,10 @@ public class ListingsFragment extends Fragment implements SwipeRefreshLayout.OnR
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstaceState){
         View view = inflater.inflate(R.layout.fragment_listings, container, false);
         setHasOptionsMenu(true);
+
+        if (getArguments() != null) {
+            cardId = getArguments().getInt(CARD_ID, 0);
+        }
 
         lvListings = view.findViewById(R.id.lvListings);
         lvListings.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -59,7 +66,13 @@ public class ListingsFragment extends Fragment implements SwipeRefreshLayout.OnR
 
         listingsController = new ListingController(getContext());
         listingsController.setListingsListener(this);
-        listingsController.fetchListings();
+
+        //This determines whether the fragment opens with every listing or with the listings for a single card
+        if (cardId == 0) {
+            listingsController.fetchListings();
+        } else {
+            listingsController.fetchListingsForCardDB(cardId);
+        }
 
         return view;
     }
@@ -80,7 +93,14 @@ public class ListingsFragment extends Fragment implements SwipeRefreshLayout.OnR
     }
 
     private void sortListingsByPrice() {
-        ArrayList<Listing> listings = listingsController.fetchListingsDB();
+        ArrayList<Listing> listings;
+
+        if(cardId == 0){
+            listings = listingsController.fetchListingsDB();
+        }else{
+            listings = listingsController.fetchListingsForCardDB(cardId);
+        }
+
         if (listings != null && !listings.isEmpty()) {
             Collections.sort(listings, new Comparator<Listing>() {
                 @Override
@@ -99,7 +119,11 @@ public class ListingsFragment extends Fragment implements SwipeRefreshLayout.OnR
 
     @Override
     public void onRefresh() {
-        listingsController.fetchListings();
+        if (cardId == 0) {
+            listingsController.fetchListings();
+        } else {
+            listingsController.fetchListingsForCardDB(cardId);
+        }
         swipeRefreshLayout.setRefreshing(false);
     }
 
