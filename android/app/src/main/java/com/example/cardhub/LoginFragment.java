@@ -55,7 +55,9 @@ public class LoginFragment extends Fragment {
             @Override
             public void onSuccess() {
                 Toast.makeText(getActivity(), "Login successful", Toast.LENGTH_SHORT).show();
-                navigateToAppMainActivity();
+                if (getActivity() instanceof LoginActivity) {
+                    ((LoginActivity) getActivity()).navigateToAppMainActivity();
+                }
             }
 
             @Override
@@ -69,11 +71,5 @@ public class LoginFragment extends Fragment {
         if (getActivity() instanceof LoginActivity) {
             ((LoginActivity) getActivity()).loadFragment(new SignupFragment());
         }
-    }
-
-    private void navigateToAppMainActivity() {
-        Intent intent = new Intent(getActivity(), AppMainActivity.class);
-        startActivity(intent);
-        requireActivity().finish();
     }
 }
