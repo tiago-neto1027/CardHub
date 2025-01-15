@@ -2,6 +2,7 @@ package com.example.cardhub;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -65,8 +66,6 @@ public class ListingsFragment extends Fragment implements SwipeRefreshLayout.OnR
         return view;
     }
 
-    //TODO: Instead of the search in the Cards Fragment, add a button that orders the listings by price
-
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater){
         inflater.inflate(R.menu.menu_sort, menu);
@@ -84,7 +83,6 @@ public class ListingsFragment extends Fragment implements SwipeRefreshLayout.OnR
 
     private void sortListingsByPrice() {
         ArrayList<Listing> listings = listingsController.fetchListingsDB();
-
         if (listings != null && !listings.isEmpty()) {
             Collections.sort(listings, new Comparator<Listing>() {
                 @Override

@@ -15,7 +15,7 @@ import java.util.ArrayList;
 public class CardHubDBHelper extends SQLiteOpenHelper {
     private static CardHubDBHelper instance;
     private static final String DATABASE_NAME = "cardhub.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     //Table Cards
     private static final String TABLE_CARDS = "cards";
@@ -54,7 +54,7 @@ public class CardHubDBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        String createTableQuery = "CREATE TABLE " + TABLE_CARDS + " (" +
+        String createTableCards = "CREATE TABLE " + TABLE_CARDS + " (" +
                 ID + " INTEGER PRIMARY KEY, " +
                 GAME_ID + " INTEGER, " +
                 NAME + " TEXT, " +
@@ -66,7 +66,7 @@ public class CardHubDBHelper extends SQLiteOpenHelper {
                 UPDATED_AT + " INTEGER, " +
                 COUNT_LISTINGS + " INTEGER, " +
                 USER_ID + " INTEGER)";
-        sqLiteDatabase.execSQL(createTableQuery);
+        sqLiteDatabase.execSQL(createTableCards);
 
         String createTableListings = "CREATE TABLE " + TABLE_LISTINGS + " (" +
                 ID + " INTEGER PRIMARY KEY, " +
@@ -86,6 +86,7 @@ public class CardHubDBHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_CARDS);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_LISTINGS);
         onCreate(sqLiteDatabase);
     }
 
