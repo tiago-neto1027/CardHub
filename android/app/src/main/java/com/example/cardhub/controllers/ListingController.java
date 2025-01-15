@@ -142,4 +142,20 @@ public class ListingController {
     public ArrayList<Listing> fetchListingsDB() {
         return cardHubDBHelper.getAllListings();
     }
+
+    public ArrayList<Listing> fetchListingsForCardDB(int cardId) {
+        ArrayList<Listing> filteredListings = new ArrayList<>();
+
+        for (Listing listing : fetchListingsDB()) {
+            if (listing.getCardId() == cardId) {
+                filteredListings.add(listing);
+            }
+        }
+
+        if (listingsListener != null) {
+            listingsListener.onRefreshListingsList(filteredListings);
+        }
+
+        return filteredListings;
+    }
 }

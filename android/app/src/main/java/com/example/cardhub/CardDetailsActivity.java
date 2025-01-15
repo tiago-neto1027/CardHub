@@ -1,10 +1,14 @@
 package com.example.cardhub;
 
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.style.StyleSpan;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,7 +28,6 @@ import models.RestAPIClient;
 
 public class CardDetailsActivity extends AppCompatActivity{
 
-    //TODO: Create a button to show the listings for the card
     //TODO: Create a button to add the card to the favorites
     public static final String CARD_ID = "CARD_ID";
     private Card card;
@@ -32,6 +35,7 @@ public class CardDetailsActivity extends AppCompatActivity{
 
     private TextView tvName, tvRarity, tvDescription, tvCountListings;
     private ImageView cardImage;
+    private Button btnViewListings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,9 +53,19 @@ public class CardDetailsActivity extends AppCompatActivity{
         tvCountListings = findViewById(R.id.tvDetailCardCountListings);
         tvDescription = findViewById(R.id.tvDetailCardDescription);
         cardImage = findViewById(R.id.cardImage);
+        btnViewListings = findViewById(R.id.btnViewListings);
 
         cardController = new CardController(this);
         fetchCardDetails();
+
+        btnViewListings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(CardDetailsActivity.this, AppMainActivity.class);
+                intent.putExtra(AppMainActivity.CARD_ID, card.getId());
+                startActivity(intent);
+            }
+        });
     }
 
     public void fetchCardDetails(){
