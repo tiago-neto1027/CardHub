@@ -106,7 +106,7 @@ public class ProductDetailsActivity extends AppCompatActivity{
         tvProductName.setText(spannableName);
 
         // Price
-        double price = product.getPrice();
+        String price = "Price: " + String.format("%.2f€", product.getPrice());
         SpannableString spannablePrice = new SpannableString("Price: " + price);
         spannablePrice.setSpan(new StyleSpan(Typeface.BOLD), 0, 6, 0);
         tvProductPrice.setText(spannablePrice);

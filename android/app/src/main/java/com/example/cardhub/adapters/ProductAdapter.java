@@ -58,21 +58,19 @@ public class ProductAdapter extends BaseAdapter {
 
     private class ProductViewHolder {
         ImageView ivProductImage;
-        TextView tvProductName, tvProductPrice, tvProductStock, tvProductDescription;
+        TextView tvProductName, tvProductPrice, tvProductStock ;
 
         public ProductViewHolder(View view) {
             ivProductImage = view.findViewById(R.id.ivProductImage);
             tvProductName = view.findViewById(R.id.tvProductName);
             tvProductPrice = view.findViewById(R.id.tvProductPrice);
             tvProductStock = view.findViewById(R.id.tvProductStock);
-            tvProductDescription = view.findViewById(R.id.tvProductDescription);
         }
 
         public void update(Product product) {
             tvProductName.setText(product.getName());
-            tvProductPrice.setText(String.valueOf(product.getPrice()));
+            tvProductPrice.setText(String.format("%.2f€", product.getPrice()));
             tvProductStock.setText(String.valueOf(product.getStock()));
-            tvProductDescription.setText(product.getDescription());
 
             Glide.with(context)
                     .load(product.getImageUrl())
