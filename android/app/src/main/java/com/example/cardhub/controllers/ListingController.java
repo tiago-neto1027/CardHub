@@ -22,13 +22,11 @@ import models.RestAPIClient;
 public class ListingController {
     private final Context context;
     private ListingsListener listingsListener;
-    private ArrayList<Listing> localListings;
     private CardHubDBHelper cardHubDBHelper = null;
 
     public ListingController(Context context){
         this.context = context;
         cardHubDBHelper = CardHubDBHelper.getInstance(context);
-        localListings = new ArrayList<>();
     }
 
     public void setListingsListener(ListingsListener listener){

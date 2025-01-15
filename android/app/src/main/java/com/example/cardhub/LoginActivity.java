@@ -14,11 +14,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.cardhub.controllers.AuthController;
 import com.example.cardhub.utils.UserUtils;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import models.RestAPIClient;
-
 public class LoginActivity extends AppCompatActivity {
 
     private AuthController authController;
