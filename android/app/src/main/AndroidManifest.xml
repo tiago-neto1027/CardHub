@@ -22,6 +22,9 @@
             android:name=".CardDetailsActivity"
             android:exported="false" />
         <activity
+            android:name=".ProductDetailsActivity"
+            android:exported="false" />
+        <activity
             android:name=".AppMainActivity"
             android:exported="false" />
         <activity

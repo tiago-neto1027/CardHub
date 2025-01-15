@@ -11,4 +11,5 @@
     <string name="browse_cards">Browse Cards</string>
     <string name="open">open</string>
     <string name="close">close</string>
+    <string name="browse_products">browse_products</string>
 </resources>
