@@ -75,10 +75,10 @@ class AuthController extends BaseController
         }
 
         //Checks if username or email are taken
-        if (User::findByUsername($data['username']) !== null) {
+        if (User::findByUsernameAll($data['username']) !== null) {
             throw new ConflictHttpException('Username is already taken.');
         }
-        if (User::findByEmail($data['email']) !== null) {
+        if (User::findByEmailAll($data['email']) !== null) {
             throw new ConflictHttpException('Email is already taken.');
         }
 

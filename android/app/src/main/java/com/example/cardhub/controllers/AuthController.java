@@ -91,7 +91,7 @@ public class AuthController {
             jsonBody.put("password", password);
             jsonBody.put("email", email);
         } catch (JSONException e) {
-            callback.onFailure("Error sending user credentials, please try again later.");
+            callback.onFailure("Error handling user credentials, please try again later.");
             return;
         }
 
