@@ -124,7 +124,7 @@ class AuthController extends BaseController
 
     private function sendVerificationEmail($user)
     {
-        $verifyLink = Yii::$app->urlManager->createAbsoluteUrl(['site/verify', 'token' => $user->auth_key]);
+        $verifyLink = Yii::$app->urlManager->createAbsoluteUrl(['site/verify', 'token' => $user->verification_token]);
 
         return Yii::$app->mailer->compose()
             ->setFrom('automail.cardhub@gmail.com')

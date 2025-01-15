@@ -21,7 +21,6 @@ import models.Card;
 
 public class AppMainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    public static final String USERNAME = "USERNAME";
     public static final String CARD_ID = "CARD_ID";
 
     private CardController cardController;
@@ -29,8 +28,6 @@ public class AppMainActivity extends AppCompatActivity implements NavigationView
     private FragmentManager fragmentManager;
     private DrawerLayout drawer;
     private NavigationView navigationView;
-
-    public String username;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
