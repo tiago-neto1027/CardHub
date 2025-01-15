@@ -71,7 +71,7 @@ public class ListingsFragment extends Fragment implements SwipeRefreshLayout.OnR
         if (cardId == 0) {
             listingsController.fetchListings();
         } else {
-            listingsController.fetchListingsForCardDB(cardId);
+            listingsController.fetchListingsForCard(cardId);
         }
 
         return view;
@@ -98,7 +98,7 @@ public class ListingsFragment extends Fragment implements SwipeRefreshLayout.OnR
         if(cardId == 0){
             listings = listingsController.fetchListingsDB();
         }else{
-            listings = listingsController.fetchListingsForCardDB(cardId);
+            listings = listingsController.fetchListingsForCard(cardId);
         }
 
         if (listings != null && !listings.isEmpty()) {
@@ -122,7 +122,7 @@ public class ListingsFragment extends Fragment implements SwipeRefreshLayout.OnR
         if (cardId == 0) {
             listingsController.fetchListings();
         } else {
-            listingsController.fetchListingsForCardDB(cardId);
+            listingsController.fetchListingsForCard(cardId);
         }
         swipeRefreshLayout.setRefreshing(false);
     }
