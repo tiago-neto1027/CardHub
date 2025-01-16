@@ -31,7 +31,6 @@ public class AppMainActivity extends AppCompatActivity {
         fragmentManager = getSupportFragmentManager();
 
         bottomNavigationView = findViewById(R.id.bottom_navigation);
-
         bottomNavigationView.setSelectedItemId(R.id.nav_home);
         bottomNavigationView.setOnNavigationItemSelectedListener(this::onNavigationItemSelected);
 
@@ -57,15 +56,11 @@ public class AppMainActivity extends AppCompatActivity {
             //intent = new Intent(this, ProfileActivity.class);
             setTitle(item.getTitle());
         }
-
         if (intent != null) {
             finish();
             startActivity(intent);
             return true;
         }
-
         return false;
     }
-
-
 }

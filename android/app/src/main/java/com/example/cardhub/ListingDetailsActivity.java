@@ -1,20 +1,24 @@
 package com.example.cardhub;
 
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.style.StyleSpan;
 import android.util.Log;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.cardhub.controllers.ListingController;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,6 +32,8 @@ public class ListingDetailsActivity extends AppCompatActivity {
     public static final String LISTING_ID = "LISTING_ID";
     private Listing listing;
     private ListingController listingController;
+    private BottomNavigationView bottomNavigationView;
+
 
     private TextView tvCardName, tvSellerUsername, tvPrice, tvCondition;
     private ImageView cardImage;
@@ -51,6 +57,10 @@ public class ListingDetailsActivity extends AppCompatActivity {
 
         listingController = new ListingController(this);
         fetchListingDetails();
+
+        bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setSelectedItemId(R.id.nav_shop);
+        bottomNavigationView.setOnNavigationItemSelectedListener(this::onNavigationItemSelected);
     }
 
     public void fetchListingDetails(){
@@ -123,5 +133,32 @@ public class ListingDetailsActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+    /**
+     * Handle BottomNavigationView item selection
+     */
+    private boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        Intent intent = null;
+
+        if (item.getItemId() == R.id.nav_home) {
+            intent = new Intent(this, AppMainActivity.class);
+            setTitle(item.getTitle());
+        } else if (item.getItemId() == R.id.nav_wishlist) {
+            // Launch Wishlist Activity
+            //intent = new Intent(this, WishlistActivity.class);
+            setTitle(item.getTitle());
+        } else if (item.getItemId() == R.id.nav_shop) {
+            intent = new Intent(this, ShopActivity.class);
+            setTitle(item.getTitle());
+        } else if (item.getItemId() == R.id.nav_profile) {
+            //intent = new Intent(this, ProfileActivity.class);
+            setTitle(item.getTitle());
+        }
+        if (intent != null) {
+            finish();
+            startActivity(intent);
+            return true;
+        }
+        return false;
     }
 }
