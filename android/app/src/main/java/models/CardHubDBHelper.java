@@ -501,6 +501,14 @@ public class CardHubDBHelper extends SQLiteOpenHelper {
         }
     }
 
+    public void removeFavorite(int cardId) {
+        try (SQLiteDatabase db = getWritableDatabase()){
+            db.delete(TABLE_FAVORITES, FAVORITE_CARD_ID + " = ?", new String[]{String.valueOf(cardId)});
+        } catch (SQLException e) {
+            Log.e("CardHubDBHelper", "Error removing favorite: " + e.getMessage());
+        }
+    }
+
     public void removeAllFavorites() {
         try (SQLiteDatabase db = getWritableDatabase()) {
             db.delete(TABLE_FAVORITES, null, null);
@@ -526,6 +534,23 @@ public class CardHubDBHelper extends SQLiteOpenHelper {
             Log.e("CardHubDBHelper", "Error fetching favorites: " + e.getMessage());
         }
         return favoriteCardIds;
+    }
+
+    public boolean isFavorite(int cardId) {
+        boolean isFavorite = false;
+
+        String query = "SELECT 1 FROM " + TABLE_FAVORITES + " WHERE " + FAVORITE_CARD_ID + " = ?";
+        try (SQLiteDatabase db = getReadableDatabase();
+             Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(cardId)})) {
+
+            if (cursor != null && cursor.moveToFirst()) {
+                isFavorite = true;
+            }
+        } catch (SQLException e) {
+            Log.e("CardHubDBHelper", "Error checking if card is favorite: " + e.getMessage());
+        }
+
+        return isFavorite;
     }
     //endregion
 }

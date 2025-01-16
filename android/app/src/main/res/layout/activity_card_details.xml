@@ -42,12 +42,33 @@
                 android:layout_marginBottom="16dp"
                 tools:ignore="ContentDescription,MissingConstraints" />
 
-            <Button
-                android:id="@+id/btnViewListings"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:orientation="horizontal"
                 android:layout_marginTop="16dp"
-                android:text="@string/view_listings" />
+                android:layout_marginBottom="16dp">
+
+                <Button
+                    android:id="@+id/btnViewListings"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="8"
+                    android:text="@string/view_listings"
+                    android:layout_marginEnd="8dp"
+                    android:padding="6dp" />
+
+                <ImageButton
+                    android:id="@+id/btnFavorite"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:layout_marginEnd="8dp"
+                    app:srcCompat="@drawable/ic_favorite"
+                    android:padding="6dp"
+                    android:onClick="onClickBtnFavorite"/>
+
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/tvDetailCardName"

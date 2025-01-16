@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,6 +20,7 @@ import androidx.appcompat.widget.Toolbar;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.cardhub.controllers.CardController;
+import com.example.cardhub.controllers.FavoriteController;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,10 +34,13 @@ public class CardDetailsActivity extends AppCompatActivity{
     public static final String CARD_ID = "CARD_ID";
     private Card card;
     private CardController cardController;
+    private FavoriteController favoriteController;
 
     private TextView tvName, tvRarity, tvDescription, tvCountListings;
     private ImageView cardImage;
     private Button btnViewListings;
+
+    private boolean isFavorite = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +60,7 @@ public class CardDetailsActivity extends AppCompatActivity{
         cardImage = findViewById(R.id.cardImage);
         btnViewListings = findViewById(R.id.btnViewListings);
 
+        favoriteController = new FavoriteController(this);
         cardController = new CardController(this);
         fetchCardDetails();
 
@@ -80,6 +86,15 @@ public class CardDetailsActivity extends AppCompatActivity{
                     if (card != null){
                         loadCard();
                         fetchCountListings(cardId);
+
+                        isFavorite = favoriteController.isFavorite(card.getId());
+                        if (isFavorite) {
+                            ImageButton btnFavorite = findViewById(R.id.btnFavorite);
+                            btnFavorite.setImageResource(R.drawable.ic_favorite_filled);
+                        } else {
+                            ImageButton btnFavorite = findViewById(R.id.btnFavorite);
+                            btnFavorite.setImageResource(R.drawable.ic_favorite);
+                        }
                     }
 
                 } catch (JSONException e){
@@ -159,5 +174,20 @@ public class CardDetailsActivity extends AppCompatActivity{
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void onClickBtnFavorite(View view) {
+        ImageButton btnFavorite = (ImageButton) view;
+        int cardId = card.getId();
+
+        if (isFavorite) {
+            favoriteController.removeFavorite(cardId);
+            isFavorite = false;
+            btnFavorite.setImageResource(R.drawable.ic_favorite);
+        } else {
+            favoriteController.insertFavorite(cardId);
+            isFavorite = true;
+            btnFavorite.setImageResource(R.drawable.ic_favorite_filled);
+        }
     }
 }

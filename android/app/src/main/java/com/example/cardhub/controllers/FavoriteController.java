@@ -66,4 +66,53 @@ public class FavoriteController {
     public List<Integer> fetchFavoritesDB(){
         return dbHelper.getAllFavorites();
     }
+
+    public boolean  isFavorite(int cardId) {
+        return dbHelper.isFavorite(cardId);
+    }
+
+    public void removeFavorite(int cardId) {
+        dbHelper.removeFavorite(cardId);
+
+        //Sends to the API
+        String endpoint = Endpoints.FAVORITE_ENDPOINT + "/" + cardId;
+        RestAPIClient.getInstance(context).deleteRequest(endpoint, new RestAPIClient.APIResponseCallback() {
+            @Override
+            public void onSuccess(JSONObject response) {
+                Toast.makeText(context, "Error removing favorite: ", Toast.LENGTH_SHORT).show();
+                Log.d("Favorite", "Favorite removed successfully");
+            }
+
+            @Override
+            public void onError(String error) {
+                Log.e("Favorite", "Error removing favorite: " + error);
+            }
+        });
+    }
+
+    public void insertFavorite(int cardId) {
+        dbHelper.insertFavorite(cardId);
+
+        try {
+            //Creates Json
+            JSONObject postData = new JSONObject();
+            postData.put("card_id", cardId);
+
+            //Sends to the API
+            RestAPIClient.getInstance(context).postRequest(Endpoints.FAVORITE_ENDPOINT, postData, new RestAPIClient.APIResponseCallback() {
+                @Override
+                public void onSuccess(JSONObject response) {
+                    Log.d("Favorite", "Favorite added successfully");
+                }
+
+                @Override
+                public void onError(String error) {
+                    Toast.makeText(context, "Error adding favorite: ", Toast.LENGTH_SHORT).show();
+                    Log.e("Favorite", "Error adding favorite: " + error);
+                }
+            });
+        } catch (JSONException e) {
+            Log.e("Favorite", "Error creating JSON to add favorite", e);
+        }
+    }
 }
