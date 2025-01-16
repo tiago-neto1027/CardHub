@@ -141,7 +141,7 @@ public class ListingDetailsActivity extends AppCompatActivity {
         Intent intent = null;
 
         if (item.getItemId() == R.id.nav_home) {
-            intent = new Intent(this, AppMainActivity.class);
+            intent = new Intent(this, HomeActivity.class);
             setTitle(item.getTitle());
         } else if (item.getItemId() == R.id.nav_wishlist) {
             // Launch Wishlist Activity
