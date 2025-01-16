@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -20,17 +21,16 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 
-import models.Card;
-
-public class ShopActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+import models.Card;public class ShopActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     public static final String CARD_ID = "CARD_ID";
 
     private CardController cardController;
-
     private FragmentManager fragmentManager;
     private DrawerLayout drawer;
-    private  BottomNavigationView bottomNavigationView;
+    private NavigationView navigationView;
+    private BottomNavigationView bottomNavigationView;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +38,7 @@ public class ShopActivity extends AppCompatActivity implements NavigationView.On
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
         drawer = findViewById(R.id.drawerLayout);
         bottomNavigationView = findViewById(R.id.bottom_navigation);
 
@@ -48,22 +49,25 @@ public class ShopActivity extends AppCompatActivity implements NavigationView.On
         cardController = new CardController(this);
         fragmentManager = getSupportFragmentManager();
 
-        bottomNavigationView = findViewById(R.id.bottom_navigation);
+        navigationView = findViewById(R.id.navView);
+        navigationView.setNavigationItemSelectedListener(this);
+
         bottomNavigationView.setSelectedItemId(R.id.nav_shop);
-        bottomNavigationView.setOnNavigationItemSelectedListener(this::onNavigationItemSelected);
+        bottomNavigationView.setOnNavigationItemSelectedListener(this::onBottomNavigationItemSelected);
+
         int cardId = getIntent().getIntExtra(CARD_ID, -1);
         if (cardId != -1) {
             showListingsFragment(cardId);
-        } else{
+        } else {
             loadInitialFragment();
         }
     }
 
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+    public boolean onBottomNavigationItemSelected(@NonNull MenuItem item) {
         Intent intent = null;
 
         if (item.getItemId() == R.id.nav_home) {
-            //intent = new Intent(this, SettingsActivity.class);
+            intent = new Intent(this, AppMainActivity.class);
             setTitle(item.getTitle());
         } else if (item.getItemId() == R.id.nav_wishlist) {
             // Launch Wishlist Activity
@@ -76,7 +80,6 @@ public class ShopActivity extends AppCompatActivity implements NavigationView.On
             //intent = new Intent(this, ProfileActivity.class);
             setTitle(item.getTitle());
         }
-
         if (intent != null) {
             finish();
             startActivity(intent);
@@ -85,10 +88,29 @@ public class ShopActivity extends AppCompatActivity implements NavigationView.On
         return false;
     }
 
-    private boolean loadInitialFragment(){
-        Menu menu = bottomNavigationView.getMenu();
+
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        Fragment fragment = null;
+
+        if (item.getItemId() == R.id.cardsList) {
+            fragment = new CardsFragment();
+        } else if (item.getItemId() == R.id.productList) {
+            fragment = new ProductsFragment();
+        } else if (item.getItemId() == R.id.listingsList) {
+            fragment = new ListingsFragment();
+        }
+        if (fragment != null) {
+            setTitle(item.getTitle());
+            fragmentManager.beginTransaction().replace(R.id.contentFragment, fragment).commit();
+        }
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+    private boolean loadInitialFragment() {
+        Menu menu = navigationView.getMenu();
         MenuItem item = menu.getItem(0);
-        item.setCheckable(true);
+        item.setChecked(true);
         return onNavigationItemSelected(item);
     }
 

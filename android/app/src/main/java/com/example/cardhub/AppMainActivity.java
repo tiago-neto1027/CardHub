@@ -22,6 +22,7 @@ public class AppMainActivity extends AppCompatActivity {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_app_main);
+        setTitle("Home");
 
         fragmentManager = getSupportFragmentManager();
 
@@ -39,7 +40,7 @@ public class AppMainActivity extends AppCompatActivity {
         Intent intent = null;
 
         if (item.getItemId() == R.id.nav_home) {
-            //intent = new Intent(this, SettingsActivity.class);
+            intent = new Intent(this, SettingsActivity.class);
             setTitle(item.getTitle());
         } else if (item.getItemId() == R.id.nav_wishlist) {
             // Launch Wishlist Activity
@@ -54,6 +55,7 @@ public class AppMainActivity extends AppCompatActivity {
         }
 
         if (intent != null) {
+            finish();
             startActivity(intent);
             return true;
         }
