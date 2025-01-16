@@ -41,4 +41,7 @@ class ProductController extends BaseActiveController
     {
         throw new ForbiddenHttpException('Delete action is disabled.');
     }
+curl --location 'http://13.39.156.210:8080/api/products/1' \
+--header 'Authorization: ••••••' \
+curl -x -h ;
 }

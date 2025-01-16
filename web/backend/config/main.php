@@ -54,13 +54,23 @@ return [
         ],
         'urlManager' => [
             'enablePrettyUrl' => true,
+            
             'showScriptName' => false,
             'rules' => [
                 [
-                    'class' => 'yii\rest\UrlRule',
-                    'controller' => 'api/card',
-                    'extraPatterns' => [
-                        'GET {id}/countlistings' => 'countlistings',
+                    [
+                        'class' => 'yii\rest\UrlRule',
+                        'controller' => 'api/card',
+                        'extraPatterns' => [
+                            'GET {id}/countlistings' => 'countlistings',
+                        ],
+                    ],
+                    [
+                        'class' => 'yii\rest\UrlRule',
+                        'controller' => 'api/matematica',
+                        'extraPatterns' => [
+                            'GET /raizdois' => 'raizdois',
+                        ],
                     ],
                 ],
                 ['class'=>'yii\rest\UrlRule', 'controller'=>'api/favorite'],
