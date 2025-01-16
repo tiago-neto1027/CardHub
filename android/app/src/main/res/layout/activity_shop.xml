@@ -5,7 +5,7 @@
     android:id="@+id/drawerLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AppMainActivity"
+    tools:context=".ShopActivity"
     android:fitsSystemWindows="true"
     tools:openDrawer="start">
 
@@ -36,18 +36,18 @@
             app:itemIconTint="@color/nav_icon_color"
             app:itemTextColor="@color/white"
             />
-
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fontFamily="casual"
-            android:paddingLeft="10dp"
-            android:text="CardHub"
-            android:textColor="@color/black"
-            android:textColorLink="#000000"
-            android:textSize="46sp"
-            android:textStyle="bold" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    <!-- Navigation Drawer -->
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/navView"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true"
+        app:headerLayout="@layout/nav_header_start"
+        app:menu="@menu/menu_main" />
+
+    <!-- Bottom Navigation Bar -->
 
 </androidx.drawerlayout.widget.DrawerLayout>

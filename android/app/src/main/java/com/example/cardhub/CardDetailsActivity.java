@@ -8,6 +8,7 @@ import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -67,8 +68,8 @@ public class CardDetailsActivity extends AppCompatActivity{
         btnViewListings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(CardDetailsActivity.this, AppMainActivity.class);
-                intent.putExtra(AppMainActivity.CARD_ID, card.getId());
+                Intent intent = new Intent(CardDetailsActivity.this, ShopActivity.class);
+                intent.putExtra(ShopActivity.CARD_ID, card.getId());
                 startActivity(intent);
             }
         });

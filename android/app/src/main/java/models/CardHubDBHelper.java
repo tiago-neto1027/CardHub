@@ -292,7 +292,7 @@ public class CardHubDBHelper extends SQLiteOpenHelper {
                             cursor.getInt(cursor.getColumnIndexOrThrow(PRODUCT_ID)),
                             cursor.getInt(cursor.getColumnIndexOrThrow(PRODUCT_GAME_ID)),
                             cursor.getString(cursor.getColumnIndexOrThrow(PRODUCT_NAME)),
-                            cursor.getFloat(cursor.getColumnIndexOrThrow(PRODUCT_PRICE)),
+                            cursor.getDouble(cursor.getColumnIndexOrThrow(PRODUCT_PRICE)),
                             cursor.getInt(cursor.getColumnIndexOrThrow(PRODUCT_STOCK)),
                             cursor.getString(cursor.getColumnIndexOrThrow(PRODUCT_STATUS)),
                             cursor.getString(cursor.getColumnIndexOrThrow(PRODUCT_IMAGE_URL)),

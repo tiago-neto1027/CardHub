@@ -44,13 +44,6 @@
                 android:gravity="center_vertical"
                 android:hint="Stock" />
 
-            <TextView
-                android:id="@+id/holderProductDescription"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:gravity="center_vertical"
-                android:hint="Description" />
-
         </LinearLayout>
 
         <LinearLayout
@@ -80,14 +73,6 @@
                 android:layout_height="50dp"
                 android:gravity="center_vertical"
                 android:text="InputStock"
-                android:textAlignment="gravity" />
-
-            <TextView
-                android:id="@+id/tvProductDescription"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:gravity="center_vertical"
-                android:text="InputDescription"
                 android:textAlignment="gravity" />
 
         </LinearLayout>
