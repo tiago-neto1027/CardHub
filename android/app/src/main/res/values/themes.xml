@@ -5,5 +5,8 @@
          <item name="colorPrimary">@color/cardhub_blue_medium</item>
     </style>
 
+
+
+
     <style name="Theme.Cardhub" parent="Base.Theme.Cardhub" />
 </resources>

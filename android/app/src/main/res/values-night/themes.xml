@@ -4,4 +4,5 @@
         <!-- Customize your dark theme here. -->
         <item name="colorPrimary">@color/cardhub_blue_medium</item>
     </style>
+
 </resources>
