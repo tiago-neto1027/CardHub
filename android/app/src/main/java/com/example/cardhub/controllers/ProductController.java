@@ -21,14 +21,11 @@ import models.RestAPIClient;
 public class ProductController {
     private final Context context;
     private ProductsListener productsListener;
-    private ArrayList<Product> localProducts;
-
     private CardHubDBHelper cardHubDBHelper = null;
 
     public ProductController(Context context){
         this.context = context;
         cardHubDBHelper = CardHubDBHelper.getInstance(context);
-        localProducts = new ArrayList<>();
     }
 
     public void setProductsListener(ProductsListener listener) {

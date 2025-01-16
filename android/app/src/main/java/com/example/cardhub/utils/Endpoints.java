@@ -14,15 +14,12 @@ public class Endpoints {
 
 
     public static final String CARD_ENDPOINT = "/cards";
-    public static final String CARD_LISTING_COUNT_ENDPOINT = "/cards/countlistings";
-
 
     public static final String PRODUCT_ENDPOINT = "/products";
 
     public static final String LISTING_ENDPOINT = "/listings";
 
-
-    public static final String USER_ENDPOINT = "/users";
+    public static final String FAVORITE_ENDPOINT = "/favorites";
 
 
     //Methods

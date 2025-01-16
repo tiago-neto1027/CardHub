@@ -1,6 +1,7 @@
 package com.example.cardhub;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -15,6 +16,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.example.cardhub.controllers.CardController;
+import com.example.cardhub.controllers.FavoriteController;
 import com.google.android.material.navigation.NavigationView;
 
 import models.Card;
@@ -33,6 +35,10 @@ public class AppMainActivity extends AppCompatActivity implements NavigationView
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_app_main);
+
+        //TODO: Tirar daqui e meter no começo da HomePage
+        FavoriteController favoriteController = new FavoriteController(this);
+        favoriteController.loadFavorites();
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

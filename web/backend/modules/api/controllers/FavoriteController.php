@@ -93,14 +93,14 @@ class FavoriteController extends BaseActiveController
         }
     }
 
-    public function actionDelete($id)
+    public function actionDelete($cardId)
     {
         if (!$this->user) {
             throw new UnauthorizedHttpException('You must be logged in to delete a favorite.');
         }
 
-        //Finds the favorite by ID
-        $favorite = Favorite::findOne($id);
+        //Finds the favorite by CardId and UserId
+        $favorite = Favorite::findOne(['card_id' => $cardId, 'user_id' => $this->user->id]);
         if (!$favorite) {
             throw new ForbiddenHttpException('Favorite not found.');
         }
