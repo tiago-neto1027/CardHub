@@ -189,5 +189,12 @@ public class CardDetailsActivity extends AppCompatActivity{
             isFavorite = true;
             btnFavorite.setImageResource(R.drawable.ic_favorite_filled);
         }
+
+        btnFavorite.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                btnFavorite.setEnabled(true);
+            }
+        }, 2000);
     }
 }
