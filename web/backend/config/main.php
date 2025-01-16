@@ -63,7 +63,13 @@ return [
                         'GET {id}/countlistings' => 'countlistings',
                     ],
                 ],
-                ['class'=>'yii\rest\UrlRule', 'controller'=>'api/favorite'],
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'api/favorite',
+                    'extraPatterns' => [
+                        'DELETE <cardId:\d+>' => 'delete',
+                    ],
+                ],
                 ['class'=>'yii\rest\UrlRule', 'controller'=>'api/game'],
                 ['class'=>'yii\rest\UrlRule', 'controller'=>'api/listing'],
                 ['class'=>'yii\rest\UrlRule', 'controller'=>'api/product'],
