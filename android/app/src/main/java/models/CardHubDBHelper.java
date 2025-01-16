@@ -11,11 +11,12 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class CardHubDBHelper extends SQLiteOpenHelper {
     private static CardHubDBHelper instance;
     private static final String DATABASE_NAME = "cardhub.db";
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
 
     //Table Cards
     private static final String TABLE_CARDS = "cards";
@@ -55,6 +56,10 @@ public class CardHubDBHelper extends SQLiteOpenHelper {
     private static final String PRICE = "price";
     private static final String CONDITION = "condition";
 
+    //Table Favorites
+    private static final String TABLE_FAVORITES = "favorites";
+    private static final String FAVORITE_CARD_ID = "card_id";
+
     public CardHubDBHelper(@Nullable Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -84,7 +89,7 @@ public class CardHubDBHelper extends SQLiteOpenHelper {
       sqLiteDatabase.execSQL(createTableCards);
 
         //Products
-        String createProductProducts = "CREATE TABLE " + TABLE_PRODUCTS + " (" +
+        String createTableProducts = "CREATE TABLE " + TABLE_PRODUCTS + " (" +
                 PRODUCT_ID + " INTEGER PRIMARY KEY, " +
                 PRODUCT_GAME_ID + " INTEGER, " +
                 PRODUCT_NAME + " TEXT, " +
@@ -96,7 +101,7 @@ public class CardHubDBHelper extends SQLiteOpenHelper {
                 PRODUCT_DESCRIPTION + " TEXT, " +
                 PRODUCT_CREATED_AT + " INTEGER, " +
                 PRODUCT_UPDATED_AT + " INTEGER)";
-        sqLiteDatabase.execSQL(createProductProducts);
+        sqLiteDatabase.execSQL(createTableProducts);
 
         
         //Listings
@@ -113,12 +118,18 @@ public class CardHubDBHelper extends SQLiteOpenHelper {
                 CREATED_AT + " INTEGER, " +
                 UPDATED_AT + " INTEGER)";
         sqLiteDatabase.execSQL(createTableListings);
+
+        String createTableFavorites = "CREATE TABLE " + TABLE_FAVORITES + " (" +
+                FAVORITE_CARD_ID + " INTEGER PRIMARY KEY)";
+        sqLiteDatabase.execSQL(createTableFavorites);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_CARDS);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_PRODUCTS);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_LISTINGS);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_FAVORITES);
         onCreate(sqLiteDatabase);
     }
 
@@ -249,7 +260,7 @@ public class CardHubDBHelper extends SQLiteOpenHelper {
     }
     //endregion
 
-    //Region Products
+    //region Products
     public void insertProduct(Product product) {
         try (SQLiteDatabase db = getWritableDatabase()) {
             ContentValues values = new ContentValues();
@@ -362,7 +373,7 @@ public class CardHubDBHelper extends SQLiteOpenHelper {
     }
     //endregion
 
-    // region Listings
+    //region Listings
     public void insertListing(Listing listing) {
         try (SQLiteDatabase db = getWritableDatabase()) {
             ContentValues values = new ContentValues();
@@ -476,6 +487,45 @@ public class CardHubDBHelper extends SQLiteOpenHelper {
             Log.e("CardHubDBHelper", "Error deleting listing: " + e.getMessage());
             return false;
         }
+    }
+    //endregion
+
+    //region Favorites
+    public void insertFavorite(int cardId) {
+        try (SQLiteDatabase db = getWritableDatabase()) {
+            ContentValues values = new ContentValues();
+            values.put(FAVORITE_CARD_ID, cardId);
+            db.insert(TABLE_FAVORITES, null, values);
+        } catch (SQLException e) {
+            Log.e("CardHubDBHelper", "Error inserting favorite: " + e.getMessage());
+        }
+    }
+
+    public void removeAllFavorites() {
+        try (SQLiteDatabase db = getWritableDatabase()) {
+            db.delete(TABLE_FAVORITES, null, null);
+        } catch (SQLException e) {
+            Log.e("CardHubDBHelper", "Error clearing favorites: " + e.getMessage());
+        }
+    }
+
+    public List<Integer> getAllFavorites() {
+        List<Integer> favoriteCardIds = new ArrayList<>();
+
+        String query = "SELECT " + FAVORITE_CARD_ID + " FROM " + TABLE_FAVORITES;
+        try (SQLiteDatabase db = getReadableDatabase();
+             Cursor cursor = db.rawQuery(query, null)) {
+
+            if (cursor.moveToFirst()) {
+                do {
+                    int cardId = cursor.getInt(cursor.getColumnIndexOrThrow(FAVORITE_CARD_ID));
+                    favoriteCardIds.add(cardId);
+                } while (cursor.moveToNext());
+            }
+        } catch (SQLException e) {
+            Log.e("CardHubDBHelper", "Error fetching favorites: " + e.getMessage());
+        }
+        return favoriteCardIds;
     }
     //endregion
 }

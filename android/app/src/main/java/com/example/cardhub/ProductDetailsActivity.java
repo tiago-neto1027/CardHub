@@ -88,12 +88,9 @@ public class ProductDetailsActivity extends AppCompatActivity{
     }
 
     private void loadProduct() {
-        Log.d("ProductDetailsActivity", "loadProduct() is being called");
-
-        // Ensure product data is not null or empty
         if (product == null) {
             Log.e("ProductDetailsActivity", "Product is null");
-            return;  // Exit if product is not available
+            return;
         }
 
         // Setting Title
@@ -124,7 +121,7 @@ public class ProductDetailsActivity extends AppCompatActivity{
         String imageUrl = product.getImageUrl();
         if (imageUrl == null || imageUrl.isEmpty()) {
             Log.w("ProductDetailsActivity", "Image URL is null or empty");
-            imageUrl = ""; // You can set a default image or handle it differently
+            imageUrl = "";
         }
         Glide.with(this)
                 .load(imageUrl)

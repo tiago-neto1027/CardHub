@@ -17,4 +17,6 @@
     <string name="sort">Sort</string>
     <string name="sort_by_price">Sort by Price</string>
     <string name="view_listings">View Listings</string>
+    <string name="browse_product">Browse Products</string>
+    <string name="browse_listings">Browse Listings</string>
 </resources>
