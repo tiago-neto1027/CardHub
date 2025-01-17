@@ -628,18 +628,99 @@ public class CardHubDBHelper extends SQLiteOpenHelper {
             }
         } catch (SQLException e) {
             Log.e("CardHubDBHelper", "Error checking if item is in cart: " + e.getMessage());
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-            db.close();
         }
+        if (cursor != null) {
+            cursor.close();
+        }
+        db.close();
+
         return isInCart;
     }
 
-    public void updateCartQuantity(CartItem cartItem, String action){
-
+    public void deleteCartItem(CartItem cartItem) {
+        SQLiteDatabase db = null;
+        try {
+            db = this.getWritableDatabase();
+            int rowsDeleted = db.delete(
+                    TABLE_CARTITEMS,
+                    ITEM_ID + "=? AND " + TYPE + "=? AND " + QUANTITY + "=?",
+                    new String[]{
+                            String.valueOf(cartItem.getItemId()),
+                            cartItem.getType(),
+                            String.valueOf(cartItem.getQuantity())
+                    }
+            );
+            if (rowsDeleted == 0) {
+                System.out.println("No matching item found to delete.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (db != null) {
+                db.close();
+            }
+        }
     }
 
+    public void clearCart() {
+        SQLiteDatabase db = null;
+        try {
+            db = this.getWritableDatabase();
+            int rowsDeleted = db.delete(TABLE_CARTITEMS, null, null);
+            System.out.println("Rows deleted: " + rowsDeleted);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (db != null) {
+                db.close();
+            }
+        }
+    }
+
+    public void updateCartQuantity(CartItem cartItem, String action) {
+        SQLiteDatabase db = null;
+        try {
+            db = this.getWritableDatabase();
+            ContentValues values = new ContentValues();
+            Log.d("updateCart", "We got here: " + action);
+
+            int curQuantity = cartItem.getQuantity();
+            int newQuantity = curQuantity;
+            Log.d("updateCart", "We got here: " + action);
+            if ("plus".equals(action)) {
+                int productStock = getProductById(cartItem.getItemId()).getStock();
+                newQuantity = Math.min(curQuantity + 1, productStock);
+            } else if ("minus".equals(action)) {
+                newQuantity = Math.max(curQuantity - 1, 0);
+            } else {
+                Log.d("updateCart", "Invalid action: " + action);
+                return;
+            }
+
+            if (curQuantity != newQuantity) {
+                values.put(QUANTITY, newQuantity);
+
+                int rowsUpdated = db.update(
+                        TABLE_CARTITEMS,
+                        values,
+                        ID + " = ?",
+                        new String[]{String.valueOf(cartItem.getId())}
+                );
+                if (rowsUpdated > 0) {
+                    Log.d("updateCart", "Cart item updated successfully: ID=" + cartItem.getId());
+                } else {
+                    Log.d("updateCart", "No cart item found to update: ID=" + cartItem.getId());
+                }
+            } else {
+                Log.d("updateCart", "No update needed. Quantity unchanged: ID=" + cartItem.getId());
+            }
+        } catch (SQLException e) {
+            Log.d("updateCart", "Error updating card: " + e.getMessage());
+        } finally {
+            if (db != null) {
+                db.close();
+            }
+        }
+    }
     //endregion
 }
