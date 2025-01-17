@@ -193,22 +193,49 @@ public class CardController {
         return cardHubDBHelper.getCardById(cardId);
     }
 
-    public ArrayList<Card> fetchFavoriteCards(){
+    public void fetchFavoriteCards() {
         ArrayList<Card> favoriteCards = new ArrayList<>();
         List<Integer> favoriteCardIds = cardHubDBHelper.getAllFavorites();
-        
-        for(int cardId : favoriteCardIds) {
-            Card card = cardHubDBHelper.getCardById(cardId);
-            if (card != null) {
-                favoriteCards.add(card);
-            }
+
+        if (favoriteCardIds.isEmpty()) {
+            Toast.makeText(context, "No favorite cards found.", Toast.LENGTH_SHORT).show();
+            return;
         }
 
-        if (!favoriteCards.isEmpty() && cardsListener != null) {
-            cardsListener.onRefreshCardsList(favoriteCards);
-        } else if (favoriteCards.isEmpty()) {
-            Toast.makeText(context, "No favorite cards found.", Toast.LENGTH_SHORT).show();
+        //Use a counter to track the number of successful fetches
+        final int totalCards = favoriteCardIds.size();
+        final int[] fetchedCardsCount = {0};
+
+        //Callback to handle each individual card fetch
+        RestAPIClient.APIResponseCallback callback = new RestAPIClient.APIResponseCallback() {
+            @Override
+            public void onSuccess(JSONObject response) {
+                try {
+                    Card card = parseCard(response);
+                    favoriteCards.add(card);
+                } catch (JSONException e) {
+                    Log.e("CardController", "Error parsing card from API", e);
+                }
+
+                //Increment the fetched count and check if all cards are fetched
+                fetchedCardsCount[0]++;
+                if (fetchedCardsCount[0] == totalCards) {
+                    //Once all cards are fetched, notify the listener
+                    if (!favoriteCards.isEmpty() && cardsListener != null) {
+                        cardsListener.onRefreshCardsList(favoriteCards);
+                    }
+                }
+            }
+
+            @Override
+            public void onError(String error) {
+                Log.e("CardController", "Error fetching card: " + error);
+            }
+        };
+
+        //Iterate through all favorite card IDs and fetch each one
+        for (int cardId : favoriteCardIds) {
+            fetchSingleCard(cardId, callback);
         }
-        return favoriteCards;
     }
 }
