@@ -5,7 +5,7 @@
     android:id="@+id/drawerLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ShopActivity"
+    tools:context=".FavoriteActivity"
     android:fitsSystemWindows="true"
     tools:openDrawer="start">
 
@@ -36,18 +36,8 @@
             app:itemIconTint="@color/nav_icon_color"
             app:itemTextColor="@color/white"
             app:labelVisibilityMode="labeled"/>
+
+
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
-    <!-- Navigation Drawer -->
-    <com.google.android.material.navigation.NavigationView
-        android:id="@+id/navView"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:fitsSystemWindows="true"
-        app:headerLayout="@layout/nav_header_start"
-        app:menu="@menu/menu_main" />
-
-    <!-- Bottom Navigation Bar -->
 
 </androidx.drawerlayout.widget.DrawerLayout>

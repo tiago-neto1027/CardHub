@@ -35,7 +35,7 @@
             app:menu="@menu/bottom_nav_menu"
             app:itemIconTint="@color/nav_icon_color"
             app:itemTextColor="@color/white"
-            />
+            app:labelVisibilityMode="labeled"/>
 
         <TextView
             android:id="@+id/textView"
