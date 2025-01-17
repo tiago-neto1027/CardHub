@@ -25,17 +25,18 @@
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_gravity="bottom"
-            android:background="@color/black"
-            app:itemBackground="@color/black"
-            app:backgroundTint="@color/black"
+            android:background="?attr/colorSecondary"
+            app:itemBackground="?attr/colorSecondary"
+            app:backgroundTint="?attr/colorSecondary"
             app:itemRippleColor="@null"
             app:itemPaddingTop="-5dp"
             app:itemPaddingBottom="10dp"
             app:itemIconSize="50dp"
             app:menu="@menu/bottom_nav_menu"
-            app:itemIconTint="@color/nav_icon_color"
-            app:itemTextColor="@color/white"
-            app:labelVisibilityMode="labeled"/>
+            app:itemIconTint="?attr/colorPrimary"
+            app:itemTextColor="?attr/colorOnSecondary"
+            app:labelVisibilityMode="labeled"
+            app:elevation="0dp"/>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

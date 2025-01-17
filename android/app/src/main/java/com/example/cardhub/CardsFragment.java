@@ -80,7 +80,7 @@ public class CardsFragment extends Fragment implements SwipeRefreshLayout.OnRefr
         cardController.setCardsListener(this);
 
         if (showFavorites)
-            cardController.fetchFavoritedCards();
+            cardController.fetchFavoriteCards();
         else
             cardController.fetchCards();
 
@@ -119,7 +119,11 @@ public class CardsFragment extends Fragment implements SwipeRefreshLayout.OnRefr
 
     @Override
     public void onRefresh() {
-        cardController.fetchCards();
+        if (showFavorites)
+            cardController.fetchFavoriteCards();
+        else
+            cardController.fetchCards();
+
         swipeRefreshLayout.setRefreshing(false);
     }
 
