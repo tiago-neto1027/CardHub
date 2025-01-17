@@ -16,7 +16,7 @@ import java.util.List;
 public class CardHubDBHelper extends SQLiteOpenHelper {
     private static CardHubDBHelper instance;
     private static final String DATABASE_NAME = "cardhub.db";
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 4;
 
     //Table Cards
     private static final String TABLE_CARDS = "cards";
@@ -59,6 +59,13 @@ public class CardHubDBHelper extends SQLiteOpenHelper {
     //Table Favorites
     private static final String TABLE_FAVORITES = "favorites";
     private static final String FAVORITE_CARD_ID = "card_id";
+
+    //Table Cartitems
+    private static final String TABLE_CARTITEMS = "cartitems";
+    private static final String CART_ITEM_ID = "cart_item_id";
+    private static final String ITEM_ID = "item_id";
+    private static final String TYPE = "type";
+    private static final String QUANTITY = "quantity";
 
     public CardHubDBHelper(@Nullable Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -122,6 +129,13 @@ public class CardHubDBHelper extends SQLiteOpenHelper {
         String createTableFavorites = "CREATE TABLE " + TABLE_FAVORITES + " (" +
                 FAVORITE_CARD_ID + " INTEGER PRIMARY KEY)";
         sqLiteDatabase.execSQL(createTableFavorites);
+
+        String createTableCartitems = "CREATE TABLE " + TABLE_CARTITEMS + " (" +
+                CART_ITEM_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                ITEM_ID + " INTEGER, " +
+                TYPE + " TEXT, " +
+                QUANTITY + " INTEGER, ";
+        sqLiteDatabase.execSQL(createTableListings);
     }
 
     @Override
@@ -130,6 +144,7 @@ public class CardHubDBHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_PRODUCTS);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_LISTINGS);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_FAVORITES);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_CARTITEMS);
         onCreate(sqLiteDatabase);
     }
 
@@ -552,5 +567,42 @@ public class CardHubDBHelper extends SQLiteOpenHelper {
 
         return isFavorite;
     }
+    //endregion
+    //Cart
+    public void insertCartItem(CartItem cartItem) {
+        try (SQLiteDatabase db = getWritableDatabase()) {
+            ContentValues values = new ContentValues();
+            values.put(ITEM_ID, cartItem.getItemId());
+            values.put(TYPE, cartItem.getType());
+            values.put(QUANTITY, cartItem.getQuantity());
+
+            db.insert(TABLE_CARTITEMS, null, values);
+        } catch (SQLException e) {
+            Log.e("CardHubDBHelper", "Error inserting cart item: " + e.getMessage());
+        }
+    }
+
+
+    public ArrayList<CartItem> getAllCartItems() {
+        ArrayList<CartItem> cartItemList = new ArrayList<>();
+
+        try (SQLiteDatabase db = getReadableDatabase(); Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_CARTITEMS, null)) {
+            if (cursor.moveToFirst()) {
+                do {
+                    CartItem cartItem = new CartItem(
+                            cursor.getInt(cursor.getColumnIndexOrThrow(ITEM_ID)),
+                            cursor.getString(cursor.getColumnIndexOrThrow(TYPE)),
+                            cursor.getInt(cursor.getColumnIndexOrThrow(QUANTITY))
+                    );
+
+                    cartItemList.add(cartItem);
+                } while (cursor.moveToNext());
+            }
+        } catch (SQLException e) {
+            Log.e("CardHubDBHelper", "Error fetching cart Items: " + e.getMessage());
+        }
+        return cartItemList;
+    }
+
     //endregion
 }

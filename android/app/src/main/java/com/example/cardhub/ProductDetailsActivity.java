@@ -7,6 +7,7 @@ import android.text.SpannableString;
 import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,6 +19,7 @@ import androidx.appcompat.widget.Toolbar;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.cardhub.controllers.CardController;
+import com.example.cardhub.controllers.CartController;
 import com.example.cardhub.controllers.ProductController;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -36,7 +38,6 @@ public class ProductDetailsActivity extends AppCompatActivity{
     private TextView tvProductName, tvProductPrice, tvProductDescription, tvProductStock;
     private ImageView productImage;
     private BottomNavigationView bottomNavigationView;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +62,14 @@ public class ProductDetailsActivity extends AppCompatActivity{
         bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setSelectedItemId(R.id.nav_shop);
         bottomNavigationView.setOnNavigationItemSelectedListener(this::onNavigationItemSelected);
+    }
+
+    public void addItemToCart(View view) {
+        CartController cartController = new CartController(this);
+        int itemId = product .getId();
+        int quantity = 1;
+        String type = "product";
+        cartController.addItemToCart(itemId, type, quantity);
     }
 
     private void fetchProductDetails() {
@@ -175,4 +184,5 @@ public class ProductDetailsActivity extends AppCompatActivity{
         }
         return false;
     }
+
 }
