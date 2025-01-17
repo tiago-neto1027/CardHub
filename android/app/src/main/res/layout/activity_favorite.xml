@@ -37,7 +37,6 @@
             app:itemTextColor="@color/white"
             app:labelVisibilityMode="labeled"/>
 
-
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </androidx.drawerlayout.widget.DrawerLayout>

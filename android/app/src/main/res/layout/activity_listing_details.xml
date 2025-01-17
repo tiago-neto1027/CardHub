@@ -24,7 +24,8 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="?attr/actionBarSize">
+            android:layout_marginTop="?attr/actionBarSize"
+            android:layout_marginBottom="60dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -90,6 +91,6 @@
         app:menu="@menu/bottom_nav_menu"
         app:itemIconTint="@color/nav_icon_color"
         app:itemTextColor="@color/white"
-        />
+        app:labelVisibilityMode="labeled"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

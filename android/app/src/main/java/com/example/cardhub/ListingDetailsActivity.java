@@ -142,21 +142,17 @@ public class ListingDetailsActivity extends AppCompatActivity {
 
         if (item.getItemId() == R.id.nav_home) {
             intent = new Intent(this, HomeActivity.class);
-            setTitle(item.getTitle());
-        } else if (item.getItemId() == R.id.nav_wishlist) {
-            // Launch Wishlist Activity
-            //intent = new Intent(this, WishlistActivity.class);
-            setTitle(item.getTitle());
         } else if (item.getItemId() == R.id.nav_shop) {
             intent = new Intent(this, ShopActivity.class);
-            setTitle(item.getTitle());
-        } else if (item.getItemId() == R.id.nav_profile) {
+        } else if (item.getItemId() == R.id.nav_wishlist) {
+            intent = new Intent(this, FavoriteActivity.class);
+        }
+        else if (item.getItemId() == R.id.nav_profile) {
             //intent = new Intent(this, ProfileActivity.class);
-            setTitle(item.getTitle());
         }
         if (intent != null) {
-            finish();
             startActivity(intent);
+            finish();
             return true;
         }
         return false;

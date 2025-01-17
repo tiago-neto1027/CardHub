@@ -48,6 +48,5 @@
         app:headerLayout="@layout/nav_header_start"
         app:menu="@menu/menu_main" />
 
-    <!-- Bottom Navigation Bar -->
 
 </androidx.drawerlayout.widget.DrawerLayout>
