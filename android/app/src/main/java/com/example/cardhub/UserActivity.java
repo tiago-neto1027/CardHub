@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -37,8 +39,19 @@ public class UserActivity extends AppCompatActivity {
         toolbarTitle = findViewById(R.id.toolbar_title);
         toolbarTitle.setText("About Me");
         setSupportActionBar(toolbar);
+
+        // Initialize Views
+        TextView tvUsername = findViewById(R.id.tvUsername);
+        TextView tvEmail = findViewById(R.id.tvEmail);
+        EditText etNewUsername = findViewById(R.id.etNewUsername);
+        EditText etNewEmail = findViewById(R.id.etNewEmail);
+
+        // Set user data (Replace these with actual user data)
+        tvUsername.setText("user123");
+        tvEmail.setText("user@example.com");
     }
 
+    //Bottom navigation
     public boolean onBottomNavigationItemSelected(@NonNull MenuItem item) {
         Intent intent = null;
 
@@ -55,5 +68,11 @@ public class UserActivity extends AppCompatActivity {
             return true;
         }
         return false;
+    }
+
+    //Settings Button
+    public void navigateToSettings(View view) {
+        Intent intent = new Intent(UserActivity.this, SettingsActivity.class);
+        startActivity(intent);
     }
 }
