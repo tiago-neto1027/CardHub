@@ -5,7 +5,6 @@
     android:id="@+id/drawerLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/cardview_dark_background"
     android:orientation="vertical"
     tools:context=".LoginActivity">
 
@@ -27,10 +26,9 @@
             android:id="@+id/tvLoginTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
+            android:layout_marginStart="30dp"
             android:layout_marginTop="15dp"
             android:text="@string/cardhub"
-            android:textColor="@color/white"
             android:textSize="50sp"
             android:textStyle="bold" />
 
@@ -39,8 +37,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="4dp"
-        android:layout_marginTop="8dp"
-        android:background="@color/white" />
+        android:layout_marginTop="8dp" />
 
     <FrameLayout
         android:id="@+id/fragment_container"
@@ -57,9 +54,9 @@
         android:layout_marginTop="65dp"
         android:layout_weight="0"
         android:textAlignment="viewEnd"
+        android:background="?attr/colorSurface"
+        app:tint="?attr/colorOnSurface"
         app:srcCompat="@drawable/setting_icon_foreground"
-        app:tint="@color/white"
-        android:background="@color/cardview_dark_background"
         android:onClick="navigateToSettings" />
 
 </LinearLayout>

@@ -1,6 +1,7 @@
 package com.example.cardhub;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -8,12 +9,15 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.cardhub.adapters.ProductCarouselAdapter;
 import com.example.cardhub.controllers.ProductController;
 import com.example.cardhub.listeners.ProductsListener;
+import com.example.cardhub.controllers.FavoriteController;
+
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
@@ -25,6 +29,7 @@ public class HomeActivity extends AppCompatActivity {
     private BottomNavigationView bottomNavigationView;
     private ViewPager2 productCarousel;
     private ProductController productController;
+    private SharedPreferences sharedPreferences;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -38,10 +43,19 @@ public class HomeActivity extends AppCompatActivity {
         toolbarTitle.setText(R.string.cardhub);
         setSupportActionBar(toolbar);
 
+        //Apply the correct theme based on the user's preference
+        sharedPreferences = getSharedPreferences("ThemePrefs", MODE_PRIVATE);
+        boolean isDarkMode = sharedPreferences.getBoolean("isDarkMode", false);
+        applyTheme(isDarkMode);
+
         bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setSelectedItemId(R.id.nav_home);
         bottomNavigationView.setOnNavigationItemSelectedListener(this::onNavigationItemSelected);
 
+        //Loads Favorites to DB
+        FavoriteController favoriteController = new FavoriteController(getApplicationContext());
+        favoriteController.loadFavorites();
+      
         //Page Content
         productCarousel = findViewById(R.id.product_carousel);
         productController = new ProductController(this);
@@ -76,5 +90,13 @@ public class HomeActivity extends AppCompatActivity {
             return true;
         }
         return false;
+    }
+
+    private void applyTheme(boolean isDarkMode) {
+        if (isDarkMode) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
     }
 }
