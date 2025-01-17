@@ -25,18 +25,25 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/holderCardName"
+                android:id="@+id/holderName"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:gravity="center_vertical"
                 android:hint="Name: " />
 
             <TextView
-                android:id="@+id/holder"
+                android:id="@+id/holderPrice"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:gravity="center_vertical"
-                android:hint="Name: " />
+                android:hint="Price: " />
+
+            <TextView
+                android:id="@+id/holderQuantity"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:gravity="center_vertical"
+                android:hint="Quantity: " />
         </LinearLayout>
 
         <LinearLayout
@@ -45,7 +52,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/tvquantity"
+                android:id="@+id/tvName"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:gravity="center_vertical"
@@ -53,11 +60,19 @@
                 android:textAlignment="gravity" />
 
             <TextView
-                android:id="@+id/tvCartID"
+                android:id="@+id/tvPrice"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:gravity="center_vertical"
-                android:text="InputName"
+                android:text="InputPrice"
+                android:textAlignment="gravity" />
+
+            <TextView
+                android:id="@+id/tvQuantity"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:gravity="center_vertical"
+                android:text="InputQuantity"
                 android:textAlignment="gravity" />
 
         </LinearLayout>

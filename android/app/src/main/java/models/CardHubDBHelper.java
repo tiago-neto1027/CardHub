@@ -7,6 +7,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
@@ -134,8 +135,8 @@ public class CardHubDBHelper extends SQLiteOpenHelper {
                 CART_ITEM_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 ITEM_ID + " INTEGER, " +
                 TYPE + " TEXT, " +
-                QUANTITY + " INTEGER, ";
-        sqLiteDatabase.execSQL(createTableListings);
+                QUANTITY + " INTEGER)";
+        sqLiteDatabase.execSQL(createTableCartitems);
     }
 
     @Override
@@ -581,8 +582,6 @@ public class CardHubDBHelper extends SQLiteOpenHelper {
             Log.e("CardHubDBHelper", "Error inserting cart item: " + e.getMessage());
         }
     }
-
-
     public ArrayList<CartItem> getAllCartItems() {
         ArrayList<CartItem> cartItemList = new ArrayList<>();
 
@@ -602,6 +601,44 @@ public class CardHubDBHelper extends SQLiteOpenHelper {
             Log.e("CardHubDBHelper", "Error fetching cart Items: " + e.getMessage());
         }
         return cartItemList;
+    }
+
+    public boolean isItemInCart(CartItem cartItem) {
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = null;
+        boolean isInCart = false;
+
+        try {
+            String selection = ITEM_ID + " = ? AND " + TYPE + " = ?";
+            String[] selectionArgs = {
+                    String.valueOf(cartItem.getItemId()),
+                    cartItem.getType()
+            };
+            cursor = db.query(
+                    TABLE_CARTITEMS,
+                    null,
+                    selection,
+                    selectionArgs,
+                    null,
+                    null,
+                    null
+            );
+            if (cursor != null && cursor.getCount() > 0) {
+                isInCart = true;
+            }
+        } catch (SQLException e) {
+            Log.e("CardHubDBHelper", "Error checking if item is in cart: " + e.getMessage());
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            db.close();
+        }
+        return isInCart;
+    }
+
+    public void updateCartQuantity(CartItem cartItem, String action){
+
     }
 
     //endregion

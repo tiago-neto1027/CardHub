@@ -11,17 +11,22 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.cardhub.R;
+import com.example.cardhub.controllers.ListingController;
 
 import java.util.ArrayList;
 
 import models.Card;
+import models.CardHubDBHelper;
 import models.CartItem;
+import models.Listing;
+import models.Product;
 
 public class CartAdapter extends BaseAdapter {
 
     private Context context;
     private LayoutInflater layoutInflater;
     private ArrayList<CartItem> cartList;
+    private CardHubDBHelper cardHubDBHelper;
 
     public CartAdapter(ArrayList<CartItem> cartList, Context context){
         this.cartList = cartList;
@@ -60,20 +65,34 @@ public class CartAdapter extends BaseAdapter {
 
     private class CartViewHolder {
         ImageView ivCardImage;
-        TextView tvCartID, tvQuantity;
+        TextView tvName, tvPrice, tvQuantity;
 
         public CartViewHolder(View view){
             ivCardImage = view.findViewById(R.id.ivCardImage);
-            tvQuantity = view.findViewById(R.id.tvquantity);
-            tvCartID = view.findViewById(R.id.tvCartID);
+            tvName = view.findViewById(R.id.tvName);
+            tvPrice = view.findViewById(R.id.tvPrice);
+            tvQuantity = view.findViewById(R.id.tvQuantity);
         }
 
         public void update(CartItem cartItem){
+            cardHubDBHelper = CardHubDBHelper.getInstance(context);
+            String image = null;
+            if(cartItem.getType().equals("listing")){
+                Listing listing = cardHubDBHelper.getListingById(cartItem.getItemId());
+                tvName.setText(String.valueOf(listing.getCardName()));
+                tvPrice.setText(String.format("%.2f€", listing.getPrice()));
+                image = listing.getCardImageUrl();
+            }
+            if(cartItem.getType().equals("product")){
+                Product product = cardHubDBHelper.getProductById(cartItem.getItemId());
+                tvName.setText(String.valueOf(product.getName()));
+                tvPrice.setText(String.format("%.2f€", product.getPrice()*cartItem.getQuantity()));
+                image = product.getImageUrl();
+            }
             tvQuantity.setText(String.valueOf(cartItem.getQuantity()));
-            tvCartID.setText(String.valueOf(cartItem.getId()));
 
             Glide.with(context)
-                    .load("")
+                    .load(image)
                     .placeholder(R.drawable.default_card)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(ivCardImage);
