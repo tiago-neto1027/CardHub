@@ -41,8 +41,6 @@ public class SettingsActivity extends AppCompatActivity {
 
         // Set the theme switch to match the current theme
         themeSwitch.setChecked(isDarkMode);
-
-        // Apply the correct theme
         applyTheme(isDarkMode);
 
         //Listener for the Switch Theme
