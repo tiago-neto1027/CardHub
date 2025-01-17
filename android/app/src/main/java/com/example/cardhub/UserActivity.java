@@ -46,8 +46,8 @@ public class UserActivity extends AppCompatActivity {
             intent = new Intent(this, HomeActivity.class);
         } else if (item.getItemId() == R.id.nav_wishlist) {
             intent = new Intent(this, FavoriteActivity.class);
-        } else if (item.getItemId() == R.id.nav_profile) {
-            intent = new Intent(this, UserActivity.class);
+        } else if (item.getItemId() == R.id.nav_shop) {
+            intent = new Intent(this, ShopActivity.class);
         }
         if (intent != null) {
             startActivity(intent);
