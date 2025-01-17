@@ -20,7 +20,7 @@ public class LoginActivity extends AppCompatActivity {
 
         UserUtils userUtils = new UserUtils();
         if (userUtils.isLoggedIn(getApplicationContext())) {
-            navigateToAppMainActivity();
+            navigateToHome();
         } else if (savedInstanceState == null) {
             loadFragment(new LoginFragment());
         }
@@ -34,8 +34,8 @@ public class LoginActivity extends AppCompatActivity {
                 .commit();
     }
 
-    public void navigateToAppMainActivity() {
-        Intent intent = new Intent(LoginActivity.this, AppMainActivity.class);
+    public void navigateToHome() {
+        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
         startActivity(intent);
         finish();
     }

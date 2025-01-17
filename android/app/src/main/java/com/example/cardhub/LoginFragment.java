@@ -56,7 +56,7 @@ public class LoginFragment extends Fragment {
             public void onSuccess() {
                 Toast.makeText(getActivity(), "Login successful", Toast.LENGTH_SHORT).show();
                 if (getActivity() instanceof LoginActivity) {
-                    ((LoginActivity) getActivity()).navigateToAppMainActivity();
+                    ((LoginActivity) getActivity()).navigateToHome();
                 }
             }
 
