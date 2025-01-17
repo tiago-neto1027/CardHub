@@ -120,7 +120,7 @@ import models.Card;public class ShopActivity extends AppCompatActivity implement
         listingsFragment.setArguments(bundle);
 
         Card tempCard = cardController.fetchCardDB(cardId);
-        toolbarTitle.setText(tempCard.getName());
+        setTitle("Listings: " + tempCard.getName());
 
         fragmentManager.beginTransaction()
                 .replace(R.id.contentFragment, listingsFragment)
