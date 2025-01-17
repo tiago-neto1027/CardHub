@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 
+import com.example.cardhub.controllers.FavoriteController;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 
@@ -39,6 +40,9 @@ public class HomeActivity extends AppCompatActivity {
         bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setSelectedItemId(R.id.nav_home);
         bottomNavigationView.setOnNavigationItemSelectedListener(this::onNavigationItemSelected);
+
+        FavoriteController favoriteController = new FavoriteController(getApplicationContext());
+        favoriteController.loadFavorites();
     }
 
     /**

@@ -193,22 +193,22 @@ public class CardController {
         return cardHubDBHelper.getCardById(cardId);
     }
 
-    public ArrayList<Card> fetchFavoritedCards(){
-        ArrayList<Card> favoritedCards = new ArrayList<>();
-        List<Integer> favoritedCardIds = cardHubDBHelper.getAllFavorites();
-
-        for(int cardId : favoritedCardIds) {
+    public ArrayList<Card> fetchFavoriteCards(){
+        ArrayList<Card> favoriteCards = new ArrayList<>();
+        List<Integer> favoriteCardIds = cardHubDBHelper.getAllFavorites();
+        
+        for(int cardId : favoriteCardIds) {
             Card card = cardHubDBHelper.getCardById(cardId);
             if (card != null) {
-                favoritedCards.add(card);
+                favoriteCards.add(card);
             }
         }
 
-        if (!favoritedCards.isEmpty() && cardsListener != null) {
-            cardsListener.onRefreshCardsList(favoritedCards);
-        } else if (favoritedCards.isEmpty()) {
+        if (!favoriteCards.isEmpty() && cardsListener != null) {
+            cardsListener.onRefreshCardsList(favoriteCards);
+        } else if (favoriteCards.isEmpty()) {
             Toast.makeText(context, "No favorite cards found.", Toast.LENGTH_SHORT).show();
         }
-        return favoritedCards;
+        return favoriteCards;
     }
 }
