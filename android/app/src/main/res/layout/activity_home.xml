@@ -19,6 +19,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/product_carousel"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="?attr/actionBarSize"
+            android:paddingBottom="60dp"/>
+
         <!-- Bottom Navigation Bar -->
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottom_navigation"

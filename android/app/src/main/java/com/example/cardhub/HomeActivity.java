@@ -2,8 +2,6 @@ package com.example.cardhub;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
@@ -11,17 +9,22 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
+import androidx.viewpager2.widget.ViewPager2;
 
-import com.example.cardhub.controllers.CardController;
-import com.example.cardhub.controllers.FavoriteController;
-import com.google.android.material.navigation.NavigationView;
+import com.example.cardhub.adapters.ProductCarouselAdapter;
+import com.example.cardhub.controllers.ProductController;
+import com.example.cardhub.listeners.ProductsListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import java.util.ArrayList;
+
+import models.Product;
 
 
 public class HomeActivity extends AppCompatActivity {
     private BottomNavigationView bottomNavigationView;
+    private ViewPager2 productCarousel;
+    private ProductController productController;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -38,6 +41,20 @@ public class HomeActivity extends AppCompatActivity {
         bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setSelectedItemId(R.id.nav_home);
         bottomNavigationView.setOnNavigationItemSelectedListener(this::onNavigationItemSelected);
+
+        //Page Content
+        productCarousel = findViewById(R.id.product_carousel);
+        productController = new ProductController(this);
+
+        productController.setProductsListener(new ProductsListener() {
+            @Override
+            public void onRefreshProductList(ArrayList<Product> productList) {
+                ProductCarouselAdapter adapter = new ProductCarouselAdapter(productList);
+                productCarousel.setAdapter(adapter);
+            }
+        });
+
+        productController.fetchProducts();
     }
 
     /**
