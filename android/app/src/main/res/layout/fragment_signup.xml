@@ -4,18 +4,15 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    android:padding="16dp"
-    android:background="@color/cardview_dark_background">
+    android:padding="16dp">
 
     <EditText
         android:id="@+id/etSignupUsername"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:backgroundTint="?attr/colorOnSurface"
         android:hint="@string/username"
         android:inputType="text"
-        android:textColor="@color/white"
-        android:textColorHint="@color/white"
-        android:backgroundTint="@color/white"
         android:padding="12dp"
         android:layout_marginBottom="16dp" />
 
@@ -23,11 +20,9 @@
         android:id="@+id/etSignupEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:backgroundTint="?attr/colorOnSurface"
         android:hint="@string/email"
         android:inputType="textEmailAddress"
-        android:textColor="@color/white"
-        android:textColorHint="@color/white"
-        android:backgroundTint="@color/white"
         android:padding="12dp"
         android:layout_marginBottom="16dp" />
 
@@ -35,11 +30,9 @@
         android:id="@+id/etSignupPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:backgroundTint="?attr/colorOnSurface"
         android:hint="@string/password"
         android:inputType="textPassword"
-        android:textColor="@color/white"
-        android:textColorHint="@color/white"
-        android:backgroundTint="@color/white"
         android:padding="12dp"
         android:layout_marginBottom="16dp" />
 
@@ -47,11 +40,9 @@
         android:id="@+id/etSignupConfirmPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:backgroundTint="?attr/colorOnSurface"
         android:hint="@string/confirm_password"
         android:inputType="textPassword"
-        android:textColor="@color/white"
-        android:textColorHint="@color/white"
-        android:backgroundTint="@color/white"
         android:padding="12dp"
         android:layout_marginBottom="16dp" />
 
@@ -59,18 +50,14 @@
         android:id="@+id/btnSignup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/cardhub_blue"
         android:text="@string/sign_up"
-        android:textColor="@color/white"
         android:padding="12dp" />
 
     <Button
         android:id="@+id/btnLogin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/cardhub_blue"
         android:text="@string/login"
-        android:textColor="@color/white"
         android:padding="12dp" />
 
 </LinearLayout>
