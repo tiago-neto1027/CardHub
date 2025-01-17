@@ -71,18 +71,17 @@ public class FavoriteController {
     }
 
     public void removeFavorite(int cardId) {
+        dbHelper.removeFavorite(cardId);
         //Sends to the API
         String endpoint = Endpoints.FAVORITE_ENDPOINT + "/" + cardId;
         RestAPIClient.getInstance(context).deleteRequest(endpoint, new RestAPIClient.APIResponseCallback() {
             @Override
             public void onSuccess(JSONObject response) {
-                Toast.makeText(context, "Error removing favorite: ", Toast.LENGTH_SHORT).show();
                 Log.d("Favorite", "Favorite removed successfully");
             }
 
             @Override
             public void onError(String error) {
-                dbHelper.removeFavorite(cardId);
                 Log.e("Favorite", "Error removing favorite: " + error);
             }
         });
@@ -90,6 +89,7 @@ public class FavoriteController {
 
     public void insertFavorite(int cardId) {
         try {
+            dbHelper.insertFavorite(cardId);
             //Creates Json
             JSONObject postData = new JSONObject();
             postData.put("card_id", cardId);
@@ -98,7 +98,6 @@ public class FavoriteController {
             RestAPIClient.getInstance(context).postRequest(Endpoints.FAVORITE_ENDPOINT, postData, new RestAPIClient.APIResponseCallback() {
                 @Override
                 public void onSuccess(JSONObject response) {
-                    dbHelper.insertFavorite(cardId);
                     Log.d("Favorite", "Favorite added successfully");
                 }
 
