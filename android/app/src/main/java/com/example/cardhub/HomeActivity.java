@@ -11,13 +11,24 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
+import androidx.viewpager2.widget.ViewPager2;
 
+import com.example.cardhub.adapters.ProductCarouselAdapter;
+import com.example.cardhub.controllers.ProductController;
+import com.example.cardhub.listeners.ProductsListener;
 import com.example.cardhub.controllers.FavoriteController;
+
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import java.util.ArrayList;
+
+import models.Product;
 
 
 public class HomeActivity extends AppCompatActivity {
     private BottomNavigationView bottomNavigationView;
+    private ViewPager2 productCarousel;
+    private ProductController productController;
     private SharedPreferences sharedPreferences;
 
     @Override
@@ -41,8 +52,23 @@ public class HomeActivity extends AppCompatActivity {
         bottomNavigationView.setSelectedItemId(R.id.nav_home);
         bottomNavigationView.setOnNavigationItemSelectedListener(this::onNavigationItemSelected);
 
+        //Loads Favorites to DB
         FavoriteController favoriteController = new FavoriteController(getApplicationContext());
         favoriteController.loadFavorites();
+      
+        //Page Content
+        productCarousel = findViewById(R.id.product_carousel);
+        productController = new ProductController(this);
+
+        productController.setProductsListener(new ProductsListener() {
+            @Override
+            public void onRefreshProductList(ArrayList<Product> productList) {
+                ProductCarouselAdapter adapter = new ProductCarouselAdapter(HomeActivity.this, productList);
+                productCarousel.setAdapter(adapter);
+            }
+        });
+
+        productController.fetchProducts();
     }
 
     /**
