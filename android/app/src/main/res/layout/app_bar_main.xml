@@ -20,7 +20,16 @@
             android:background="@color/cardhub_blue_medium"
             android:minHeight="?attr/actionBarSize"
             android:theme="?attr/actionBarTheme"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+            <TextView
+                android:id="@+id/toolbar_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="46sp"
+                android:textStyle="bold"
+                android:fontFamily="casual" />
+        </androidx.appcompat.widget.Toolbar>
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -28,6 +37,7 @@
         android:id="@+id/contentFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginBottom="60dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     </FrameLayout>

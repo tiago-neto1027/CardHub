@@ -2,55 +2,56 @@ package com.example.cardhub;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.Fragment;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.FragmentManager;
 
-import com.example.cardhub.controllers.CardController;
-import com.example.cardhub.controllers.FavoriteController;
-import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-
-public class HomeActivity extends AppCompatActivity {
+public class FavoriteActivity extends AppCompatActivity {
     private BottomNavigationView bottomNavigationView;
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
+        setContentView(R.layout.activity_favorite);
 
-        //Top bar with title and buttons
         Toolbar toolbar = findViewById(R.id.toolbar);
         setTitle(null);
         TextView toolbarTitle = findViewById(R.id.toolbar_title);
-        toolbarTitle.setText(R.string.cardhub);
+        toolbarTitle.setText(R.string.wishlist);
         setSupportActionBar(toolbar);
 
         bottomNavigationView = findViewById(R.id.bottom_navigation);
-        bottomNavigationView.setSelectedItemId(R.id.nav_home);
+        bottomNavigationView.setSelectedItemId(R.id.nav_wishlist);
         bottomNavigationView.setOnNavigationItemSelectedListener(this::onNavigationItemSelected);
+
+        //Starts The Cards Fragment
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.contentFragment, CardsFragment.newInstance(true))
+                .commit();
     }
 
-    /**
-     * Handle BottomNavigationView item selection
-     */
     private boolean onNavigationItemSelected(@NonNull MenuItem item) {
         Intent intent = null;
 
-        if (item.getItemId() == R.id.nav_wishlist) {
-            intent = new Intent(this, FavoriteActivity.class);
+        if (item.getItemId() == R.id.nav_home) {
+            intent = new Intent(this, HomeActivity.class);
         } else if (item.getItemId() == R.id.nav_shop) {
             intent = new Intent(this, ShopActivity.class);
-        } else if (item.getItemId() == R.id.nav_profile) {
+        } else if (item.getItemId() == R.id.nav_wishlist) {
+            intent = new Intent(this, FavoriteActivity.class);
+        }
+        else if (item.getItemId() == R.id.nav_profile) {
             //intent = new Intent(this, ProfileActivity.class);
         }
         if (intent != null) {

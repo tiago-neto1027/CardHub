@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
@@ -29,19 +30,23 @@ import models.Card;public class ShopActivity extends AppCompatActivity implement
     private FragmentManager fragmentManager;
     private DrawerLayout drawer;
     private NavigationView navigationView;
-    private BottomNavigationView bottomNavigationView;
+    private TextView toolbarTitle;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shop);
 
+        //Top bar with title and buttons
         Toolbar toolbar = findViewById(R.id.toolbar);
+        setTitle(null);
+        toolbarTitle = findViewById(R.id.toolbar_title);
         setSupportActionBar(toolbar);
 
         drawer = findViewById(R.id.drawerLayout);
-        bottomNavigationView = findViewById(R.id.bottom_navigation);
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
 
+        //Drawer to go to other fragments
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.open, R.string.close);
         toggle.syncState();
         drawer.addDrawerListener(toggle);
@@ -68,21 +73,14 @@ import models.Card;public class ShopActivity extends AppCompatActivity implement
 
         if (item.getItemId() == R.id.nav_home) {
             intent = new Intent(this, HomeActivity.class);
-            setTitle(item.getTitle());
         } else if (item.getItemId() == R.id.nav_wishlist) {
-            // Launch Wishlist Activity
-            //intent = new Intent(this, WishlistActivity.class);
-            setTitle(item.getTitle());
-        } else if (item.getItemId() == R.id.nav_shop) {
-            intent = new Intent(this, ShopActivity.class);
-            setTitle(item.getTitle());
+            intent = new Intent(this, FavoriteActivity.class);
         } else if (item.getItemId() == R.id.nav_profile) {
             //intent = new Intent(this, ProfileActivity.class);
-            setTitle(item.getTitle());
         }
         if (intent != null) {
-            finish();
             startActivity(intent);
+            finish();
             return true;
         }
         return false;
@@ -99,8 +97,9 @@ import models.Card;public class ShopActivity extends AppCompatActivity implement
         } else if (item.getItemId() == R.id.listingsList) {
             fragment = new ListingsFragment();
         }
+
         if (fragment != null) {
-            setTitle(item.getTitle());
+            toolbarTitle.setText(item.getTitle());
             fragmentManager.beginTransaction().replace(R.id.contentFragment, fragment).commit();
         }
         drawer.closeDrawer(GravityCompat.START);
@@ -121,7 +120,7 @@ import models.Card;public class ShopActivity extends AppCompatActivity implement
         listingsFragment.setArguments(bundle);
 
         Card tempCard = cardController.fetchCardDB(cardId);
-        setTitle(tempCard.getName());
+        toolbarTitle.setText(tempCard.getName());
 
         fragmentManager.beginTransaction()
                 .replace(R.id.contentFragment, listingsFragment)

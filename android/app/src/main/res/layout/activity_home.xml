@@ -35,19 +35,9 @@
             app:menu="@menu/bottom_nav_menu"
             app:itemIconTint="@color/nav_icon_color"
             app:itemTextColor="@color/white"
-            />
+            app:labelVisibilityMode="labeled"
+            app:elevation="0dp"/>
 
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fontFamily="casual"
-            android:paddingStart="10dp"
-            android:text="@string/cardhub"
-            android:textColor="@color/black"
-            android:textColorLink="#000000"
-            android:textSize="46sp"
-            android:textStyle="bold" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </androidx.drawerlayout.widget.DrawerLayout>

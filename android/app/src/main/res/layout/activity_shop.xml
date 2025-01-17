@@ -35,7 +35,7 @@
             app:menu="@menu/bottom_nav_menu"
             app:itemIconTint="@color/nav_icon_color"
             app:itemTextColor="@color/white"
-            />
+            app:labelVisibilityMode="labeled"/>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <!-- Navigation Drawer -->
@@ -48,6 +48,5 @@
         app:headerLayout="@layout/nav_header_start"
         app:menu="@menu/menu_main" />
 
-    <!-- Bottom Navigation Bar -->
 
 </androidx.drawerlayout.widget.DrawerLayout>

@@ -13,6 +13,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import models.Card;
 import models.CardHubDBHelper;
@@ -190,5 +191,24 @@ public class CardController {
 
     public Card fetchCardDB(int cardId){
         return cardHubDBHelper.getCardById(cardId);
+    }
+
+    public ArrayList<Card> fetchFavoritedCards(){
+        ArrayList<Card> favoritedCards = new ArrayList<>();
+        List<Integer> favoritedCardIds = cardHubDBHelper.getAllFavorites();
+
+        for(int cardId : favoritedCardIds) {
+            Card card = cardHubDBHelper.getCardById(cardId);
+            if (card != null) {
+                favoritedCards.add(card);
+            }
+        }
+
+        if (!favoritedCards.isEmpty() && cardsListener != null) {
+            cardsListener.onRefreshCardsList(favoritedCards);
+        } else if (favoritedCards.isEmpty()) {
+            Toast.makeText(context, "No favorite cards found.", Toast.LENGTH_SHORT).show();
+        }
+        return favoritedCards;
     }
 }

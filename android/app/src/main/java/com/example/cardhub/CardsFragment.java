@@ -29,13 +29,32 @@ import models.CardHubDBHelper;
 
 public class CardsFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, CardsListener {
 
+    private static final String ARG_SHOW_FAVORITES = "show_favorites";
+    private boolean showFavorites;
+
     private ListView lvCards;
-    private SearchView searchView;
     private SwipeRefreshLayout swipeRefreshLayout;
     private CardController cardController;
 
     public CardsFragment() {
         // Required empty public constructor
+    }
+
+    //Receives the boolean to decide if shows the favorites or the normal cards page, stores it in constant
+    public static CardsFragment newInstance(boolean showFavorites) {
+        CardsFragment fragment = new CardsFragment();
+        Bundle args = new Bundle();
+        args.putBoolean(ARG_SHOW_FAVORITES, showFavorites);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            showFavorites = getArguments().getBoolean(ARG_SHOW_FAVORITES, false);
+        }
     }
 
     @Override
@@ -59,7 +78,11 @@ public class CardsFragment extends Fragment implements SwipeRefreshLayout.OnRefr
 
         cardController = new CardController(getContext());
         cardController.setCardsListener(this);
-        cardController.fetchCards();
+
+        if (showFavorites)
+            cardController.fetchFavoritedCards();
+        else
+            cardController.fetchCards();
 
         return view;
     }
@@ -68,7 +91,7 @@ public class CardsFragment extends Fragment implements SwipeRefreshLayout.OnRefr
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.menu_search, menu);
         MenuItem itemSearch = menu.findItem(R.id.itemSearch);
-        searchView = (SearchView) itemSearch.getActionView();
+        SearchView searchView = (SearchView) itemSearch.getActionView();
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override

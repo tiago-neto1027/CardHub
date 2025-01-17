@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Cardhub</string>
-    <string name="cardhub">Cardhub</string>
+    <string name="cardhub">CardHub</string>
     <string name="login">Login</string>
     <string name="sign_up">Sign Up</string>
     <string name="username">Username</string>
@@ -10,13 +10,17 @@
     <string name="signupNowMessage">Not signed in yet, sign up now</string>
     <string name="no_internet">Please connect to the internet first.</string>
     <string name="search">Search</string>
-    <string name="browse_cards">Browse Cards</string>
+    <string name="browse_cards">Cards</string>
     <string name="open">open</string>
     <string name="close">close</string>
     <string name="browse_products">browse_products</string>
     <string name="sort">Sort</string>
     <string name="sort_by_price">Sort by Price</string>
     <string name="view_listings">View Listings</string>
-    <string name="browse_product">Browse Products</string>
-    <string name="browse_listings">Browse Listings</string>
+    <string name="browse_product">Products</string>
+    <string name="browse_listings">Listings</string>
+    <string name="home">Home</string>
+    <string name="shop">Shop</string>
+    <string name="wishlist">Wishlist</string>
+    <string name="me">Me</string>
 </resources>
