@@ -82,7 +82,7 @@ public class HomeActivity extends AppCompatActivity {
         } else if (item.getItemId() == R.id.nav_shop) {
             intent = new Intent(this, ShopActivity.class);
         } else if (item.getItemId() == R.id.nav_profile) {
-            //intent = new Intent(this, ProfileActivity.class);
+            intent = new Intent(this, UserActivity.class);
         }
         if (intent != null) {
             startActivity(intent);
