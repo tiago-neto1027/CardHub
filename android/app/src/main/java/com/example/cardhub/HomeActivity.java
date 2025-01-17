@@ -49,7 +49,7 @@ public class HomeActivity extends AppCompatActivity {
         productController.setProductsListener(new ProductsListener() {
             @Override
             public void onRefreshProductList(ArrayList<Product> productList) {
-                ProductCarouselAdapter adapter = new ProductCarouselAdapter(productList);
+                ProductCarouselAdapter adapter = new ProductCarouselAdapter(HomeActivity.this, productList);
                 productCarousel.setAdapter(adapter);
             }
         });
