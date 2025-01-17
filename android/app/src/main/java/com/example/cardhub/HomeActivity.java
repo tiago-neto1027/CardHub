@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -59,5 +60,10 @@ public class HomeActivity extends AppCompatActivity {
             return true;
         }
         return false;
+    }
+
+    public void navigateToSettings(View view) {
+        Intent intent = new Intent(HomeActivity.this, SettingsActivity.class);
+        startActivity(intent);
     }
 }

@@ -19,6 +19,17 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 
+        <ImageButton
+            android:id="@+id/btnSettings"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_marginStart="310dp"
+            android:layout_marginTop="65dp"
+            android:layout_weight="0"
+            android:textAlignment="viewEnd"
+            app:srcCompat="@drawable/setting_icon_foreground"
+            android:onClick="navigateToSettings" />
+
         <!-- Bottom Navigation Bar -->
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottom_navigation"

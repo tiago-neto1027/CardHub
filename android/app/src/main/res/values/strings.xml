@@ -23,4 +23,9 @@
     <string name="shop">Shop</string>
     <string name="wishlist">Wishlist</string>
     <string name="me">Me</string>
+    <string name="base_api_url">Base API URL</string>
+    <string name="save">Save</string>
+    <string name="theme_switch_title">Switch Theme</string>
+    <string name="api_url_icon">API URL Icon</string>
+    <string name="theme_switch_icon">Theme Switch Icon</string>
 </resources>
