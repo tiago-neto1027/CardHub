@@ -28,4 +28,13 @@
     <string name="theme_switch_title">Switch Theme</string>
     <string name="api_url_icon">API URL Icon</string>
     <string name="theme_switch_icon">Theme Switch Icon</string>
+    <string name="enter_new_email">Enter new email</string>
+    <string name="enter_new_username">Enter new username</string>
+    <string name="email_john_doe_example_com">Email: john.doe@example.com</string>
+    <string name="username_johndoe">Username: JohnDoe</string>
+    <string name="my_account">My Account</string>
+    <string name="save_email">Save Email</string>
+    <string name="save_username">Save Username</string>
+    <string name="change_my_settings">Change my Settings</string>
+    <string name="log_out">Logout</string>
 </resources>

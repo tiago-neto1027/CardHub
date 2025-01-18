@@ -6,6 +6,7 @@
     <color name="cardhub_blue_light">#e3e8ff</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="red">#FF5B5B</color>
     <color name="bg_grey">#1B1B1B</color>
     <color name="bg_grey_light">#3D464D</color>
     <color name="cardview_dark_background">#212121</color>

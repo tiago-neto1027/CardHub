@@ -1,42 +1,204 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".UserActivity">
+    android:layout_height="match_parent">
 
-    <!-- Main content container -->
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
+    <!-- AppBarLayout with Toolbar -->
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/AppBarLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-        <include
-            layout="@layout/app_bar_main"
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="wrap_content"
+            android:background="@color/cardhub_blue_medium"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="?attr/actionBarTheme"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
-        <!-- Bottom Navigation Bar -->
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/bottom_navigation"
+            <TextView
+                android:id="@+id/toolbar_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="46sp"
+                android:textStyle="bold"
+                android:fontFamily="casual" />
+        </androidx.appcompat.widget.Toolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <!-- Main Content Layout -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:weightSum="1">
+
+        <!-- Title Section -->
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/my_account"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="16dp"
+            android:textColor="?attr/colorOnBackground"
+            android:layout_marginTop="30dp"/>
+
+        <!-- User Info Section -->
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_gravity="bottom"
-            android:background="?attr/colorSecondary"
-            app:itemBackground="?attr/colorSecondary"
-            app:backgroundTint="?attr/colorSecondary"
-            app:itemRippleColor="@null"
-            app:itemPaddingTop="-5dp"
-            app:itemPaddingBottom="10dp"
-            app:itemIconSize="50dp"
-            app:menu="@menu/bottom_nav_menu"
-            app:itemIconTint="?attr/colorPrimary"
-            app:itemTextColor="?attr/colorOnSecondary"
-            app:labelVisibilityMode="labeled"
-            app:elevation="0dp"/>
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginBottom="32dp">
 
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+            <TextView
+                android:id="@+id/tvUsername"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:layout_marginBottom="8dp"
+                android:textColor="?attr/colorOnBackground" />
 
+            <TextView
+                android:id="@+id/tvEmail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textColor="?attr/colorOnBackground" />
+        </LinearLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <!-- Divider -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?attr/colorOnBackground"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Change my Settings Title -->
+        <TextView
+            android:id="@+id/tvChangeSettings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/change_my_settings"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="?attr/colorOnBackground"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="30dp"/>
+
+        <!-- Input Fields Section -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginBottom="32dp">
+
+            <EditText
+                android:id="@+id/etNewUsername"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/enter_new_username"
+                android:inputType="textPersonName"
+                android:padding="12dp"
+                android:layout_marginBottom="16dp"
+                android:textColor="?attr/colorOnBackground"
+                android:textColorHint="?attr/colorOnBackground" />
+
+            <EditText
+                android:id="@+id/etNewEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/enter_new_email"
+                android:inputType="textEmailAddress"
+                android:padding="12dp"
+                android:textColor="?attr/colorOnBackground"
+                android:textColorHint="?attr/colorOnBackground" />
+        </LinearLayout>
+
+        <!-- Save Buttons -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="10dp">
+
+            <!-- Save Username Button -->
+            <Button
+                android:id="@+id/btnSaveUsername"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/save_username"
+                android:textColor="?attr/colorOnPrimary"
+                android:background="?attr/colorPrimary"
+                android:layout_marginEnd="10dp"
+                android:onClick="updateUsername"/>
+
+            <!-- Save Email Button -->
+            <Button
+                android:id="@+id/btnSaveEmail"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/save_email"
+                android:textColor="?attr/colorOnPrimary"
+                android:background="?attr/colorPrimary"
+                android:onClick="updateEmail"/>
+        </LinearLayout>
+
+        <!-- Log Out Button -->
+        <Button
+            android:id="@+id/btnLogOut"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/log_out"
+            android:textColor="?attr/colorOnTertiary"
+            android:background="?attr/colorTertiary"
+            android:backgroundTint="?attr/colorTertiary"
+            android:layout_marginTop="16dp"
+            android:onClick="logOut" />
+
+    </LinearLayout>
+
+    <!-- Bottom Navigation Bar -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_gravity="bottom"
+        android:background="?attr/colorSecondary"
+        app:itemBackground="?attr/colorSecondary"
+        app:backgroundTint="?attr/colorSecondary"
+        app:itemRippleColor="@null"
+        app:itemPaddingTop="-5dp"
+        app:itemPaddingBottom="10dp"
+        app:itemIconSize="50dp"
+        app:menu="@menu/bottom_nav_menu"
+        app:itemIconTint="?attr/colorPrimary"
+        app:itemTextColor="?attr/colorOnSecondary"
+        app:labelVisibilityMode="labeled"
+        app:elevation="0dp"/>
+
+    <!-- Settings Button (Bottom Left) -->
+    <ImageButton
+        android:id="@+id/btnSettings"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_gravity="start|bottom"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="80dp"
+        android:background="?attr/colorSurface"
+        app:tint="?attr/colorOnSurface"
+        app:srcCompat="@drawable/setting_icon_foreground"
+        android:onClick="navigateToSettings" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
