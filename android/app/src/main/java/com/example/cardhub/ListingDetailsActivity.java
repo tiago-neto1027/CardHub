@@ -7,6 +7,7 @@ import android.text.SpannableString;
 import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,12 +18,14 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.example.cardhub.controllers.CartController;
 import com.example.cardhub.controllers.ListingController;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import models.CardHubDBHelper;
 import models.Listing;
 import models.RestAPIClient;
 
@@ -33,7 +36,6 @@ public class ListingDetailsActivity extends AppCompatActivity {
     private Listing listing;
     private ListingController listingController;
     private BottomNavigationView bottomNavigationView;
-
 
     private TextView tvCardName, tvSellerUsername, tvPrice, tvCondition;
     private ImageView cardImage;
@@ -61,6 +63,14 @@ public class ListingDetailsActivity extends AppCompatActivity {
         bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setSelectedItemId(R.id.nav_shop);
         bottomNavigationView.setOnNavigationItemSelectedListener(this::onNavigationItemSelected);
+    }
+
+    public void addItemToCart(View view) {
+        CartController cartController = new CartController(this);
+        int itemId = listing.getId();
+        int quantity = 1;
+        String type = "listing";
+        cartController.addItemToCart(itemId, type, quantity);
     }
 
     public void fetchListingDetails(){
@@ -130,6 +140,12 @@ public class ListingDetailsActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(android.view.MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             onBackPressed();
+            return true;
+        }
+
+        if (item.getItemId() == R.id.action_cart) {
+            Intent intent = new Intent(this, CartActivity.class);
+            startActivity(intent);
             return true;
         }
         return super.onOptionsItemSelected(item);

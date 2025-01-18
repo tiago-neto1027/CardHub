@@ -48,6 +48,7 @@ public class HomeActivity extends AppCompatActivity {
         boolean isDarkMode = sharedPreferences.getBoolean("isDarkMode", false);
         applyTheme(isDarkMode);
 
+        //Bottom bar with nav buttons
         bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setSelectedItemId(R.id.nav_home);
         bottomNavigationView.setOnNavigationItemSelectedListener(this::onNavigationItemSelected);
