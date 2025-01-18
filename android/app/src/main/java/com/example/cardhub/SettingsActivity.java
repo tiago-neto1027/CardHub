@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -15,10 +16,12 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.SwitchCompat;
 
 import com.example.cardhub.utils.Endpoints;
+import com.example.cardhub.utils.UserUtils;
 
 public class SettingsActivity extends AppCompatActivity {
 
     private EditText etURL;
+    private TextView tvURL;
     private SwitchCompat themeSwitch;
     private SharedPreferences sharedPreferences;
 
@@ -29,11 +32,17 @@ public class SettingsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_settings);
 
         // Initialize UI components
+        tvURL = findViewById(R.id.tvURL);
         etURL = findViewById(R.id.etURL);
         themeSwitch = findViewById(R.id.themeSwitch);
 
         // Load Base API URL
         etURL.setText(Endpoints.getBaseUrl(getApplicationContext()));
+        UserUtils userUtils = new UserUtils();
+        if(userUtils.isLoggedIn(this)){
+            etURL.setVisibility(View.GONE);
+            tvURL.setVisibility(View.GONE);
+        }
 
         // Initialize SharedPreferences to store theme preference
         sharedPreferences = getSharedPreferences("ThemePrefs", MODE_PRIVATE);
