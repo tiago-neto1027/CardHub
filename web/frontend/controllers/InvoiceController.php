@@ -49,7 +49,7 @@ class InvoiceController extends Controller
         $invoice = Invoice::findOne($id);
 
         if (!$invoice || $invoice->client_id !== Yii::$app->user->id) {
-            throw new \yii\web\NotFoundHttpException('Invoice not found or access denied.');
+            throw new \yii\web\NotFoundHttpException('Invoice not found or access denied. Login with the right account to see the invoice.');
         }
 
         $invoiceLines = InvoiceLine::find()
