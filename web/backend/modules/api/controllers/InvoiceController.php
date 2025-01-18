@@ -197,7 +197,7 @@ class InvoiceController extends BaseController{
         $items = $postData['items'] ?? [];
         $paymentMethod = $postData['payment_method'] ?? null;
 
-        $validPaymentMethods = ['PayPal', 'MbWay'];
+        $validPaymentMethods = ['paypal', 'mbway'];
         if (!in_array($paymentMethod, $validPaymentMethods)) {
             return [
                 'success' => false,
@@ -229,7 +229,7 @@ class InvoiceController extends BaseController{
                 'date' => date('Y-m-d H:i:s'),
             ]);
             if (!$payment->save()) {
-                throw new \Exception('Error saving payment.');
+                throw new \Exception('Error saving payment. Payment data: ' . json_encode($payment->errors));
             }
 
             //Creates invoice
