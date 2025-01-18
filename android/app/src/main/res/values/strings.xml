@@ -30,4 +30,6 @@
     <string name="theme_switch_icon">Theme Switch Icon</string>
     <string name="add_to_cart">Add to Cart</string>
     <string name="cart">Cart</string>
+    <string name="increase_quantity">Increase Quantity</string>
+    <string name="decrease_quantity">Decrease Quantity</string>
 </resources>

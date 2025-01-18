@@ -18,28 +18,12 @@ public class CartController
 
     public void addItemToCart(int itemId, String type, int quantity){
         CartItem cartItem = new CartItem(itemId,type,quantity);
-        if(type.equals("listing"))
-        {
-            if(cardHubDBHelper.isItemInCart(cartItem))
-                Toast.makeText(context, "The item already is in the cart.", Toast.LENGTH_SHORT).show();
-            else {
-                cardHubDBHelper.insertCartItem(cartItem);
-                Toast.makeText(context, "Item added to the cart.", Toast.LENGTH_SHORT).show();
-            }
-        }
-        else if (type.equals("product"))
-        {
-            if(cardHubDBHelper.isItemInCart(cartItem)){
-                String action = "plus";
-                cardHubDBHelper.updateCartQuantity(cartItem, action);
-                Toast.makeText(context, "Quantity updated in the cart.", Toast.LENGTH_SHORT).show();
-            }
-            else {
-                cardHubDBHelper.insertCartItem(cartItem);
-                Toast.makeText(context, "Item added to the cart.", Toast.LENGTH_SHORT).show();
-            }
+
+        if(cardHubDBHelper.isItemInCart(cartItem))
+            Toast.makeText(context, "The item is already in the cart.", Toast.LENGTH_SHORT).show();
+        else {
+            cardHubDBHelper.insertCartItem(cartItem);
+            Toast.makeText(context, "Item added to the cart.", Toast.LENGTH_SHORT).show();
         }
     }
-
-
 }

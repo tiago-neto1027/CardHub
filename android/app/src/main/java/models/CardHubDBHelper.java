@@ -677,49 +677,11 @@ public class CardHubDBHelper extends SQLiteOpenHelper {
         }
     }
 
-    public void updateCartQuantity(CartItem cartItem, String action) {
-        SQLiteDatabase db = null;
-        try {
-            db = this.getWritableDatabase();
+    public void updateCartItemQuantity(int cartItemId, int newQuantity) {
+        try (SQLiteDatabase db = getWritableDatabase()){
             ContentValues values = new ContentValues();
-            Log.d("updateCart", "We got here: " + action);
-
-            int curQuantity = cartItem.getQuantity();
-            int newQuantity = curQuantity;
-            Log.d("updateCart", "We got here: " + action);
-            if ("plus".equals(action)) {
-                int productStock = getProductById(cartItem.getItemId()).getStock();
-                newQuantity = Math.min(curQuantity + 1, productStock);
-            } else if ("minus".equals(action)) {
-                newQuantity = Math.max(curQuantity - 1, 0);
-            } else {
-                Log.d("updateCart", "Invalid action: " + action);
-                return;
-            }
-
-            if (curQuantity != newQuantity) {
-                values.put(QUANTITY, newQuantity);
-
-                int rowsUpdated = db.update(
-                        TABLE_CARTITEMS,
-                        values,
-                        ID + " = ?",
-                        new String[]{String.valueOf(cartItem.getId())}
-                );
-                if (rowsUpdated > 0) {
-                    Log.d("updateCart", "Cart item updated successfully: ID=" + cartItem.getId());
-                } else {
-                    Log.d("updateCart", "No cart item found to update: ID=" + cartItem.getId());
-                }
-            } else {
-                Log.d("updateCart", "No update needed. Quantity unchanged: ID=" + cartItem.getId());
-            }
-        } catch (SQLException e) {
-            Log.d("updateCart", "Error updating card: " + e.getMessage());
-        } finally {
-            if (db != null) {
-                db.close();
-            }
+            values.put(QUANTITY, newQuantity);
+            db.update(TABLE_CARTITEMS, values, ITEM_ID +" = ?", new String[]{String.valueOf(cartItemId)});
         }
     }
     //endregion

@@ -23,6 +23,7 @@ public class CartItem {
     public int getItemId() { return itemId; }
     public String getType() { return type; }
     public int getQuantity() { return quantity; }
+    public void setQuantity(int quantity) { this.quantity = quantity; }
 
     @Override
     public String toString() {
