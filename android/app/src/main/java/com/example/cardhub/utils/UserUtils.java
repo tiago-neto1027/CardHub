@@ -12,10 +12,12 @@ public class UserUtils {
     private static final String SHARED_PREFS_NAME = "AppPreferences";
     private static final String USERNAME_KEY = "Username";
     private static final String PASSWORD_KEY = "Password";
+    private static final String EMAIL_KEY = "Email";
 
     //Credentials
     private String username;
     private String password;
+    private String email;
 
     //Methods
     private void loadCredentialsFromCache(Context context) {
@@ -69,8 +71,10 @@ public class UserUtils {
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.remove(USERNAME_KEY);
             editor.remove(PASSWORD_KEY);
+            editor.remove(EMAIL_KEY);
             editor.apply();
 
+            this.email = null;
             this.username = null;
             this.password = null;
         } catch (Exception e) {
@@ -87,8 +91,58 @@ public class UserUtils {
         return username;
     }
 
+    public void setUsername(Context context, String username){
+        try {
+            SharedPreferences sharedPreferences = EncryptedSharedPreferences.create(
+                    SHARED_PREFS_NAME,
+                    MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC),
+                    context,
+                    EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+                    EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM);
+
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString(USERNAME_KEY, username);
+            editor.apply();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public String getPassword(Context context) {
         loadCredentialsFromCache(context);
         return password;
+    }
+
+    public String getEmail(Context context){
+        try {
+            SharedPreferences sharedPreferences = EncryptedSharedPreferences.create(
+                    SHARED_PREFS_NAME,
+                    MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC),
+                    context,
+                    EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+                    EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM);
+
+            email = sharedPreferences.getString(EMAIL_KEY, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return email;
+    }
+
+    public void setEmail(Context context, String email){
+        try {
+            SharedPreferences sharedPreferences = EncryptedSharedPreferences.create(
+                    SHARED_PREFS_NAME,
+                    MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC),
+                    context,
+                    EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+                    EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM);
+
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString(EMAIL_KEY, email);
+            editor.apply();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

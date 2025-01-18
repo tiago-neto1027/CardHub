@@ -36,4 +36,5 @@
     <string name="save_email">Save Email</string>
     <string name="save_username">Save Username</string>
     <string name="change_my_settings">Change my Settings</string>
+    <string name="log_out">Logout</string>
 </resources>
