@@ -5,10 +5,12 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.Insets;
 import androidx.core.view.GravityCompat;
 import androidx.core.view.ViewCompat;
@@ -33,19 +35,24 @@ public class CartActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cart);
 
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+        //Top bar with title and buttons
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setTitle(null);
+        TextView toolbarTitle = findViewById(R.id.toolbar_title);
+        toolbarTitle.setText(R.string.cart);
+        setSupportActionBar(toolbar);
 
+        //Bottom bar with nav buttons
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setSelectedItemId(R.id.nav_shop);
+        bottomNavigationView.setOnNavigationItemSelectedListener(this::onBottomNavigationItemSelected);
+
+        //Inflate the page with items
         lvCartItems = findViewById(R.id.lvCartItems);
         cardHubDBHelper = CardHubDBHelper.getInstance(getApplicationContext());
         ArrayList<CartItem> cartItemList = cardHubDBHelper.getAllCartItems();
-
         CartAdapter cartAdapter = new CartAdapter(cartItemList, this);
-
         lvCartItems.setAdapter(cartAdapter);
-
-        bottomNavigationView.isSelected();
-        bottomNavigationView.setSelected(false);
-        bottomNavigationView.setOnNavigationItemSelectedListener(this::onBottomNavigationItemSelected);
     }
 
     public boolean onBottomNavigationItemSelected(@NonNull MenuItem item) {
@@ -66,8 +73,5 @@ public class CartActivity extends AppCompatActivity {
             return true;
         }
         return false;
-    }
-
-    public void onBottomNavigationItemSelected(View view) {
     }
 }

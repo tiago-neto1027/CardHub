@@ -115,7 +115,18 @@ public class CardsFragment extends Fragment implements SwipeRefreshLayout.OnRefr
 
         super.onCreateOptionsMenu(menu, inflater);
     }
-    
+
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_cart) {
+            Intent intent = new Intent(getContext(), CartActivity.class);
+            startActivity(intent);
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 
     @Override
     public void onRefresh() {

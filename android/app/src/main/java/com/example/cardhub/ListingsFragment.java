@@ -89,6 +89,13 @@ public class ListingsFragment extends Fragment implements SwipeRefreshLayout.OnR
             sortListingsByPrice();
             return true;
         }
+
+        if (item.getItemId() == R.id.action_cart) {
+            Intent intent = new Intent(getContext(), CartActivity.class);
+            startActivity(intent);
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
     }
 

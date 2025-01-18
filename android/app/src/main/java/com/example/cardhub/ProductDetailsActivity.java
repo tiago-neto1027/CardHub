@@ -159,6 +159,13 @@ public class ProductDetailsActivity extends AppCompatActivity{
             onBackPressed();
             return true;
         }
+
+        if (item.getItemId() == R.id.action_cart) {
+            Intent intent = new Intent(this, CartActivity.class);
+            startActivity(intent);
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
     }
     /**
