@@ -102,6 +102,15 @@
                     android:padding="8dp" />
             </LinearLayout>
 
+            <Button
+                android:id="@+id/btnRemoveItem"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Remove Item"
+                android:backgroundTint="@color/design_default_color_error"
+                android:textColor="@android:color/white"
+                android:layout_marginTop="10dp" />
+
         </LinearLayout>
 
     </LinearLayout>

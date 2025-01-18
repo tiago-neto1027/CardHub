@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -67,6 +68,7 @@ public class CartAdapter extends BaseAdapter {
         ImageView ivCardImage;
         TextView tvName, tvPrice, tvQuantity;
         View btnIncrease, btnDecrease;
+        Button btnRemoveItem;
 
         public CartViewHolder(View view){
             ivCardImage = view.findViewById(R.id.ivCardImage);
@@ -75,6 +77,7 @@ public class CartAdapter extends BaseAdapter {
             tvQuantity = view.findViewById(R.id.tvQuantity);
             btnIncrease = view.findViewById(R.id.btnIncreaseQuantity);
             btnDecrease = view.findViewById(R.id.btnDecreaseQuantity);
+            btnRemoveItem = view.findViewById(R.id.btnRemoveItem);
         }
 
         public void update(CartItem cartItem){
@@ -120,12 +123,22 @@ public class CartAdapter extends BaseAdapter {
                 });
             }
 
+            btnRemoveItem.setOnClickListener(v -> {
+                removeItem(cartItem);
+            });
+
             Glide.with(context)
                     .load(image)
                     .placeholder(R.drawable.default_card)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(ivCardImage);
         }
+    }
+
+    private void removeItem(CartItem cartItem) {
+        cardHubDBHelper.deleteCartItem(cartItem);
+        cartList.remove(cartItem);
+        notifyDataSetChanged();
     }
 
     private void updateDatabase(CartItem cartItem) {
