@@ -87,11 +87,11 @@ public class CartActivity extends AppCompatActivity {
     }
 
     public void showPaymentMethodDialog(View view) {
-        String[] paymentMethods = {"PayPal", "MBWay"};
+        String[] paymentMethods = {"PayPal", "MbWay"};
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Select Payment Method")
                 .setSingleChoiceItems(paymentMethods, -1, (dialog, which) -> {
-                    String selectedPayment = paymentMethods[which].toLowerCase();
+                    String selectedPayment = paymentMethods[which];
                     dialog.dismiss();
                     proceedToCheckout(selectedPayment);
                 })
