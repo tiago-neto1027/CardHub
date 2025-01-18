@@ -16,11 +16,13 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.cardhub.utils.UserUtils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class UserActivity extends AppCompatActivity {
 
     private TextView toolbarTitle;
+    private UserUtils userUtils;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -47,7 +49,8 @@ public class UserActivity extends AppCompatActivity {
         EditText etNewEmail = findViewById(R.id.etNewEmail);
 
         // Set user data (Replace these with actual user data)
-        tvUsername.setText("user123");
+        userUtils = new UserUtils();
+        tvUsername.setText(userUtils.getUsername(this));
         tvEmail.setText("user@example.com");
     }
 
