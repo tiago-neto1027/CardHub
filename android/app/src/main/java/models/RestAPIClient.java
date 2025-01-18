@@ -145,36 +145,6 @@ public class RestAPIClient {
         requestQueue.add(jsonRequest);
     }
 
-    public void putRequest(String endpoint, JSONObject putData, final APIResponseCallback callback) {
-        String url = Endpoints.getBaseUrl(context) + endpoint;
-        JsonObjectRequest jsonRequest = new JsonObjectRequest(
-                Request.Method.PUT, url, putData,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        callback.onSuccess(response);
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        callback.onError(error.toString());
-                    }
-                }){
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                UserUtils userUtils = new UserUtils();
-
-                Map<String, String> headers = new HashMap<>();
-                String credentials = userUtils.getUsername(context) + ":" + userUtils.getPassword(context);
-                String auth = "Basic " + Base64.encodeToString(credentials.getBytes(), Base64.NO_WRAP);
-                headers.put("Authorization", auth);
-                return headers;
-            }
-        };
-        requestQueue.add(jsonRequest);
-    }
-
     public void deleteRequest(String endpoint, final APIResponseCallback callback) {
         String url = Endpoints.getBaseUrl(context) + endpoint;
         StringRequest stringRequest = new StringRequest(

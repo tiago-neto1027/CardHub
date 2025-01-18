@@ -85,7 +85,7 @@ return [
 
                 'GET,HEAD api/invoices' => 'api/invoice/index',
                 'GET,HEAD api/invoices/<id:\d+>' => 'api/invoice/view',
-                'PUT,PATCH api/invoices/<id:\d+>/status' => 'api/invoice/update-status',
+                'POST api/invoices/<id:\d+>/status' => 'api/invoice/update-status',
                 'POST api/invoices' => 'api/invoice/create',
 
                 'GET api/user/email' => 'api/user/get-email',

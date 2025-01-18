@@ -41,4 +41,5 @@
     <string name="save_username">Save Username</string>
     <string name="change_my_settings">Change my Settings</string>
     <string name="log_out">Logout</string>
+    <string name="checkout">Checkout</string>
 </resources>

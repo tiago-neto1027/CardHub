@@ -31,12 +31,16 @@ class InvoiceController extends BaseController{
     }
     public function authintercept($username, $password)
     {
+        Yii::info("Attempting to authenticate user: $username");
+
         $user = User::findByUsername($username);
         if ($user && $user->validatePassword($password))
         {
+            Yii::info("User $username authenticated successfully.");
             $this->user=$user;
             return $user;
         }
+        Yii::error("Authentication failed for user: $username");
         throw new ForbiddenHttpException('Wrong credentials.');
     }
 
@@ -59,6 +63,7 @@ class InvoiceController extends BaseController{
     //Updates the payment status
     public function actionUpdateStatus($id)
     {
+        Yii::info("Executing actionUpdateStatus for user ID: " . $this->user->id);
         $postData = Yii::$app->request->post();
 
         $invoice = Invoice::findOne(['id' => $id, 'client_id' => $this->user->id]);

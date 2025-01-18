@@ -12,15 +12,34 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
-    <!-- ListView for Cart Items -->
-    <ListView
-        android:id="@+id/lvCartItems"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginBottom="60dp"
-        android:paddingTop="?attr/actionBarSize"
-        android:scrollbars="vertical" />
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:layout_marginBottom="60dp">
+
+        <!-- Button for Checkout -->
+        <Button
+            android:id="@+id/btnCheckout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/checkout"
+            android:layout_margin="16dp"
+            android:backgroundTint="?attr/colorPrimary"
+            android:textColor="?attr/colorOnPrimary"
+            android:layout_gravity="center_horizontal"
+            android:onClick="showPaymentMethodDialog" />
+
+        <!-- ListView for Cart Items -->
+        <ListView
+            android:id="@+id/lvCartItems"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:scrollbars="vertical" />
+    </LinearLayout>
+
 
     <!-- Bottom Navigation Bar -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
