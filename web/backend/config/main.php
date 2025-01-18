@@ -58,19 +58,17 @@ return [
             'showScriptName' => false,
             'rules' => [
                 [
-                    [
-                        'class' => 'yii\rest\UrlRule',
-                        'controller' => 'api/card',
-                        'extraPatterns' => [
-                            'GET {id}/countlistings' => 'countlistings',
-                        ],
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'api/card',
+                    'extraPatterns' => [
+                        'GET {id}/countlistings' => 'countlistings',
                     ],
-                    [
-                        'class' => 'yii\rest\UrlRule',
-                        'controller' => 'api/matematica',
-                        'extraPatterns' => [
-                            'GET /raizdois' => 'raizdois',
-                        ],
+                ],
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'api/matematica',
+                    'extraPatterns' => [
+                        'GET /raizdois' => 'raizdois',
                     ],
                 ],
                 [
@@ -89,6 +87,10 @@ return [
                 'GET,HEAD api/invoices/<id:\d+>' => 'api/invoice/view',
                 'PUT,PATCH api/invoices/<id:\d+>/status' => 'api/invoice/update-status',
                 'POST api/invoices' => 'api/invoice/create',
+
+                'GET api/user/email' => 'api/user/get-email',
+                'POST api/user/username' => 'api/user/change-username',
+                'POST api/user/email' => 'api/user/change-email',
             ],
         ],
         'view' => [
