@@ -34,7 +34,6 @@ import models.RestAPIClient;
 
 public class CardDetailsActivity extends AppCompatActivity{
 
-    //TODO: Create a button to add the card to the favorites
     public static final String CARD_ID = "CARD_ID";
     private Card card;
     private CardController cardController;

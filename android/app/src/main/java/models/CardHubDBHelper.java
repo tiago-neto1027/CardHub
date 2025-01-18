@@ -684,5 +684,13 @@ public class CardHubDBHelper extends SQLiteOpenHelper {
             db.update(TABLE_CARTITEMS, values, ITEM_ID +" = ?", new String[]{String.valueOf(cartItemId)});
         }
     }
+
+    public void removeAllCartItems() {
+        try (SQLiteDatabase db = getWritableDatabase()) {
+            db.delete(TABLE_CARTITEMS, null, null);
+        } catch (SQLException e) {
+            Log.e("CardHubDBHelper", "Error clearing cart items: " + e.getMessage());
+        }
+    }
     //endregion
 }

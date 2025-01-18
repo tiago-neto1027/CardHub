@@ -75,10 +75,10 @@
                 android:id="@+id/btnAddToCart"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/add_to_cart"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginBottom="16dp"
                 android:onClick="addItemToCart"
-                />
+                android:text="@string/add_to_cart" />
         </LinearLayout>
 
     </ScrollView>

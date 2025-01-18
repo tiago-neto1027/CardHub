@@ -31,7 +31,6 @@ import models.RestAPIClient;
 
 public class ListingDetailsActivity extends AppCompatActivity {
 
-    //TODO: Create a button to add the listing to the cart
     public static final String LISTING_ID = "LISTING_ID";
     private Listing listing;
     private ListingController listingController;

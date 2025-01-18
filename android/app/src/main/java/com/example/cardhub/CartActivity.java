@@ -30,7 +30,6 @@ public class CartActivity extends AppCompatActivity {
     private ListView lvCartItems;
     private CardHubDBHelper cardHubDBHelper;
 
-    //TODO: Garantir que o item nao pode ser adicionado ao carrinho 2 vezes
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

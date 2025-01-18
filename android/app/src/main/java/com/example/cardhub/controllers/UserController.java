@@ -149,7 +149,7 @@ public class UserController {
     public void logOut() {
         CardHubDBHelper dbHelper = CardHubDBHelper.getInstance(context);
         dbHelper.removeAllFavorites();
-        //TODO: removeAllCartItems();
+        dbHelper.removeAllCartItems();
 
         userUtils.logout(context);
 
