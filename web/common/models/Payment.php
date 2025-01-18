@@ -17,8 +17,8 @@ use Yii;
  */
 class Payment extends \yii\db\ActiveRecord
 {
-    const METHOD_PAYPAL = 'paypal';
-    const METHOD_MBWAY = 'mbway';
+    const METHOD_PAYPAL = 'PayPal';
+    const METHOD_MBWAY = 'MbWay';
 
     /**
      * {@inheritdoc}
@@ -66,8 +66,8 @@ class Payment extends \yii\db\ActiveRecord
     public static function getPaymentMethods()
     {
         return [
-            self::METHOD_PAYPAL => 'paypal',
-            self::METHOD_MBWAY => 'mbway',
+            self::METHOD_PAYPAL => self::METHOD_PAYPAL,
+            self::METHOD_MBWAY => self::METHOD_MBWAY,
         ];
     }
 

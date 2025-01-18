@@ -201,9 +201,8 @@ class InvoiceController extends BaseController{
 
         $items = $postData['items'] ?? [];
         $paymentMethod = $postData['payment_method'] ?? null;
-
-        $validPaymentMethods = ['paypal', 'mbway'];
-        if (!in_array($paymentMethod, $validPaymentMethods)) {
+        
+        if (!$paymentMethod || !in_array(strtolower($paymentMethod), array_map('strtolower', Payment::getPaymentMethods()))) {
             return [
                 'success' => false,
                 'message' => 'Invalid payment method.',
