@@ -11,6 +11,7 @@ public class Endpoints {
 
     public static final String LOGIN_ENDPOINT = "/auth/login";
     public static final String SIGNUP_ENDPOINT = "/auth/signup";
+    public static final String USER_ENDPOINT = "/user";
 
 
     public static final String CARD_ENDPOINT = "/cards";

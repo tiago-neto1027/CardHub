@@ -76,7 +76,7 @@ import models.Card;public class ShopActivity extends AppCompatActivity implement
         } else if (item.getItemId() == R.id.nav_wishlist) {
             intent = new Intent(this, FavoriteActivity.class);
         } else if (item.getItemId() == R.id.nav_profile) {
-            //intent = new Intent(this, ProfileActivity.class);
+            intent = new Intent(this, UserActivity.class);
         }
         if (intent != null) {
             startActivity(intent);
@@ -120,7 +120,6 @@ import models.Card;public class ShopActivity extends AppCompatActivity implement
         listingsFragment.setArguments(bundle);
 
         Card tempCard = cardController.fetchCardDB(cardId);
-        toolbarTitle.setText(tempCard.getName());
 
         fragmentManager.beginTransaction()
                 .replace(R.id.contentFragment, listingsFragment)
