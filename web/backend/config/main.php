@@ -66,13 +66,6 @@ return [
                 ],
                 [
                     'class' => 'yii\rest\UrlRule',
-                    'controller' => 'api/matematica',
-                    'extraPatterns' => [
-                        'GET /raizdois' => 'raizdois',
-                    ],
-                ],
-                [
-                    'class' => 'yii\rest\UrlRule',
                     'controller' => 'api/favorite',
                     'extraPatterns' => [
                         'DELETE <cardId:\d+>' => 'delete',
