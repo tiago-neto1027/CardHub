@@ -20,72 +20,45 @@ use function PHPSTORM_META\type;
             <div class="container-fluid pt-5 pb-3">
                 <h2 class="section-title position-relative text-uppercase mb-4"><span
                             class="bg-secondary pr-3">Filters</span></h2>
-    
-                <?php
-                    if($type === 'product')
-                    {
-                        ?><a class="btn bg-primary text-dark rounded mb-4" href="<?= \yii\helpers\Url::to(['/catalog/index?type=product']) ?>">Clear</a><?php   
-                    }elseif($type === 'listing'){
-                        ?><a class="btn bg-primary text-dark rounded mb-4" href="<?= \yii\helpers\Url::to(['/catalog/index?type=listing']) ?>">Clear</a><?php
-                    }
-                ?>
 
-                <div class="dropdown">
-                    <a class="btn dropdown-toggle mb-3" type="button" id="dropdownMenuButton" data-toggle="dropdown"
-                       aria-haspopup="true" aria-expanded="false">Catalog</a>
-                    <div class="dropdown-menu bg-dark">
-                        <?php    
-                            echo Html::a('Cards', Url::current([
-                                'type' => 'listing']),
-                                ['class' => 'dropdown-item']);
-                            echo Html::a('Products', Url::current([
-                                'type' => 'product']),
-                                ['class' => 'dropdown-item']);
-                         ?>  
-                    </div>
+                <div class="mb-3">
+                    <label style="color: white;">Catalog</label>
+                    <select id="catalog-dropdown" class="form-control">
+                        <option value="<?= Url::current(['type' => 'listing']) ?>" <?= $type === 'listing' ? 'selected' : '' ?>>Cards</option>
+                        <option value="<?= Url::current(['type' => 'product']) ?>" <?= $type === 'product' ? 'selected' : '' ?>>Products</option>
+                    </select>
                 </div>
-                
-                <div class="search-form" id="filter-buttons">
-                    <div>
-                        <?php $gameList = ArrayHelper::map($games, 'id', 'name'); ?>
-                        <?php $form = ActiveForm::begin(['method' => 'get',]); ?>
-                        <?=
-                        $form->field($searchModel, 'game')->dropDownList(
-                            $gameList,
-                            ['prompt' => 'Select Game',]
-                        )?>
-                        <?php ActiveForm::end(); ?>
-                    </div>
-                    <div>
-                        <?php
-                        if($type === 'product')
-                        {
-                            $form = ActiveForm::begin(['method' => 'get',]); ?>
-                            <?=
-                            $form->field($searchModel, 'type')->dropDownList(
-                                $productTypes,
-                                ['prompt' => 'Select Product Type',]
-                            )?>
-                            <?= $form->field($searchModel, 'name')->textInput(['placeholder' => 'Search by name']) ?>
 
-                            <div class="form-group">
-                                <?= \yii\helpers\Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
-                            </div>
+                <div class="mb-3">
+                    <label style="color: white;">Game</label>
+                    <select id="game-dropdown" class="form-control">
+                        <?php foreach ($games as $game): ?>
+                            <?php $gameName = Html::encode($game->name); ?>
+                            <option value="<?= Url::to(['/catalog/index', 'game' => $game->name, 'type' => $type], false) ?>"
+                                <?= isset($_GET['game']) && urldecode($_GET['game']) === $game->name ? 'selected' : '' ?>>
+                                <?= $gameName ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
 
-                            <?php ActiveForm::end();
-
-                        }elseif($type === 'listing'){
-                            $form = ActiveForm::begin([
-                                'method' => 'get',
-                            ]); ?>
-
-                            <?php ActiveForm::end();
+                <script>
+                    document.getElementById('catalog-dropdown').addEventListener('change', function() {
+                        if (this.value) {
+                            window.location.href = this.value;
                         }
-                        ?>
-                    </div>
-                </div>
+                    });
+
+                    document.getElementById('game-dropdown').addEventListener('change', function() {
+                        if (this.value) {
+                            window.location.href = this.value;
+                        }
+                    });
+                </script>
             </div>
         </div>
+
+        <!-- CATALOG -->
         <div class="col-lg-9">
             <div class="container-fluid pt-5 pb-3">
                 <h2 class="section-title position-relative text-uppercase mx-xl-2 mb-4">
