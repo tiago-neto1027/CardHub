@@ -57,14 +57,14 @@ $this->params['breadcrumbs'][] = $this->title;
                             <!-- Favorite Button -->
                             <div class="mt-2">
                                 <?php if (!$model->isFavorited()): ?>
-                                    <?= Html::a('<i class="far fa-heart" id="favorite-heart"></i> Add to Favorites',
+                                    <?= Html::a('<i class="fas fa-heart" id="favorite-heart"></i> Add to Favorites',
                                         ['/favorite/create', 'id' => $model->id],
-                                        ['class' => 'btn btn-outline-info']
+                                        ['class' => 'btn btn-outline-info text-light']
                                     ) ?>
                                 <?php else: ?>
                                     <?= Html::a('<i class="fas fa-heart-broken"></i> Remove from Favorites',
                                         ['/favorite/remove', 'id' => $model->id],
-                                        ['class' => 'btn btn-outline-danger']
+                                        ['class' => 'btn btn-outline-danger text-light']
                                     ) ?>
                                 <?php endif; ?>
                             </div>
