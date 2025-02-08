@@ -101,7 +101,7 @@ class FavoriteController extends Controller
         } else {
             Yii::$app->session->setFlash('error', 'Card not found in your favorites.');
         }
-        return $this->redirect(['index']);
+        return $this->redirect(Yii::$app->request->referrer);
     }
 
 }

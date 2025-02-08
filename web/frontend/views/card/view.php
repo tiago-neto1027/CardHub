@@ -53,6 +53,21 @@ $this->params['breadcrumbs'][] = $this->title;
                                 <p><strong class="text-info">Description: </strong><?= nl2br(Html::encode($model->description)) ?></p>
                             <?php endif; ?>
                             <p><strong class="text-info">Available Listings:</strong> <?= $availableListingsCount ?></p>
+
+                            <!-- Favorite Button -->
+                            <div class="mt-2">
+                                <?php if (!$model->isFavorited()): ?>
+                                    <?= Html::a('<i class="far fa-heart" id="favorite-heart"></i> Add to Favorites',
+                                        ['/favorite/create', 'id' => $model->id],
+                                        ['class' => 'btn btn-outline-info']
+                                    ) ?>
+                                <?php else: ?>
+                                    <?= Html::a('<i class="fas fa-heart-broken"></i> Remove from Favorites',
+                                        ['/favorite/remove', 'id' => $model->id],
+                                        ['class' => 'btn btn-outline-danger']
+                                    ) ?>
+                                <?php endif; ?>
+                            </div>
                         </div>
                     </div>
                     <div class="container bg-dark p-3 col-lg-5">
