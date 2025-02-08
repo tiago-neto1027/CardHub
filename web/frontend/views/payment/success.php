@@ -25,6 +25,6 @@ $this->params['breadcrumbs'][] = $this->title;
     ]) ?>
 
     <p>
-        <a href="<?= Yii::$app->urlManager->createUrl(['cart/index']) ?>" class="btn btn-primary">Back to Cart</a>
+        <a href="<?= Yii::$app->urlManager->createUrl(['site/index']) ?>" class="btn btn-primary">Home</a>
     </p>
 </div>
