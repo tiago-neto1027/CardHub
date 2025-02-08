@@ -6,7 +6,7 @@ use yii\helpers\Url;
 ?>
 
 <!-- Footer Start -->
-<div class="container-fluid bg-dark text-secondary mt-2 pt-5">
+<div class="container-fluid bg-dark text-secondary mt-auto pt-5">
         <div class="row px-xl-5">
             <div class="col-lg-4 col-md-12 mb-5 pr-3 pr-xl-5">
                 <h5 class="text-secondary text-uppercase mb-4">CardHub</h5>
@@ -14,69 +14,39 @@ use yii\helpers\Url;
             </div>
             <div class="col-lg-8 col-md-12">
                 <div class="row">
-                    <div class="col-md-4 mb-3">
-                        <!--<h5 class="text-secondary text-uppercase mb-4">Quick Shop</h5>
-                        <div class="d-flex flex-column justify-content-start">
-                            <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Home</a>
-                            <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Our Shop</a>
-                            <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Shop Detail</a>
-                            <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Shopping Cart</a>
-                            <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Checkout</a>
-                            <a class="text-secondary" href="#"><i class="fa fa-angle-right mr-2"></i>Contact Us</a>
-                        </div>-->
+                    <div class="col-md-8 mb-3">
+                        <h5 class="text-secondary mb-4">Contacts</h5>
                         <p class="mb-2"><i class="fa fa-map-marker-alt text-primary mr-3"></i>Rua General Norton de Matos,  Apartado 4133 Leiria, Portugal</p>
                         <p class="mb-2"><i class="fa fa-envelope text-primary mr-3"></i>info@cardhub.com</p>
                         <p class="mb-0"><i class="fa fa-phone-alt text-primary mr-3"></i>+351 345 67890</p>
                     </div>
                     <div class="col-md-4 mb-3">
-                        <!--<h5 class="text-secondary text-uppercase mb-4">My Account</h5>
-                        <div class="d-flex flex-column justify-content-start">
-                            <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Home</a>
-                            <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Our Shop</a>
-                            <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Shop Detail</a>
-                            <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Shopping Cart</a>
-                            <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Checkout</a>
-                            <a class="text-secondary" href="#"><i class="fa fa-angle-right mr-2"></i>Contact Us</a>
-                        </div>-->
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        <!--<div class="d-flex">
-                            <h6 class="text-secondary text-uppercase mt-4 mr-2">Follow Us:</h6>
-                            <a class="btn btn-primary btn-square mr-2" href="#"><i class="fab fa-twitter"></i></a>
-                            <a class="btn btn-primary btn-square mr-2" href="#"><i class="fab fa-facebook-f"></i></a>
-                            <a class="btn btn-primary btn-square mr-2" href="#"><i class="fab fa-linkedin-in"></i></a>
-                            <a class="btn btn-primary btn-square" href="#"><i class="fab fa-instagram"></i></a>
-                        </div>-->
-                        <h6 class="text-secondary text-uppercase mb-2">Quick Links</h6>
+                        <h5 class="text-secondary mb-4">Me</h5>
                         <?php
-                            if (Yii::$app->user->isGuest) {
-                                echo Html::tag('div',
-                                    Html::a('<i class="fa fa-angle-right mr-2"></i>home', ['site/index'], ['class' => 'text-secondary mb-2']),
-                                    ['class' => 'd-flex flex-column justify-content-start']
-                                );
-                                echo Html::tag('div',
-                                    Html::a('<i class="fa fa-angle-right mr-2"></i>Log In', ['/site/login'], ['class' => 'text-secondary mb-2']),
-                                    ['class' => 'd-flex flex-column justify-content-start']
-                                );
-                                echo Html::tag('div',
-                                    Html::a('<i class="fa fa-angle-right mr-2"></i>Sign Up', ['/site/signup'], ['class' => 'text-secondary mb-2']),
-                                    ['class' => 'd-flex flex-column justify-content-start']
-                                );
-                            } else {
-                                echo Html::tag('div',
-                                    Html::a('<i class="fa fa-angle-right mr-2"></i>My Account', ['/detail/details', 'id' => Yii::$app->user->id], ['class' => 'text-secondary mb-2']),
-                                    ['class' => 'd-flex flex-column justify-content-start']
-                                );
-                                echo Html::tag('div',
-                                    Html::a('<i class="fa fa-angle-right mr-2"></i>Favorites', ['/favorites/index'], ['class' => 'text-secondary mb-2']),
-                                    ['class' => 'd-flex flex-column justify-content-start']
-                                );
-                                echo Html::tag('div',
-                                    Html::a('<i class="fa fa-angle-right mr-2"></i>Shopping Cart', ['/cart/index'], ['class' => 'text-secondary mb-2']),
-                                    ['class' => 'd-flex flex-column justify-content-start']
-                                );
-                            }
-                            ?>
+                        if (Yii::$app->user->isGuest) {
+                            echo Html::tag('div',
+                                Html::a('<i class="fa fa-angle-right mr-2"></i>Log In', ['/site/login'], ['class' => 'text-secondary mb-2']),
+                                ['class' => 'd-flex flex-column justify-content-start']
+                            );
+                            echo Html::tag('div',
+                                Html::a('<i class="fa fa-angle-right mr-2"></i>Sign Up', ['/site/signup'], ['class' => 'text-secondary mb-2']),
+                                ['class' => 'd-flex flex-column justify-content-start']
+                            );
+                        } else {
+                            echo Html::tag('div',
+                                Html::a('<i class="fa fa-angle-right mr-2"></i>My Account', ['/detail/details', 'id' => Yii::$app->user->id], ['class' => 'text-secondary mb-2']),
+                                ['class' => 'd-flex flex-column justify-content-start']
+                            );
+                            echo Html::tag('div',
+                                Html::a('<i class="fa fa-angle-right mr-2"></i>My Favorites', ['/favorite/index'], ['class' => 'text-secondary mb-2']),
+                                ['class' => 'd-flex flex-column justify-content-start']
+                            );
+                            echo Html::tag('div',
+                                Html::a('<i class="fa fa-angle-right mr-2"></i>My Cart', ['/cart/index'], ['class' => 'text-secondary mb-2']),
+                                ['class' => 'd-flex flex-column justify-content-start']
+                            );
+                        }
+                        ?>
                     </div>
                 </div>
             </div>
@@ -112,3 +82,14 @@ use yii\helpers\Url;
 
     <!-- Template Javascript -->
     <script src="web/frontend/web/js/main.js"></script>
+
+<style>
+    main.flex-shrink-0 {
+        flex: 1 0 auto;
+    }
+
+    .container-fluid.bg-dark {
+        flex-shrink: 0;
+        margin-top: auto !important;
+    }
+</style>
