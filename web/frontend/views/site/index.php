@@ -53,8 +53,7 @@ $this->title = 'My Yii Application';
 
 <!-- Products -->
 <div class="container-fluid pt-5 pb-3">
-    <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">Featured Products</span>
-    </h2>
+    <h2 class="position-relative text-uppercase mx-xl-5 mb-4 border-bottom"><span class="text-light pr-3">Featured Products</span></h2>
     <div class="row px-xl-5">
         <?= ListView::widget([
             'dataProvider' => $products,
@@ -98,7 +97,7 @@ $this->title = 'My Yii Application';
 
 <!-- Recent Products -->
 <div class="container-fluid pt-5 pb-3">
-    <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">Recent Products</span>
+    <h2 class="position-relative text-uppercase mx-xl-5 mb-4 border-bottom"><span class="text-light pr-3">Recent Products</span>
     </h2>
     <div class="row px-xl-5">
         <?= ListView::widget([
