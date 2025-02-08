@@ -18,8 +18,7 @@ use function PHPSTORM_META\type;
         <!-- Filters -->
         <div class="col-lg-3">
             <div class="container-fluid pt-5 pb-3">
-                <h2 class="section-title position-relative text-uppercase mb-4"><span
-                            class="bg-secondary pr-3">Filters</span></h2>
+                <h2 class="position-relative text-uppercase mb-4 border-bottom"><span class="text-light pr-3">Filters</span></h2>
 
                 <div class="mb-3">
                     <label style="color: white;">Catalog</label>
@@ -61,8 +60,7 @@ use function PHPSTORM_META\type;
         <!-- CATALOG -->
         <div class="col-lg-9">
             <div class="container-fluid pt-5 pb-3">
-                <h2 class="section-title position-relative text-uppercase mx-xl-2 mb-4">
-                    <span class="bg-secondary pr-3">Product Catalog</span></h2>
+                <h2 class="position-relative text-uppercase mb-4 border-bottom"><span class="text-light pr-3">Product Catalog</span></h2>
                 <div class="row">
                         <?php 
                             if($type === 'listing')
