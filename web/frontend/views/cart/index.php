@@ -12,7 +12,7 @@ if (empty($cartItems)) {
 
 ?>
 
-<div class="container col-10">
+<div class="container col-8">
     <table class="table">
         <thead class="table-info">
         <tr class="fs-4 text-center">
@@ -32,7 +32,7 @@ if (empty($cartItems)) {
                         <?php
                         echo '
                  <a href="' . Url::to([$item['type'] === 'product' ? '/product/view' : '/catalog/view', 'id' => $item['itemId']]) . '" >
-                     <img class="img-fluid w-100 rounded-3 " src="' . $item['image'] . '" alt="">
+                     <img class="img-fluid w-100 rounded-3" src="' . $item['image'] . '" alt="">
                  </a>
                 '
                         ?>
@@ -71,16 +71,16 @@ if (empty($cartItems)) {
         </tbody>
     </table>
 </div>
-<div class="d-flex col-10 offset-1 justify-content-between">
-    <?= Html::a('Clear Cart', ['cart/clear-cart'], [
-        'class' => 'btn btn-lg bg-primary text-dark',
+<div class="d-flex col-8 offset-2 justify-content-between mb-5">
+    <?= Html::a('Pay', ['payment/view', 'source' => 'cart', 'id'=> 'cart'], [
+        'class' => 'btn btn-success btn-lg text-light col-2',
         'data-method' => 'post',
-        'data-confirm' => 'Are you sure you want to clear the cart?',
     ]) ?>
 
-    <?= Html::a('Pay', ['payment/view', 'source' => 'cart', 'id'=> 'cart'], [
-        'class' => 'btn btn-success text-light col-3',
+    <?= Html::a('Clear Cart', ['cart/clear-cart'], [
+        'class' => 'btn btn-lg bg-primary text-black',
         'data-method' => 'post',
+        'data-confirm' => 'Are you sure you want to clear the cart?',
     ]) ?>
 </div>
 

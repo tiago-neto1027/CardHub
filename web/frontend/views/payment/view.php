@@ -7,8 +7,8 @@ use yii\widgets\ActiveForm;
 
 ?>
 
-<div class="container mt-5">
-    <h1 class="text-center mb-4">Your Cart</h1>
+<div class="container my-5">
+    <h1 class="text-center mb-4 text-light">Your Cart</h1>
 
     <div class="card mx-auto" style="max-width: 600px;">
         <div class="card-body">

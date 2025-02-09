@@ -11,7 +11,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <div class="payment-success">
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h1 class="text-light"><?= Html::encode($this->title) ?></h1>
     <p>Your payment has been successfully processed. Below are the details of your transaction:</p>
 
     <?= DetailView::widget([
@@ -25,6 +25,6 @@ $this->params['breadcrumbs'][] = $this->title;
     ]) ?>
 
     <p>
-        <a href="<?= Yii::$app->urlManager->createUrl(['site/index']) ?>" class="btn btn-primary">Home</a>
+        <a href="<?= Yii::$app->urlManager->createUrl(['site/index']) ?>" class="btn btn-primary text-black">Home</a>
     </p>
 </div>
