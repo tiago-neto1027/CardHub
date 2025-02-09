@@ -60,10 +60,10 @@ use yii\helpers\Url;
             <div class="col-lg-3 col-md-5 px-xl-0 text-center text-md-right">
                 <div class="d-flex" style="justify-content: center">
                     <h6 class="text-secondary text-uppercase mt-3 mr-2">Follow Us:</h6>
-                    <a class="btn btn-primary btn-square mr-2 text-center text-md-right" href="https://x.com/" target="_blank"><i class="fab fa-twitter"></i></a>
-                    <a class="btn btn-primary btn-square mr-2 text-center text-md-right" href="https://www.facebook.com/" target="_blank"><i class="fab fa-facebook-f"></i></a>
-                    <a class="btn btn-primary btn-square mr-2 text-center text-md-right" href="https://www.linkedin.com/" target="_blank"><i class="fab fa-linkedin-in"></i></a>
-                    <a class="btn btn-primary btn-square text-center text-md-right" href="https://www.instagram.com/" target="_blank"><i class="fab fa-instagram"></i></a>
+                    <a class="btn btn-primary btn-square mr-2 text-center text-md-right" href="https://x.com/" target="_blank"><i class="fab fa-twitter text-dark"></i></a>
+                    <a class="btn btn-primary btn-square mr-2 text-center text-md-right" href="https://www.facebook.com/" target="_blank"><i class="fab fa-facebook-f text-dark"></i></a>
+                    <a class="btn btn-primary btn-square mr-2 text-center text-md-right" href="https://www.linkedin.com/" target="_blank"><i class="fab fa-linkedin-in text-dark"></i></a>
+                    <a class="btn btn-primary btn-square text-center text-md-right" href="https://www.instagram.com/" target="_blank"><i class="fab fa-instagram text-dark"></i></a>
                 </div>
             </div>
         </div>
