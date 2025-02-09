@@ -52,31 +52,31 @@ use yii\helpers\Url;
                 if (Yii::$app->user->isGuest) {
                     echo Html::tag('div',
                         Html::a('Login', ['/site/login'],
-                            ['class' => 'btn bg-primary text-dark btn-sm',
+                            ['class' => 'btn bg-primary text-black btn-sm',
                             'data-method' => 'post',
                             'id' => 'login-button',]),
                         ['class' => 'btn d-flex']
                     );
                     echo Html::tag('div',
                         Html::a('Sign Up', ['/site/signup'],
-                            ['class' => 'btn bg-primary text-dark btn-sm',
+                            ['class' => 'btn bg-primary text-black btn-sm',
                             'id' => 'signup-button',]),
                         ['class' => 'btn d-flex']
                     );
                 } else {
                     if(Yii::$app->user->can('buyer') && !(Yii::$app->user->can('seller'))){
                         echo Html::tag('div',
-                            Html::a('Become a seller', ['/site/seller-form', 'id' => Yii::$app->user->id], ['class' => 'btn bg-primary text-dark btn-sm']),
+                            Html::a('Become a seller', ['/site/seller-form', 'id' => Yii::$app->user->id], ['class' => 'text-black btn bg-primary btn-sm']),
                             ['class' => 'btn d-flex']
                         );
                     }
                     echo Html::tag('div',
-                        Html::a('My Account', ['/detail/details', 'id' => Yii::$app->user->id], ['class' => 'btn bg-primary text-dark btn-sm']),
+                        Html::a('My Account', ['/detail/details', 'id' => Yii::$app->user->id], ['class' => 'text-black btn bg-primary btn-sm']),
                         ['class' => 'btn d-flex']
                     );
                     echo Html::tag('div',
                         Html::a('Logout', ['/site/logout'], ['data-method' => 'post',
-                            'class' => 'btn bg-primary text-dark btn-sm',
+                            'class' => 'btn bg-primary btn-sm text-black',
                             'id' => 'logout-button',]),
                         ['class' => 'btn d-flex']
                     );
@@ -127,7 +127,7 @@ use yii\helpers\Url;
                 ?>
 
                 <?= Html::a(
-                    '<i class="fas fa-shopping-cart text-dark"></i>
+                    '<i class="fas fa-shopping-cart text-primary"></i>
                                 <span class="badge text-secondary border border-secondary rounded-circle" style="padding-bottom: 2px;">' .
                     $itemCount .
                     '</span>',
@@ -227,7 +227,7 @@ use yii\helpers\Url;
                     ?>
 
                     <?= Html::a(
-                        '<i class="fas fa-shopping-cart text-dark"></i>
+                        '<i class="fas fa-shopping-cart text-primary"></i>
                                 <span class="badge text-secondary border border-secondary rounded-circle" style="padding-bottom: 2px;">' .
                                     $itemCount .
                                 '</span>',
