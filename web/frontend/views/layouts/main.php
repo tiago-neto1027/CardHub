@@ -25,12 +25,34 @@ AppAsset::register($this);
     <div>
         <?= $this->render('header') ?>
         <div class="container-fluid">
+            <?php foreach (Yii::$app->session->getAllFlashes() as $type => $message): ?>
+                <div class="alert alert-<?= $type ?> alert-dismissible fade show mt-3" role="alert">
+                    <?= $message ?>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            <?php endforeach; ?>
+
             <?= $content ?>
         </div>
     </div>
 </main>
 
 <?= $this->render('footer') ?>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var alertList = document.querySelectorAll('.alert');
+        alertList.forEach(function(alert) {
+            var closeButton = alert.querySelector('.btn-close');
+            if (closeButton) {
+                closeButton.addEventListener('click', function() {
+                    alert.classList.remove('show');
+                    setTimeout(function() { alert.remove(); }, 300);
+                });
+            }
+        });
+    });
+</script>
 
 <?php $this->endBody() ?>
 </body>
