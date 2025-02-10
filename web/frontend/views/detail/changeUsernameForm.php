@@ -9,28 +9,48 @@ use yii\bootstrap5\ActiveForm;
 
 $this->title = 'Change Username  ';
 ?>
-<div class="col-6 ml-4">
-    <h1><?= Html::encode($this->title) ?></h1>
-    <?php $form = ActiveForm::begin([
-        'id' => 'change-username-form',
-        'method' => 'post',
-        'action' => ['detail/change-username', 'id' => $user->id]
-    ]); ?>
-    <div class="mt-5">
-        <h5>Current username:  </h5>
-        <?= $form->field($user, 'username')->textInput(['readonly' => true])->label(false) ?>
-    </div>
-    <div class="mt-5">
-        <h5>New username: </h5>
-        <?= Html::input('text', 'newUsername', '', ['class' => 'form-control']) ?>
-    </div>
 
-    <div class="mt-5">
-        <?= Html::submitButton('Change Username', ['class' => 'btn btn-primary']) ?>
+<div class="card shadow-lg border-0 mb-5">
+    <div class="card-header bg-primary text-white">
+        <h3 class="mb-0"><i class="fas fa-user-tag me-2"></i><?= Html::encode($this->title) ?></h3>
     </div>
+    <div class="card-body">
+        <?php $form = ActiveForm::begin([
+            'id' => 'change-username-form',
+            'method' => 'post',
+            'action' => ['detail/change-username', 'id' => $user->id],
+            'options' => ['class' => 'needs-validation', 'novalidate' => true]
+        ]); ?>
 
-    <?php ActiveForm::end(); ?>
+        <!-- Current Username Field -->
+        <div class="mb-4">
+            <label class="form-label text-muted"><i class="fas fa-user me-2"></i>Current Username</label>
+            <?= $form->field($user, 'username')->textInput([
+                'class' => 'form-control form-control-lg',
+                'readonly' => true
+            ])->label(false) ?>
+        </div>
 
+        <!-- New Username Field -->
+        <div class="mb-4">
+            <label for="newUsername" class="form-label text-muted"><i class="fas fa-user-plus me-2"></i>New Username</label>
+            <?= Html::input('text', 'newUsername', '', [
+                'class' => 'form-control form-control-lg',
+                'required' => true,
+                'placeholder' => 'Enter new username'
+            ]) ?>
+            <div class="invalid-feedback">Please enter a new username.</div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="text-center">
+            <?= Html::submitButton('<i class="fas fa-save me-2"></i>Change Username', [
+                'class' => 'btn btn-outline-primary btn-lg rounded-pill px-4'
+            ]) ?>
+        </div>
+
+        <?php ActiveForm::end(); ?>
+    </div>
 </div>
 
 

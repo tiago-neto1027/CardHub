@@ -1,5 +1,4 @@
 <?php
-
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\jui\AutoComplete;
@@ -10,53 +9,47 @@ use yii\jui\AutoComplete;
 ?>
 
 <div class="listing-form">
+    <?php $form = ActiveForm::begin([
+        'id' => 'listing-form',
+        'options' => ['class' => 'needs-validation', 'novalidate' => true]
+    ]); ?>
 
-    <?php $form = ActiveForm::begin(['id' => 'listing-form']); ?>
+    <!-- Card Name Autocomplete -->
+    <div class="mb-4">
+        <label class="form-label text-muted"><i class="fas fa-search me-2"></i>Card Name</label>
+        <?= AutoComplete::widget([
+            'options' => [
+                'class' => 'form-control form-control-lg',
+                'placeholder' => 'Type card name...',
+                'id' => 'autocomplete-card-name',
+            ],
+            'clientOptions' => [
+                'source' => \yii\helpers\Url::to(['listing/card-list']),
+                'minLength' => 2,
+                'select' => new \yii\web\JsExpression('function(event, ui) {
+                $("#listing-card_id").val(ui.item.id);
+            }'),
+            ],
+        ]); ?>
+        <?= $form->field($model, 'card_id')->hiddenInput(['id' => 'listing-card_id'])->label(false) ?>
+    </div>
 
-    <!-- The code below creates a label with auto complete for the cards so that the user can ----
-    ---- search trough the cards and select it by typing the name. When the user selects a card --
-    ---- it's Id is then passed to an hidden field in the form to be submitted. -->
-    <label class="control-label" for="listing-price">Card Name</label>
-    <?= \yii\jui\AutoComplete::widget([
-        'options' => [
-            'class' => 'form-control',
-            'placeholder' => 'Type card name...',
-            'id' => 'autocomplete-card-name',
-        ],
-        'clientOptions' => [
-            'source' => \yii\helpers\Url::to(['listing/card-list']),
-            'minLength' => 2,
-            'select' => new \yii\web\JsExpression('function(event, ui) {
-            $("#listing-card_id").val(ui.item.id);
-        }'),
-        ],
-    ]);
-    ?>
-    <?= $form->field($model, 'card_id')->hiddenInput(['id' => 'listing-card_id'])->label(false) ?>
-
-    <?php
-    //Blur checks whether if the field is blank after loosing focus, then clears the hidden field
-    $js = <<<JS
-    $('#autocomplete-card-name').on('blur', function() {
-        var inputVal = $(this).val();
-        if (!inputVal) {
-            $("#listing-card_id").val('');
-        }
-    });
-    //Input clears the hidden field everytime the card name is manually changed
-    $('#autocomplete-card-name').on('input', function() {
-        $("#listing-card_id").val('');
-    });
-JS;
-    $this->registerJs($js);
-    ?>
-
-    <div class="row">
-        <div class="col-6">
-            <?= $form->field($model, 'price')->textInput(['placeholder' => 'Type the price...']) ?>
+    <!-- Price and Condition Fields -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <?= $form->field($model, 'price', [
+                'inputOptions' => [
+                    'class' => 'form-control form-control-lg',
+                    'placeholder' => 'Type the price...'
+                ]
+            ])->textInput() ?>
         </div>
-        <div class="col-6">
-            <?= $form->field($model, 'condition')->dropDownList(
+        <div class="col-md-6">
+            <?= $form->field($model, 'condition', [
+                'inputOptions' => [
+                    'class' => 'form-select form-select-lg',
+                ]
+            ])->dropDownList(
                 [
                     'Brand new' => 'Brand new',
                     'Very good' => 'Very good',
@@ -70,13 +63,32 @@ JS;
         </div>
     </div>
 
-    <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success mr-3']) ?>
-        <?= Html::a('Create new Card', ['/card/create'],
-            ['class' => 'btn btn-primary mr-3',
-                'id' => 'create_card']) ?>
+    <!-- Form Actions -->
+    <div class="form-group d-flex gap-3">
+        <?= Html::submitButton('<i class="fas fa-save me-2 text-black"></i>Save', [
+            'class' => 'btn btn-success btn-lg rounded-pill px-4 text-black'
+        ]) ?>
+        <?= Html::a('<i class="fas fa-plus-circle me-2 text-black"></i>Create New Card', ['/card/create'], [
+            'class' => 'btn btn-primary btn-lg rounded-pill px-4 text-black',
+            'id' => 'create_card'
+        ]) ?>
     </div>
 
     <?php ActiveForm::end(); ?>
-
 </div>
+
+<!-- JavaScript for Autocomplete Behavior -->
+<?php
+    $js = <<<JS
+    $('#autocomplete-card-name').on('blur', function() {
+        var inputVal = $(this).val();
+        if (!inputVal) {
+            $("#listing-card_id").val('');
+        }
+    });
+    $('#autocomplete-card-name').on('input', function() {
+        $("#listing-card_id").val('');
+    });
+    JS;
+    $this->registerJs($js);
+?>

@@ -25,10 +25,8 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'summary' => false,
-        'tableOptions' => ['class' => 'table table-dark table-bordered'],
+        'tableOptions' => ['class' => 'table custom-table'],
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
             [
                 'attribute' => 'image_url',
                 'format' => 'html',
@@ -52,13 +50,26 @@ $this->params['breadcrumbs'][] = $this->title;
                 'contentOptions' => ['style' => 'white-space: nowrap;'],
                 'class' => ActionColumn::className(),
                 'header' => 'Actions',
-                'template' => '{view}',
+                'template' => '{view} {favorite}',
                 'buttons' => [
                     'view' => function ($url, $model, $key) {
                         return Html::a('View', ['view', 'id' => $model->id], [
-                            'class' => 'btn btn-info btn-sm text-light',
+                            'class' => 'btn btn-info btn-sm text-light d-block w-100',
                             'data-method' => 'post',
                         ]);
+                    },
+                    'favorite' => function ($url, $model, $key) {
+                        if (!$model->isFavorited()) {
+                            return Html::a('Add',
+                                ['/favorite/create', 'id' => $model->id],
+                                ['class' => 'btn btn-outline-success btn-sm text-white d-block mt-2 w-100']
+                            );
+                        } else {
+                            return Html::a('Remove',
+                                ['/favorite/remove', 'id' => $model->id],
+                                ['class' => 'btn btn-outline-danger btn-sm text-white d-block mt-2 w-100']
+                            );
+                        }
                     },
                 ],
                 'urlCreator' => function ($action, Card $model, $key, $index, $column) {
@@ -68,3 +79,29 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]); ?>
 </div>
+
+<style>
+    .custom-table {
+        border: 1px solid #ddd !important;
+        border-collapse: collapse !important;
+        color: white !important;
+    }
+
+    .custom-table th,
+    .custom-table td {
+        background-color: transparent !important;
+        border: 1px solid #ddd !important;
+        padding: 8px;
+        color: white !important;
+    }
+
+    .custom-table thead th {
+        border-bottom: 2px solid #ddd !important;
+        color: white !important;
+    }
+
+    .custom-table tbody tr:not(:last-child) td {
+        border-bottom: 1px solid #ddd !important;
+        color: white !important;
+    }
+</style>

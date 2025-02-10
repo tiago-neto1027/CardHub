@@ -1,60 +1,64 @@
 <?php
-
 use yii\helpers\Url;
 use yii\helpers\Html;
 
 $this->title = $model->card->name;
 ?>
 
-
-<!DOCTYPE html>
-<html lang="en">
-<body>
-<div class="container-fluid pt-5 pb-3">
-    <div class="row px-xl-5">
-        <div class="container bg-dark p-3 col-lg-3 rounded-3">
-            <div class="product-img position-relative overflow-hidden">
-                <img class="img-fluid w-100 rounded-3" src="<?= $model->card->image_url ?>" alt="">
-            </div>
+<div class="container my-5">
+    <div class="card">
+        <!-- Card Header -->
+        <div class="card-header">
+            <h2 class="text-center text-black mb-0"><?= Html::encode($this->title) ?></h2>
         </div>
-        <div class="col-lg-5">
-            <h4 class="text-secondary mb-4 mt-2"><?= $model->card->name ?></h4>
-            <?php if (!empty($model->card->description)): ?>
-                <div class="container-fluid bg-dark mt-4 mb-4 rounded-1" style="padding: 10px">
-                    <h5 class="text-secondary"><?= nl2br(Html::encode($model->card->description)) ?></h5>
+
+        <!-- Card Body -->
+        <div class="card-body bg-dark">
+            <div class="row">
+                <!-- Card Image -->
+                <div class="col-lg-3 col-md-4">
+                    <img class="img-fluid w-100 rounded-3" src="<?= $model->card->image_url ?>" alt="<?= Html::encode($model->card->name) ?>">
                 </div>
-            <?php endif; ?>
-            <h3 class="text-primary mb-4">Card Condition: <?= $model->condition ?></h3>
-            <h3 class="text-primary mb-4"><?= Yii::$app->formatter->asCurrency($model->price, 'EUR') ?></h3>
-            <div>
-                <?php
-                if ($model->status === "inactive") { ?>
-                    <div class=" align-items-left">
-                        <h5 class="text-secondary mb-4"><i class="text-primary bi bi-bag-x-fill me-2"></i>Not available
-                        </h5>
-                        <button type="button" class="rounded bg-primary text-secondary btn btn-lg disabled">Add to
-                            cart!
-                        </button>
-                    </div><?php
-                } elseif ($model->status === "active") { ?>
-                    <div class=" align-items-left">
 
-                    <h5 class="text-secondary mb-4"><i class="text-primary bi bi-bag-check-fill me-2"></i>Available!
-                    </h5>
-                    <?php
-                        echo Html::a('Add to cart!', ['/cart/add-to-cart', 'itemId' => $model->id, 'type' => 'listing'], [
-                            'class' => 'btn btn-primary btn-lg rounded',]);
-                        ?>
+                <!-- Listing Details -->
+                <div class="col-lg-4 col-md-4">
+                    <h4 class="text-primary pt-2"><i class="fas fa-info-circle me-2"></i>Listing Details:</h4>
+                    <p class="text-light mt-3"><span class="text-primary font-weight-bold">Card Condition: </span><?= $model->condition ?></p>
+                    <p class="text-light"><span class="text-primary font-weight-bold">Price: </span><?= Yii::$app->formatter->asCurrency($model->price, 'EUR') ?></p>
+
+                    <!-- Availability -->
+                    <div class="mt-4">
+                        <?php if ($model->status === "inactive"): ?>
+                            <div class="alert alert-warning mb-0">
+                                <i class="bi bi-bag-x-fill me-2"></i>Not available
+                            </div>
+                        <?php elseif ($model->status === "active"): ?>
+                            <div class="alert alert-success mb-0">
+                                <i class="bi bi-bag-check-fill me-2"></i>Available!
+                            </div>
+                            <?= Html::a(
+                                '<i class="fas fa-cart-plus me-2"></i>Add to cart',
+                                ['/cart/add-to-cart', 'itemId' => $model->id, 'type' => 'listing'],
+                                ['class' => 'btn btn-light btn-lg w-100 mt-3']
+                            ) ?>
+                        <?php endif; ?>
                     </div>
-                    <?php
-                } ?>
+                </div>
+
+                <!-- Card Description -->
+                <?php if (!empty($model->card->description)): ?>
+                <div class="col-lg-3 col-md-4 mt-2 offset-lg-2">
+                    <h4 class="text-primary pt-2"><i class="fas fa-align-left"></i> Description:</h4>
+                    <p class="text-light"><?= $model->card->description ?></p>
+                </div>
+                <?php endif; ?>
             </div>
-        </div>
-        <div class="col-lg-4">
         </div>
     </div>
 </div>
-</body>
 
-
-
+<style>
+    h4.text-primary, span.text-primary {
+        text-shadow: 0.5px 0.5px 1px black, -0.5px -0.5px 1px black;
+    }
+</style>

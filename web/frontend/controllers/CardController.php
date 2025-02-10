@@ -90,6 +90,7 @@ class CardController extends Controller
     {
         $model = new Card();
         $model->status = 'inactive';
+        $model->user_id = Yii::$app->user->id;
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {

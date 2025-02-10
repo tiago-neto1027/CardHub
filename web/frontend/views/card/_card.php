@@ -1,65 +1,88 @@
 <?php
-
 use common\models\Listing;
 use yii\helpers\Html;
 use yii\helpers\Url;
-
 ?>
-<div class="col-12 mt-3">
-    <div class="container-fluid">
-        <div class="product-item bg-light mb-4">
-            <div class="row g-0">
-                <!-- Image column (will fill the full height) -->
-                <div class="col-md-4 column d-flex align-items-stretch p-0">
-                    <?= Html::img($model->card->image_url, [
-                        'alt' => $model->card->name,
-                        'class' => 'img-fluid card-img w-100 object-cover',
-                    ]); ?>
-                </div>
 
-                <!-- Text column with card title and description -->
-                <div class="col-md-8 column d-flex">
-                    <div class="card-body d-flex flex-column justify-content-between h-100">
-                        <h5 class="card-title"><?= Html::encode($model->card->name) ?></h5>
-                        <p class="card-text"><?= nl2br(Html::encode($model->card->description)) ?></p>
-
-                        <!-- Buttons below the card content -->
-                        <div class="d-flex justify-content-between mt-3">
-                            <!-- Remove Button with Heart icon -->
-                            <?= Html::a(
-                                '<i class="fas fa-heart"></i> Remove', // Heart icon and text
-                                ['remove', 'id' => $model->card->id],
-                                [
-                                    'class' => 'btn border border-primary bg-light text-primary btn-sm', // Yellow button color
-                                    'title' => 'Remove from favorites', // Tooltip text
-                                    'data-toggle' => 'tooltip', // Enable Bootstrap tooltip
-                                ]
-                            ) ?>
-
-                            <!-- View Button (Items for Sale) -->
-                            <?= Html::a(
-                                'Items for Sale', // Button text
-                                ['card/view', 'id' => $model->card->id],
-                                ['class' => 'btn bg-primary btn-sm text-light'] // Styling for View button
-                            ) ?>
-                        </div>
-                    </div>
-                </div>
+<div class="product-item card h-100 shadow-sm">
+    <!-- Product Image -->
+    <div class="card-img-top position-relative overflow-hidden">
+        <?php if ($model->card !== null && $model->card->image_url !== null): ?>
+            <?= Html::img($model->card->image_url, [
+                'alt' => Html::encode($model->card->name),
+                'class' => 'img-fluid w-100 p-2',
+            ]); ?>
+        <?php else: ?>
+            <div class="bg-light p-5 text-center">
+                <p class="text-muted mb-0">Image not available</p>
             </div>
+        <?php endif; ?>
+
+        <!-- Action Buttons -->
+        <div class="product-action">
+            <?php if (!$model->card->isFavorited()): ?>
+                <?= Html::a('<i class="far fa-heart"></i>',
+                    ['/favorite/create', 'id' => $model->card_id],
+                    ['class' => 'btn btn-outline-dark btn-square']
+                ) ?>
+            <?php else: ?>
+                <?= Html::a('<i class="fas fa-heart-broken"></i>',
+                    ['/favorite/remove', 'id' => $model->card_id],
+                    ['class' => 'btn btn-outline-dark btn-square',
+                        'disabled' => true,
+                        'title' => 'This item is already in your favorites']
+                ) ?>
+            <?php endif; ?>
+
+            <?= Html::a('<i class="fas fa-search"></i>',
+                ['/listing/view', 'id' => $model->id],
+                ['class' => 'btn btn-outline-dark btn-square']
+            ) ?>
         </div>
+    </div>
+
+    <!-- Product Details -->
+    <div class="card-body text-center">
+        <?= Html::a(Html::encode($model->card->name),
+            ['/listing/view', 'id' => $model->id],
+            ['class' => 'h6 text-decoration-none text-truncate d-block',
+                'title' => Html::encode($model->card->name)]
+        ) ?>
     </div>
 </div>
 
-
-
 <style>
-    .row.g-0 {
-        display: flex;
-        height: 100%;
+    .product-item {
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s ease;
     }
 
-    .column {
+    .product-action {
+        position: absolute;
+        top: 10px;
+        right: -50px;
+        opacity: 0;
+        transition: all 0.3s ease;
+    }
+
+    .product-item:hover .product-action {
+        right: 10px;
+        opacity: 1;
+    }
+
+    .btn-square {
+        width: 40px;
+        height: 40px;
         display: flex;
-        height: 100%;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        margin-bottom: 5px;
+        transition: all 0.3s ease;
+    }
+
+    .btn-square:hover {
+        transform: scale(1.1);
     }
 </style>

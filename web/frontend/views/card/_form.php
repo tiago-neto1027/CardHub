@@ -25,8 +25,10 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'description')->textInput(['maxlength' => true]) ?>
 
-    <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+    <div class="form-group mt-4">
+        <?= Html::submitButton('<i class="fas fa-save me-2 text-light"></i>Save', [
+            'class' => 'btn btn-success btn-lg rounded-pill px-4 text-light'
+        ]) ?>
     </div>
 
     <?php ActiveForm::end(); ?>
