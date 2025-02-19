@@ -35,7 +35,7 @@ use yii\helpers\Url;
             <?php endif; ?>
 
             <?= Html::a('<i class="fas fa-search"></i>',
-                ['/listing/view', 'id' => $model->id],
+                ['/card/view', 'id' => $model->card_id],
                 ['class' => 'btn btn-outline-dark btn-square']
             ) ?>
         </div>
