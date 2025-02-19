@@ -8,7 +8,7 @@ use yii\bootstrap5\Html;
 $this->title = "Invoice #{$invoice->id}";
 ?>
 
-<div class="mt-5">
+<div class="my-5">
     <h2 class="text-center mb-4">Invoice Details</h2>
     <div class="rounded bg-light p-4">
         <h3 class="mt-4">Purchased Items</h3>
@@ -76,7 +76,7 @@ $this->title = "Invoice #{$invoice->id}";
         <?php endif; ?>
         <div class="d-flex justify-content-between">
             <?= Html::a('Back to Orders', ['/detail/details', 'id' => Yii::$app->user->id], [
-                'class' => 'btn btn-primary mt-4'
+                'class' => 'btn btn-primary text-black mt-4'
             ]); ?>
 
             <?php if ($invoice->status === 'Pending'): ?>

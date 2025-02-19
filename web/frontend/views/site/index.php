@@ -75,7 +75,7 @@ $this->title = 'My Yii Application';
                 <div class="offer-text">
                     <h6 class="text-white text-uppercase">Check our collection of</h6>
                     <h3 class="text-white mb-3">CARDS!</h3>
-                    <a href="<?= Url::to(['/card/index'])?>" class="btn btn-primary text-light">Browse</a>
+                    <a href="<?= Url::to(['/card/index'])?>" class="btn btn-primary text-white">Browse</a>
                 </div>
             </div>
         </div>
@@ -87,7 +87,7 @@ $this->title = 'My Yii Application';
                 <div class="offer-text">
                     <h6 class="text-white text-uppercase">Browse our product</h6>
                     <h3 class="text-white mb-3">CATALOG!</h3>
-                    <a href="<?= Url::to(['/product/index'])?>" class="btn btn-primary text-light">Browse</a>
+                    <a href="<?= Url::to(['/product/index'])?>" class="btn btn-primary text-white">Browse</a>
                 </div>
             </div>
         </div>
@@ -111,3 +111,9 @@ $this->title = 'My Yii Application';
 </body>
 
 </html>
+
+<style>
+    span.text-white {
+        text-shadow: 0.5px 0.5px 1px black, -0.5px -0.5px 1px black;
+    }
+</style>
